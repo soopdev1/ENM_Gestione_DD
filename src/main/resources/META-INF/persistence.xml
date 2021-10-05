@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="microcredito" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>it.refill.domain.TipoDoc_Allievi</class>
+        <class>it.refill.domain.TipoFaq</class>
+        <class>it.refill.domain.CpiUser</class>
+        <class>it.refill.domain.Condizione_Lavorativa</class>
+        <class>it.refill.domain.Faq</class>
+        <class>it.refill.domain.SoggettiAttuatori</class>
+        <class>it.refill.domain.Attivita</class>
+        <class>it.refill.domain.User</class>
+        <class>it.refill.domain.StatiPrg</class>
+        <class>it.refill.domain.Documenti_Allievi</class>
+        <class>it.refill.domain.Cloud</class>
+        <class>it.refill.domain.ModificheStatoPrg</class>
+        <class>it.refill.domain.Selfiemployment_Prestiti</class>
+        <class>it.refill.domain.Storico_Prg</class>
+        <class>it.refill.domain.Tracking</class>
+        <class>it.refill.domain.ComuniCoord</class>
+        <class>it.refill.domain.FasceDocenti</class>
+        <class>it.refill.domain.EstensioniFile</class>
+        <class>it.refill.domain.TipoDoc</class>
+        <class>it.refill.domain.Cad</class>
+        <class>it.refill.domain.Allievi</class>
+        <class>it.refill.domain.TitoliStudio</class>
+        <class>it.refill.domain.Comuni</class>
+        <class>it.refill.domain.Storico_ModificheInfo</class>
+        <class>it.refill.domain.Condizione_Mercato</class>
+        <class>it.refill.domain.SediFormazione</class>
+        <class>it.refill.domain.Allievi_Pregresso</class>
+        <class>it.refill.domain.Estrazioni</class>
+        <class>it.refill.domain.Docenti</class>
+        <class>it.refill.domain.DocumentiPrg</class>
+        <class>it.refill.domain.Pagina</class>
+        <class>it.refill.domain.Email</class>
+        <class>it.refill.domain.ProgettiFormativi</class>
+        <class>it.refill.domain.StatoPartecipazione</class>
+        <class>it.refill.domain.Path</class>
+        <class>it.refill.domain.NomiProgetto</class>
+        <class>it.refill.domain.UnitaDidattiche</class>
+        <class>it.refill.domain.Documenti_UnitaDidattiche</class>
+        <class>it.refill.domain.LezioneCalendario</class>
+        <class>it.refill.domain.ModelliPrg</class>
+        <class>it.refill.domain.Lezioni_Modelli</class>
+        <class>it.refill.domain.StaffModelli</class>
+        <class>it.refill.domain.Formagiuridica</class>
+        <class>it.refill.domain.Motivazione</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="eclipselink.logging.level" value="SEVERE"/>
+            <property name="eclipselink.query-results-cache" value="false"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.cache.size.default" value="0"/>
+            <property name="eclipselink.cache.type.default" value="None"/>
+            <property name="javax.persistence.schema-generation.database.action" value="create-or-extend-tables"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>      
+            <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
+            <property name="javax.persistence.jdbc.user" value="bando"/>
+            <property name="javax.persistence.jdbc.password" value="bando"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      
+            <!-- SVILUPPO
+             <property name="javax.persistence.jdbc.url" 
+                       value="jdbc:mysql://clustermicrocredito.cluster-c6m6yfqeypv3.eu-south-1.rds.amazonaws.com:3306/enm_gestione_dd" />
+            -->
+            <!--    PROD   -->
+            <property name="javax.persistence.jdbc.url" 
+                      value="jdbc:mysql://clustermicrocredito.cluster-c6m6yfqeypv3.eu-south-1.rds.amazonaws.com:3306/enm_gestione_dd_prod"/>
+
+                             
+        </properties>
+    </persistence-unit>
+</persistence>
