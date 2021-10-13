@@ -7,7 +7,6 @@ package it.refill.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
-import com.google.common.util.concurrent.AtomicDouble;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.RGBLuminanceSource;
@@ -116,6 +115,13 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.Store;
 import org.joda.time.DateTime;
 import static it.refill.util.Utility.roundDoubleAndFormat;
+import org.verapdf.pdfa.Foundries;
+import org.verapdf.pdfa.PDFAParser;
+import org.verapdf.pdfa.PDFAValidator;
+import org.verapdf.pdfa.VeraGreenfieldFoundryProvider;
+import org.verapdf.pdfa.flavours.PDFAFlavour;
+import org.verapdf.pdfa.results.ValidationResult;
+import org.verapdf.pdfa.validation.validators.ValidatorConfig;
 
 /**
  *
@@ -1981,19 +1987,57 @@ public class Pdf_new {
         }
     }
 
+    public static boolean validPDFA(PDFAParser parser) {
+
+        try {
+            List<PDFAFlavour> tocheck = new ArrayList<>();
+            tocheck.add(PDFAFlavour.fromString("1a"));
+            tocheck.add(PDFAFlavour.fromString("1b"));
+            tocheck.add(PDFAFlavour.fromString("2a"));
+            tocheck.add(PDFAFlavour.fromString("2b"));
+            tocheck.add(PDFAFlavour.fromString("3a"));
+            tocheck.add(PDFAFlavour.fromString("3b"));
+            tocheck.add(PDFAFlavour.fromString("3u"));
+            tocheck.add(PDFAFlavour.fromString("ua1"));
+            for (PDFAFlavour v1 : tocheck) {
+                PDFAValidator validator = Foundries.defaultInstance().createValidator(v1, true);
+                ValidationResult result = validator.validate(parser);
+                if (result.isCompliant()) {
+                    System.out.println(v1.getId() + " OK");
+                    return true;
+                } else {
+                    System.out.println(v1.getId() + " KO");
+                }
+
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
     private static String verificaPDFA(byte[] content) {
 
         String out = "KO";
         try {
             setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
             if (content != null) {
+//                VeraGreenfieldFoundryProvider.initialise();
+//
+//                try (PDFAParser parser = Foundries.defaultInstance().createParser(
+//                        new FileInputStream(new File("C:\\Users\\raf\\Desktop\\Registro Complessivo_20211007.pdf")))) {
+//                    if (validPDFA(parser)) {
+//
+//                        out = "OK";
+//                    } else {
+//                        out = "ERRORE NEL FILE - NO PDF/A";
+//                    }
+//                }
+
                 try (InputStream is1 = new ByteArrayInputStream(content); PDDocument doc = load(is1)) {
                     PDDocumentInformation info = doc.getDocumentInformation();
-                    
-                    System.out.println(info.getTitle());
-                    System.out.println(info.getAuthor());
-                    System.out.println(info.getCreator());
-                    
+//                    System.out.println(") " + doc.getDocumentCatalog().getMetadata().getStream());
                     if (info.getSubject() != null) {
                         if (info.getSubject().equals("PDF/A")) {
                             out = "OK";
@@ -2138,10 +2182,9 @@ public class Pdf_new {
             String qrcrop
     ) {
 
-//        if (Utility.test) {
-//            return "OK";
-//        }
-
+        if (Utility.test) {
+            return "OK";
+        }
         if (nomedoc.equalsIgnoreCase("modello1")) {
             //SOLO QR
             try {
