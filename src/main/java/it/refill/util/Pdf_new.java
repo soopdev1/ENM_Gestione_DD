@@ -1989,6 +1989,11 @@ public class Pdf_new {
             if (content != null) {
                 try (InputStream is1 = new ByteArrayInputStream(content); PDDocument doc = load(is1)) {
                     PDDocumentInformation info = doc.getDocumentInformation();
+                    
+                    System.out.println(info.getTitle());
+                    System.out.println(info.getAuthor());
+                    System.out.println(info.getCreator());
+                    
                     if (info.getSubject() != null) {
                         if (info.getSubject().equals("PDF/A")) {
                             out = "OK";
@@ -2133,9 +2138,9 @@ public class Pdf_new {
             String qrcrop
     ) {
 
-        if (Utility.test) {
-            return "OK";
-        }
+//        if (Utility.test) {
+//            return "OK";
+//        }
 
         if (nomedoc.equalsIgnoreCase("modello1")) {
             //SOLO QR

@@ -760,7 +760,25 @@ public class Database {
 
     }
 
-        public Map<Long, Long> OreRendicontabiliDocenti(int pf) {
+    public Map<Long, Long> OreRendicontabiliDocentiFASEA(int pf) {
+        Map result = new HashMap();
+        try {
+            String sql = "SELECT sum(totaleorerendicontabili) as totOre,idutente FROM registro_completo WHERE ruolo = 'DOCENTE' AND fase='A' AND idprogetti_formativi = ? GROUP BY idutente";
+            PreparedStatement ps = this.c.prepareStatement(sql);
+            ps.setInt(1, pf);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                result.put(rs.getLong("idutente"), rs.getLong("totOre"));
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("ERROR: " + ExceptionUtils.getStackTrace(e));
+        }
+        return result;
+    }
+
+    public Map<Long, Long> OreRendicontabiliDocenti(int pf) {
         Map result = new HashMap();
         try {
             String sql = "SELECT sum(totaleorerendicontabili) as totOre,idutente FROM registro_completo WHERE ruolo = 'DOCENTE' AND idprogetti_formativi = ? GROUP BY idutente;";
@@ -777,7 +795,7 @@ public class Database {
         }
         return result;
     }
-    
+
     //Totale Ore rendicontabili per Maschera Modello 5
     public Map<Long, Long> OreRendicontabiliAlunni(int pf) {
         Map result = new HashMap();
@@ -796,7 +814,7 @@ public class Database {
         }
         return result;
     }
-    
+
     public Map<Long, Long> OreRendicontabiliAlunni_faseB(int pf) {
         Map result = new HashMap();
         try {

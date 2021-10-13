@@ -1,5 +1,5 @@
 
-//import static it.refill.util.Pdf_new.checkFirmaQRpdfA;
+import static it.refill.util.Pdf_new.checkFirmaQRpdfA;
 import java.io.File;
 
 /*
@@ -14,6 +14,6 @@ import java.io.File;
  */
 public class R {
     public static void main(String[] args) {
-//        System.out.println(checkFirmaQRpdfA("MODELLO2", "", new File("F:\\mnt\\mcn\\BECONSULTING260720211205764.M2_pdfA.pdf"), "", "20;0;60;60"));
+        System.out.println(checkFirmaQRpdfA("MODELLO3", "", new File("C:\\Users\\raf\\Desktop\\SEGRETERIAGENERALE_ULE-UNIONELAVORATORIEUROPEI_131020211011244.M3_pdfA-signed.pdf"), "", "20;0;60;60"));
     }
 }

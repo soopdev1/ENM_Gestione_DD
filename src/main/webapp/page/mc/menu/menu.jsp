@@ -8,9 +8,9 @@
 <%@page import="it.refill.db.Entity"%>
 <%
     User us1 = (User) session.getAttribute("user");
-    int tipo = 0;
+    int tipoR = 0;
     if (us1 != null) {
-        tipo = us1.getTipo();
+        tipoR = us1.getTipo();
     }
     String uri = request.getRequestURI();
     String pageName = uri.substring(uri.lastIndexOf("/") + 1);
@@ -60,9 +60,6 @@
             break;
     }
 
-    Entity entity = new Entity();
-    String a_cad = entity.getPath("abilitate_cad");
-    entity.close();
 %>
 <!DOCTYPE html>
 <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
@@ -83,7 +80,7 @@
         <div class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_aside_menu_wrapper">
             <div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1" data-ktmenu-dropdown-timeout="500">
                 <ul class="kt-menu__nav ">
-                    <%if (tipo == 2) {%>
+                    <%if (tipoR == 2) {%>
                     <li class="kt-menu__item  <%=home%>" aria-haspopup="true">
                         <a href="indexMicrocredito.jsp" class="kt-menu__link ">
                             <span class="kt-menu__link-icon"><i class="flaticon-home-2"></i></span>
@@ -97,8 +94,9 @@
                     <%@include file="general/ProgettiFormativi.jsp"%>
                     <%@include file="general/Cloud.jsp"%>
                     <%@include file="general/Faq.jsp"%>
-                    <%} else if (tipo == 5) {%>
+                    <%} else if (tipoR == 5) {%>
                     <%@include file="general/ProgettiFormativi.jsp"%>
+                    <%@include file="general/Cloud.jsp"%>
                     <%}%>
                 </ul>
             </div>

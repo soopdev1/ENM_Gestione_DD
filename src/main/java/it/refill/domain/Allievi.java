@@ -169,7 +169,10 @@ public class Allievi implements Serializable {
     private double ore_fa = 0.0;
     @Transient
     private double ore_fb = 0.0;
-
+     @Transient
+    private String orerendicontabili  = "";
+    
+    
     //Gruppo modello 4
     @Column(name = "gruppo_faseB")
     private int gruppo_faseB;
@@ -182,6 +185,14 @@ public class Allievi implements Serializable {
     
     public Allievi() {
         this.pregresso = false;
+    }
+    
+    public String getOrerendicontabili() {
+        return orerendicontabili;
+    }
+
+    public void setOrerendicontabili(String orerendicontabili) {
+        this.orerendicontabili = orerendicontabili;
     }
 
     public int getMappatura() {

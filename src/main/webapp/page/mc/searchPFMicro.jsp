@@ -154,9 +154,9 @@
                                                                         <option value="-">Seleziona Stato</option>
                                                                         <%for (StatiPrg i : stati) {
                                                                                 if (istato.equals(i.getTipo())) {%>
-                                                                        <option selected value="<%=i.getTipo()%>"><%=i.getDe_tipo()%></option>
+                                                                        <option selected value="<%=i.getTipo()%>"><%=i.getDescrizione()%></option>
                                                                         <%} else {%>
-                                                                        <option value="<%=i.getTipo()%>"><%=i.getDe_tipo()%></option>
+                                                                        <option value="<%=i.getTipo()%>"><%=i.getDescrizione()%></option>
                                                                         <%}
                                                                             }%>
                                                                     </select>
@@ -397,7 +397,8 @@
         <script src="<%=src%>/assets/vendors/general/bootstrap-datepicker/dist/js/bootstrap-datepicker.js" type="text/javascript"></script>
         <script src="<%=src%>/assets/vendors/general/inputmask/dist/inputmask/inputmask.js" type="text/javascript"></script>
         <script src="<%=src%>/assets/vendors/general/inputmask/dist/inputmask/jquery.inputmask.js" type="text/javascript"></script>
-        <script id="searchPFMicro" src="<%=src%>/page/mc/js/searchPFMicro.js<%=no_cache%>" defer data-context="<%=request.getContextPath()%>" data-typeuser="<%=us.getTipo()%>" type="text/javascript"></script>
+        <script id="searchPFMicro" src="<%=src%>/page/mc/js/searchPFMicro.js<%=no_cache%>" defer data-context="<%=request.getContextPath()%>" 
+        data-typeuser="<%=us.getTipo()%>" type="text/javascript"></script>
         <script type="text/javascript">
                                                                         var KTAppOptions = {
                                                                             "colors": {

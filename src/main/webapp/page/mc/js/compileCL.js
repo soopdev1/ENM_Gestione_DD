@@ -14,7 +14,7 @@ let allievi_domanda = new Map();
 
 function completeOre(hh, max) {
     hh = hh.replaceAll("_", "").replace(",", ".");
-    if (hh == "") {
+    if (hh === "") {
         hh += "0";
     }
     hh = Number(hh).toFixed(2);
@@ -25,13 +25,21 @@ function completeOre(hh, max) {
 }
 
 function DotToComma(n) {
-    n = Number(n).toFixed(2).toString().replace(".", ",");
-    return n;
+    //console.log("IN " + n);
+    //console.log("OUT " + formatMoney(n, 2, ",", "."));
+    return formatMoney(n, 2, ",", ".");
+    //n = Number(n).toFixed(2).toString().replace(".", ",");
+    //return n;
 }
 
 function CommaToDot(n) {
-    n = n.toString().replace(",", ".");
-    return Number(n).toFixed(2);
+
+    var out = n.toString();
+    out = out.replace(".", "");
+    out = out.replace(",", ".");
+    return Number(out).toFixed(2);
+    // n = n.toString().replace(".", "").replace(",", ".");
+    // return Number(n).toFixed(2);
 }
 
 $('.decimal_custom.ctrl[id^=fa_controllo_ore_]').on('change', function () {
@@ -124,20 +132,22 @@ jQuery(document).ready(function () {
         this.value = DotToComma(this.value);
     });
 
-    $(".decimal_custom").inputmask({
-        mask: "9{0,4}[,]9{2}",
+    $(".decimal_custom").maskMoney({prefix: '', allowNegative: true, thousands: '.', decimal: ',', affixesStay: false});
+
+    //$(".decimal_custom").inputmask({
+    //      mask: "9{0,4}[,]9{2}",
 //        definitions: {
 //            "Z": {
 //                validator: "[,]",
 //            }
 //        },
-        radixPoint: ',',
+    //       radixPoint: ',',
 //        clearIncomplete: true,
 //        autoUnmask: true,
-        greedy: false,
-        rightAlign: true,
-        allowMinus: false
-    });
+    //       greedy: false,
+    //       rightAlign: true,
+    //      allowMinus: false
+    //  });
 
     $(window).scrollTop(0);
     let dati = load_Checklist();
@@ -150,7 +160,7 @@ jQuery(document).ready(function () {
     step3_load(dati);
     step4_load(dati);
     recap();
-    window.location.hash="";
+    window.location.hash = "";
 });
 
 function recap() {
@@ -161,7 +171,7 @@ function recap() {
         $('#recapfb_' + k).val($('#fb_tot_' + k).val());
     });
     allievi_outputs.forEach((v, k) => {
-        if (v == "1") {
+        if (v === "1") {
             $('#recapmap_' + k).val("SI");
         }
     });
@@ -199,7 +209,7 @@ function resizeNota() {
 }
 
 function step1_load(data) {
-    if (data.cl != null && data.cl != "") {
+    if (data.cl !== null && data.cl !== "") {
         $('#currentstep').val(data.cl.step);
         $('a[id^=show_file_]').hide();
         $("input:radio[name=step1_switch][value=" + data.cl.tipo + "]").prop('checked', true);
@@ -216,7 +226,7 @@ function step1_load(data) {
 }
 
 function step2_load(dati) {
-    if (dati.cl != null && dati.cl != "" && dati.cl.tab_neet_fa != null && dati.cl.tab_neet_fa != "" && dati.cl.tab_neet_fb != null && dati.cl.tab_neet_fb != "") {
+    if (dati.cl !== null && dati.cl !== "" && dati.cl.tab_neet_fa !== null && dati.cl.tab_neet_fa !== "" && dati.cl.tab_neet_fb !== null && dati.cl.tab_neet_fb !== "") {
         let tempID;
         let calc;
         $('.decimal_custom.ctrl[id^=fa_controllo_ore_]').each(function () {
@@ -251,7 +261,7 @@ function step3_load(dati) {
 
             $('#output_' + tempID).attr('disabled', false);
 
-            if (allievi_outputs.get(tempID.toString()) == "1") {
+            if (allievi_outputs.get(tempID.toString()) === "1") {
                 $('#output_' + tempID).attr('checked', 'checked');
             } else {
                 $('#output_' + tempID).removeAttr('checked');
@@ -269,10 +279,10 @@ function step3_load(dati) {
         }
     });
 
-    if (dati.cl != null && dati.cl != "" && dati.cl.nota_controllore != null && dati.cl.tab_mappatura_neet != "null" && dati.cl.tab_mappatura_neet != "") {
+    if (dati.cl !== null && dati.cl !== "" && dati.cl.nota_controllore !== null && dati.cl.tab_mappatura_neet !== "null" && dati.cl.tab_mappatura_neet !== "") {
         $('div[id^=mappaturarow_]').each(function () {
             tempID = Number(this.id.split("_")[1]);
-            if (allievi_mappati.get(tempID.toString()) == "1") {
+            if (allievi_mappati.get(tempID.toString()) === "1") {
                 $('#mappatura_' + tempID).attr('checked', 'checked');
             } else {
                 $('#mappatura_' + tempID).removeAttr('checked');
@@ -280,10 +290,10 @@ function step3_load(dati) {
         });
     }
 
-    if (dati.cl != null && dati.cl != "" && dati.cl.nota_controllore != null && dati.cl.nota_controllore != "null" && dati.cl.nota_controllore != "") {
+    if (dati.cl !== null && dati.cl !== "" && dati.cl.nota_controllore !== null && dati.cl.nota_controllore !== "null" && dati.cl.nota_controllore !== "") {
         $('#nota_controllore').val(dati.cl.nota_controllore);
     }
-    if (dati.allievi != null && dati.allievi != "" && dati.cl != null && dati.cl != "" && dati.cl.tab_completezza_output_neet != null && dati.cl.tab_completezza_output_neet != "") {
+    if (dati.allievi !== null && dati.allievi !== "" && dati.cl !== null && dati.cl !== "" && dati.cl.tab_completezza_output_neet !== null && dati.cl.tab_completezza_output_neet !== "") {
         $('#step3_ok').show();
     } else {
         $('#step3_ko').show();
@@ -293,7 +303,7 @@ function step3_load(dati) {
 }
 
 function step4_load(dati) {
-    if (dati.cl != null && dati.cl != "" && dati.cl.revisore != null) {
+    if (dati.cl !== null && dati.cl !== "" && dati.cl.revisore !== null) {
         $("#controllore").val(dati.cl.revisore.codice).change();
         $('[data-ktwizard-type="action-submit"]').text("Aggiorna");
         $('#step4_ok').show();
@@ -303,12 +313,12 @@ function step4_load(dati) {
 }
 
 function step1_init() {
-    if ($("input:radio[name=step1_switch]:checked").val() == "DURC") {
+    if ($("input:radio[name=step1_switch]:checked").val() === "DURC") {
         $('#DURC_file').attr('disabled', false);
     } else {
         $('#DURC_file').attr('disabled', true);
     }
-    if ($("input:radio[name=step1_switch]:checked").val() == "ASSENZA") {
+    if ($("input:radio[name=step1_switch]:checked").val() === "ASSENZA") {
         $('#scarica_ASSENZA_file').attr("href", context + '/OperazioniMicro?type=scaricaFileAssenza&idpr=' + $('#pf').val());
         $('#scarica_ASSENZA_file').removeClass("disablelink");
         $('#ASSENZA_file').attr('disabled', false);
@@ -328,10 +338,10 @@ function ctrlFormStep1(isPress) {
         let err = checkObblFieldsContent($('#step1')) ? true : false;
         let tipo = $("input:radio[name=step1_switch]:checked").val();
         err = !checkRequiredSpecificFile(tipo + "_file") ? true : err;
-        if (tipo == "ASSENZA") {
+        if (tipo === "ASSENZA") {
             $('#DURC_file').removeClass('is-invalid is-valid');
         }
-        if (tipo == "DURC") {
+        if (tipo === "DURC") {
             $('#ASSENZA_file').removeClass('is-invalid is-valid');
         }
         return !err;
@@ -355,7 +365,7 @@ $('a[id=save_step1]').on('click', function () {
             confirmButtonClass: "btn btn-io",
             customClass: {
                 popup: 'animated bounceInUp'
-            },
+            }
         }).then((result) => {
             if (result.value) {
                 showLoad();
@@ -402,7 +412,7 @@ $('a[id=save_step2]').on('click', function () {
         confirmButtonClass: "btn btn-io",
         customClass: {
             popup: 'animated bounceInUp'
-        },
+        }
     }).then((result) => {
         if (result.value) {
             showLoad();
@@ -439,7 +449,7 @@ $('a[id=save_step2]').on('click', function () {
                     closeSwal();
                     var json = JSON.parse(data);
                     if (json.result) {
-                        swalSuccessReloadWithHash("Checklist Finale", "Salvataggio dei dati effettuato con successo","#2");
+                        swalSuccessReloadWithHash("Checklist Finale", "Salvataggio dei dati effettuato con successo", "#2");
                     } else {
                         swalError("Errore", json.message);
                     }
@@ -466,7 +476,7 @@ $('a[id=save_step3]').on('click', function () {
         confirmButtonClass: "btn btn-io",
         customClass: {
             popup: 'animated bounceInUp'
-        },
+        }
     }).then((result) => {
         if (result.value) {
             showLoad();
@@ -507,7 +517,7 @@ $('a[id=save_step3]').on('click', function () {
                     closeSwal();
                     var json = JSON.parse(data);
                     if (json.result) {
-                        swalSuccessReloadWithHash("Checklist Finale", "Salvataggio dei dati effettuato con successo","#3");
+                        swalSuccessReloadWithHash("Checklist Finale", "Salvataggio dei dati effettuato con successo", "#3");
                     } else {
                         swalError("Errore", json.message);
                     }
@@ -525,7 +535,7 @@ $('a[id=save_step3]').on('click', function () {
 function checkRequiredSpecificFile(id) {
     var err = false;
     $('input:file[tipo=obbligatory][id=' + id + ']').each(function () {
-        if ($(this)[0].files.length == 0) {
+        if ($(this)[0].files.length === 0) {
             err = true;
             $(this).attr("class", "custom-file-input is-invalid");
         } else {
@@ -542,24 +552,36 @@ function load_Checklist() {
         async: false,
         url: context + "/QueryMicro?type=getChecklistfinale&pf=" + $('#pf').val(),
         success: function (resp) {
-            if (resp != null && resp.length > 0) {
+            if (resp !== null && resp.length > 0) {
                 ret = JSON.parse(resp);
             }
         }
     });
-    if (ret.cl != null && ret.cl != "" && ret.cl.tab_neet_fa != null && ret.cl.tab_neet_fa != "" && ret.cl.tab_neet_fb != null && ret.cl.tab_neet_fb != "") {
+    if (ret.cl !== null && ret.cl !== "" && ret.cl.tab_neet_fa !== null && ret.cl.tab_neet_fa !== "" && ret.cl.tab_neet_fb !== null && ret.cl.tab_neet_fb !== "") {
         allievi_fa = new Map(JSON.parse(ret.cl.tab_neet_fa).map(i => [i.id, i.ore]));
         allievi_fb = new Map(JSON.parse(ret.cl.tab_neet_fb).map(i => [i.id, i.ore]));
     }
-    if (ret.allievi != null && ret.allievi != "") {
+    if (ret.allievi !== null && ret.allievi !== "") {
         allievi_domanda = new Map(JSON.parse(ret.allievi).map(i => [i.id, i.da]));
     }
-    if (ret.cl != null && ret.cl != "" && ret.cl.tab_mappatura_neet != null && ret.cl.tab_mappatura_neet != "") {
+    if (ret.cl !== null && ret.cl !== "" && ret.cl.tab_mappatura_neet !== null && ret.cl.tab_mappatura_neet !== "") {
         allievi_mappati = new Map(JSON.parse(ret.cl.tab_mappatura_neet).map(i => [i.id, i.mappato]));
     }
-    if (ret.cl != null && ret.cl != "" && ret.cl.tab_completezza_output_neet != null && ret.cl.tab_completezza_output_neet != "") {
+    if (ret.cl !== null && ret.cl !== "" && ret.cl.tab_completezza_output_neet !== null && ret.cl.tab_completezza_output_neet !== "") {
         allievi_outputs = new Map(JSON.parse(ret.cl.tab_completezza_output_neet).map(i => [i.id, i.output]));
     }
 
     return ret;
+}
+function formatMoney(number, decPlaces, decSep, thouSep) {
+    decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+            decSep = typeof decSep === "undefined" ? "." : decSep;
+    thouSep = typeof thouSep === "undefined" ? "," : thouSep;
+    var sign = number < 0 ? "-" : "";
+    var i = String(parseInt(number = Math.abs(Number(number) || 0).toFixed(decPlaces)));
+    var j = (j = i.length) > 3 ? j % 3 : 0;
+    return sign +
+            (j ? i.substr(0, j) + thouSep : "") +
+            i.substr(j).replace(/(\decSep{3})(?=\decSep)/g, "$1" + thouSep) +
+            (decPlaces ? decSep + Math.abs(number - i).toFixed(decPlaces).slice(2) : "");
 }

@@ -62,7 +62,7 @@ var KTDatatablesDataSourceAjaxServer = function () {
                                 + '   <i class="flaticon-more-1"></i>'
                                 + '</button>'
                                 + '<div class="dropdown-menu dropdown-menu-left">';
-                        if (typeuser === 2) {
+                        if (typeuser === "2") {
                             option += '<a class="dropdown-item" href="javascript:void(0);" onclick="assegna(' + row.id + ')"><i class="fa fa-user"></i> Assegnazione</a>';
                             option += '<a class="dropdown-item" href="javascript:void(0);" onclick="uploadDocGenerico(' + row.id + ')"><i class="fa fa-upload" style="margin-top:-2px"></i>Carica Altra Documentazione</a>';
                             option += '<a class="dropdown-item" href="javascript:void(0);" onclick="modifyDate(' + row.id + ',' + row.start + ',' + row.end + ',' + row.end_fa + ')"><i class="fa fa-calendar-alt"></i> Modifica Date</a>';
@@ -83,7 +83,7 @@ var KTDatatablesDataSourceAjaxServer = function () {
                         if (row.pdfunico !== null) {
                             option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalPdfUnicoAllievi(' + row.id + ')"><i class="fa fa-file-pdf" style="margin-top:-2px"></i> Scarica PDF per ANPAL</a>';
                         }
-                        if (typeuser === 2) {
+                        if (typeuser === "2") {
                             if (row.stato.id === "MA") {
                                 option += '<a class="dropdown-item kt-font-success" href="javascript:void(0);" onclick="swalMappaAllievi(' + row.id + ')"><i class="fa fa-check kt-font-success" style="margin-top:-2px"></i> Mappatura</a>';
                             } else if (row.stato.id === "IV") {

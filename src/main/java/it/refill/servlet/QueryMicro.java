@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import it.refill.db.Action;
 import it.refill.db.Database;
 import it.refill.db.Entity;
 import it.refill.domain.Allievi;
@@ -650,6 +651,32 @@ public class QueryMicro extends HttpServlet {
 
     }
 
+    protected void searchMappaAllievi(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Entity e = new Entity();
+        try {
+            ProgettiFormativi p = e.getEm().find(ProgettiFormativi.class, Long.parseLong(request.getParameter("idprogetto")));
+            List<Allievi> list = e.getAllieviProgettiFormativi(p);
+//            List<Allievi> list = e.getAllieviProgettiFormativiAll(p);
+//            Long hh36 = new Long(129600000);
+            Map<Long, Long> oreRendicontabili_faseA = Action.OreRendicontabiliAlunni_faseA((int) (long) p.getId());
+
+            list.forEach(al1 -> {
+                if (oreRendicontabili_faseA.get(al1.getId()) == null) {
+                    al1.setOrerendicontabili("0");
+                } else {
+                    al1.setOrerendicontabili(Utility.roundFloatAndFormat(oreRendicontabili_faseA.get(al1.getId()), true));
+                }
+            });
+
+            writeJsonResponse(response, list);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            e.close();
+        }
+    }
+    
     protected void getChecklistfinale(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         ProgettiFormativi d = e.getEm().find(ProgettiFormativi.class, Long.parseLong(request.getParameter("pf")));
@@ -781,6 +808,9 @@ public class QueryMicro extends HttpServlet {
                     break;
                 case "getChecklistfinale":
                     getChecklistfinale(request, response);
+                    break;
+                case "searchMappaAllievi":
+                    searchMappaAllievi(request, response);
                     break;
                 default:
                     break;

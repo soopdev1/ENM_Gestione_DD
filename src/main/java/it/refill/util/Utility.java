@@ -627,7 +627,7 @@ public class Utility {
         Map s = new HashMap();
         s.put(1, "L'investimento iniziale non raggiunge l'investimento minimo per accedere alle agevolazioni di legge");
         s.put(2, "La copertura è assicurata interamente con fondi propri");
-        s.put(3, "Ricordo al criterio ordinario - non ci sono bandi attivi o l'iniziativa non rientra tra le iniziative ammissibili a finanziamento dei bandi attivi");
+        s.put(3, "Ricorso al credito ordinario - non ci sono bandi attivi o l'iniziativa non rientra tra le iniziative ammissibili a finanziamento dei bandi attivi");
         return s;
     }
 
@@ -834,6 +834,10 @@ public class Utility {
 
     public static List<Docenti> docenti_ore(long idp, List<Docenti> l) {
         Map<Long, Long> oreRendicontabili_docenti = Action.OreRendicontabiliDocenti((int) (long) idp);
+        return l.stream().filter(a -> oreRendicontabili_docenti.get(a.getId()) != null).collect(Collectors.toList());
+    }
+    public static List<Docenti> docenti_ore_A(long idp, List<Docenti> l) {
+        Map<Long, Long> oreRendicontabili_docenti = Action.OreRendicontabiliDocentiFASEA((int) (long) idp);
         return l.stream().filter(a -> oreRendicontabili_docenti.get(a.getId()) != null).collect(Collectors.toList());
     }
 

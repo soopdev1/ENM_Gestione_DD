@@ -60,7 +60,7 @@ public class Action {
         if (!pregresso) {
             return 0;
         }
-        Database db = new Database(false,false);
+        Database db = new Database(false, false);
         if (db.getC() == null) {
             return 0;
         }
@@ -71,7 +71,7 @@ public class Action {
 
     public static List<FadCalendar> calendarioFAD(String id) {
         List<FadCalendar> out = new ArrayList<>();
-        Database db = new Database(false,false);
+        Database db = new Database(false, false);
         if (db.getC() == null) {
             return out;
         }
@@ -81,7 +81,7 @@ public class Action {
     }
 
     public static String linkFAD() {
-        Database db = new Database(false,false);
+        Database db = new Database(false, false);
         if (db.getC() == null) {
             return "https://accreditamento.diventaimprenditore.eu/fad_ded/";
         }
@@ -205,7 +205,7 @@ public class Action {
                 });
             });
 
-            Database db1 = new Database(true,false);
+            Database db1 = new Database(true, false);
             List<SoggettiAttuatori> list = db1.estrai_SA_accettare(e);
             db1.closeDB();
             List<String> list2 = e.getSoggettiAttuatori().stream().map(r -> r.getPiva()).collect(Collectors.toList());
@@ -240,8 +240,15 @@ public class Action {
         return out;
 
     }
-    
-         //Totale Ore rendicontabili per Docenti
+
+    public static Map<Long, Long> OreRendicontabiliDocentiFASEA(int pf) {
+        Database db = new Database(false, false);
+        Map<Long, Long> r = db.OreRendicontabiliDocentiFASEA(pf);
+        db.closeDB();
+        return r;
+    }
+    //Totale Ore rendicontabili per Docenti
+
     public static Map<Long, Long> OreRendicontabiliDocenti(int pf) {
         Database db = new Database(false, false);
         Map<Long, Long> r = db.OreRendicontabiliDocenti(pf);
@@ -251,28 +258,28 @@ public class Action {
 
     //Totale Ore rendicontabili per Maschera Modello 5
     public static Map<Long, Long> OreRendicontabiliAlunni(int pf) {
-        Database db = new Database(false,false);
+        Database db = new Database(false, false);
         Map<Long, Long> r = db.OreRendicontabiliAlunni(pf);
         db.closeDB();
         return r;
     }
-    
-      public static Map<Long, Long> OreRendicontabiliAlunni_faseB(int pf) {
+
+    public static Map<Long, Long> OreRendicontabiliAlunni_faseB(int pf) {
         Database db = new Database(false, false);
         Map<Long, Long> r = db.OreRendicontabiliAlunni_faseB(pf);
         db.closeDB();
         return r;
     }
 
-    
     public static Map<Long, Long> OreRendicontabiliAlunni_faseA(int pf) {
-        Database db = new Database(false,false);
+        Database db = new Database(false, false);
         Map<Long, Long> r = db.OreRendicontabiliAlunni_faseA(pf);
         db.closeDB();
         return r;
     }
+
     public static String[] dati_modello5_neet(String idded, String idsa, String pf) {
-        Database db = new Database(false,false);
+        Database db = new Database(false, false);
         String[] r = db.dati_modello5_neet(idded, idsa, pf);
         db.closeDB();
         return r;

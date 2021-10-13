@@ -127,7 +127,7 @@
                                                                     <select class="form-control kt-select2-general" id="stato" name="stato" style="width: 100%">
                                                                         <option value="-">Seleziona Stato</option>
                                                                         <%for (StatiPrg i : stati) {%>
-                                                                        <option value="<%=i.getTipo()%>"><%=i.getDe_tipo()%></option>
+                                                                        <option value="<%=i.getTipo()%>"><%=i.getDescrizione()%></option>
                                                                         <%}%>
                                                                     </select>
                                                                 </div>

@@ -66,46 +66,48 @@
                                 </div>
                             </div>
                         </div>
+                        <%if (us.getTipo() == 2) {%>
                         <div class="kt-content  kt-grid__item kt-grid__item--fluid">
                             <form id="kt_form" action="<%=request.getContextPath()%>/OperazioniMicro?type=addCloud" 
                                   enctype="multipart/form-data" style="padding: 0;" class="kt-form kt-form--label-right"
-                                                          accept-charset="ISO-8859-1" method="post">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="kt-portlet" id="kt_portlet" data-ktportlet="true">
-                                        <div class="kt-portlet__head">
-                                            <div class="kt-portlet__head-label col-lg-8">
-                                                <div class="col-lg-4">
-                                                    <h3 class="kt-portlet__head-title text" >
-                                                        Carica Nuovo File (Pdf,Word) :
-                                                    </h3>
+                                  accept-charset="ISO-8859-1" method="post">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="kt-portlet" id="kt_portlet" data-ktportlet="true">
+                                            <div class="kt-portlet__head">
+                                                <div class="kt-portlet__head-label col-lg-8">
+                                                    <div class="col-lg-4">
+                                                        <h3 class="kt-portlet__head-title text" >
+                                                            Carica Nuovo File (Pdf,Word) :
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="kt-portlet__head-toolbar">
+                                                    <div class="kt-portlet__head-group">
+                                                        <a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down" id="toggle_search"></i></a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="kt-portlet__head-toolbar">
-                                                <div class="kt-portlet__head-group">
-                                                    <a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down" id="toggle_search"></i></a>
+                                            <div class="kt-portlet__body">
+                                                <div class="custom-file">
+                                                    <input type="hidden" name ="tf" value="<%=tipo%>"/>
+                                                    <input type="file" required name="file" id="file" class="custom-file-input" accept=".doc, .docx, .pdf"/>
+                                                    <label class="custom-file-label selected" style="color: #a7abc3; text-align: left;">Scegli File</label>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="kt-portlet__body">
-                                            <div class="custom-file">
-                                                <input type="hidden" name ="tf" value="<%=tipo%>"/>
-                                                <input type="file" required name="file" id="file" class="custom-file-input" accept=".doc, .docx, .pdf"/>
-                                                <label class="custom-file-label selected" style="color: #a7abc3; text-align: left;">Scegli File</label>
+                                            <div class="kt-portlet__foot">
+                                                <button class="btn btn-io btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" 
+                                                        type="button" id="submit"
+                                                        >
+                                                    Carica
+                                                </button>
                                             </div>
-                                        </div>
-                                        <div class="kt-portlet__foot">
-                                            <button class="btn btn-io btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" 
-                                                    type="button" id="submit"
-                                                    >
-                                                Carica
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             </form>
                         </div>
+                        <%}%>
                         <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
                             <div class="row">
                                 <div class="col-lg-12">
