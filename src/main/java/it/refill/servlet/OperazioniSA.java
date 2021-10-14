@@ -500,7 +500,6 @@ public class OperazioniSA extends HttpServlet {
     protected void salvamodello3(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
-
         Entity e = new Entity();
         e.begin();
         String qrcrop = e.getPath("qr_crop");
