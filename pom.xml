@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>it.refill</groupId>
-    <artifactId>enm.dd</artifactId>
+    <artifactId>ENM_Gestione_DD</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-    <name>Enm_DD</name>
+    <name>ENM_Gestione_DD</name>
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

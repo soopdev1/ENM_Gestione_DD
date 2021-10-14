@@ -40,7 +40,7 @@ public class Login extends HttpServlet {
         String password = request.getParameter("password");
         Entity e = new Entity();
         User us = e.getUser(user, password);
-        if (request.getContextPath().contains("Enm_DD")) {
+        if (request.getContextPath().contains("ENM_Gestione_DD")) { //sviluppo
             request.getSession().setAttribute("src", "../..");
         } else {
             request.getSession().setAttribute("src", e.getPath("dominio"));
