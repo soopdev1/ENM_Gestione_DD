@@ -182,10 +182,10 @@
                                                     <tr>
                                                         <th class="text-uppercase text-center">Azioni</th>
                                                         <th class="text-uppercase text-center">Ente</th>
-                                                        <th class="text-uppercase text-center">Domada</th>
+                                                        <th class="text-uppercase text-center">Domanda</th>
                                                         <th class="text-uppercase text-center">Risposta</th>
                                                         <th class="text-uppercase text-center">Data Risposta</th>
-                                                        <th class="text-uppercase text-center">Tipo</th>
+                                                        <!--<th class="text-uppercase text-center">Tipo</th>-->
                                                     </tr>
                                                 </thead>
                                             </table>  

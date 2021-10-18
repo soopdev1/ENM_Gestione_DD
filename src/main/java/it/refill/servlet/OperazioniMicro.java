@@ -8,7 +8,6 @@ package it.refill.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
 import com.google.gson.JsonObject;
-import com.mailjet.client.errors.MailjetException;
 import it.refill.db.Action;
 import it.refill.db.Database;
 import it.refill.db.Entity;
@@ -2212,7 +2211,7 @@ public class OperazioniMicro extends HttpServlet {
             if (part != null && part.getSubmittedFileName() != null && part.getSubmittedFileName().length() > 0) {
                 e.begin();
                 ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class, Long.parseLong(idpr));
-                DocumentiPrg esitovalutazione = pf.getDocumenti().stream().filter(d1 -> d1.getId() == 36L).findAny().orElse(null);
+                DocumentiPrg esitovalutazione = pf.getDocumenti().stream().filter(d1 -> d1.getTipo().getId() == 36L).findAny().orElse(null);
                 String destpath = esitovalutazione.getPath() + "SIGNED" + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."));;
                 part.write(destpath);
                 esitovalutazione.setDeleted(1);
@@ -2261,7 +2260,7 @@ public class OperazioniMicro extends HttpServlet {
             e.begin();
             ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class, Long.parseLong(idpr));
 //            DocumentiPrg esitovalutazione = pf.getDocumenti().stream().filter(d1 -> d1.getTipo().getId() == 33L).findAny().orElse(null); //R^TEST
-            DocumentiPrg esitovalutazione = pf.getDocumenti().stream().filter(d1 -> d1.getId() == 36L).findAny().orElse(null);
+            DocumentiPrg esitovalutazione = pf.getDocumenti().stream().filter(d1 -> d1.getTipo().getId() == 36L).findAny().orElse(null);
             if (esitovalutazione != null) {
 //                File content = new File("F:\\mnt\\mcn\\BECONSULTING260720211205764.M2_pdfA.pdf");//R^TEST
                 File content = new File(esitovalutazione.getPath());

@@ -2382,10 +2382,10 @@ public class Pdf_new {
             int allieviOK = Utility.allieviOK(pf.getId(), allievi_totali);
 
             List<Allievi> allievi_faseA = Utility.allievi_fa(pf.getId(), e.getAllieviProgettiFormativi(pf));
-            List<Docenti> docenti_tab = Utility.docenti_ore(pf.getId(), pf.getDocenti());
+            List<Docenti> docenti_tab = Utility.docenti_ore_A(pf.getId(), pf.getDocenti());
             Map<Long, Long> oreRendicontabili_faseA = Action.OreRendicontabiliAlunni_faseA((int) (long) pf.getId());
             Map<Long, Long> oreRendicontabili_faseB = Action.OreRendicontabiliAlunni_faseB((int) (long) pf.getId());
-            Map<Long, Long> oreRendicontabili_docenti = Action.OreRendicontabiliDocenti((int) (long) pf.getId());
+            Map<Long, Long> oreRendicontabili_docenti = Action.OreRendicontabiliDocentiFASEA((int) (long) pf.getId());
             String coeff_fa = e.getPath("coeff.allievo.fasea");
             String coeff_fb = e.getPath("coeff.allievo.faseb");
 
@@ -2589,10 +2589,10 @@ public class Pdf_new {
             String contentb64 = p.getModello();
 
             List<Allievi> allievi_faseA = Utility.allievi_fa(pf.getId(), e.getAllieviProgettiFormativi(pf));
-            List<Docenti> docenti_tab = Utility.docenti_ore(pf.getId(), pf.getDocenti());
+            List<Docenti> docenti_tab = Utility.docenti_ore_A(pf.getId(), pf.getDocenti());
 //            Map<Long, Long> oreRendicontabili_faseA = Action.OreRendicontabiliAlunni_faseA((int) (long) pf.getId());
             Map<Long, Long> oreRendicontabili_faseB = Action.OreRendicontabiliAlunni_faseB((int) (long) pf.getId());
-            Map<Long, Long> oreRendicontabili_docenti = Action.OreRendicontabiliDocenti((int) (long) pf.getId());
+            Map<Long, Long> oreRendicontabili_docenti = Action.OreRendicontabiliDocentiFASEA((int) (long) pf.getId());
 
             File pdfOut = new File(startpath + username + "_"
                     + StringUtils.deleteWhitespace(sa.getRagionesociale()) + "_"
