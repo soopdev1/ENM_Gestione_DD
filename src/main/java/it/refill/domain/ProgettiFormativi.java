@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,6 +30,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 /**
  *
@@ -542,7 +543,6 @@ public class ProgettiFormativi implements Serializable {
 
     @Override
     public String toString() {
-        return "ProgettiFormativi{" + "id=" + id + ", data_up=" + data_up + ", start=" + start + ", end=" + end + ", timestamp=" + timestamp + ", descrizione=" + descrizione + ", nome=" + nome + ", cip=" + cip + ", motivo=" + motivo + ", ore=" + ore + ", ore_svolte=" + ore_svolte + ", controllable=" + controllable + ", archiviabile=" + archiviabile + ", extract=" + extract + ", end_fa=" + end_fa + ", start_fb=" + start_fb + ", end_fb=" + end_fb + ", importo=" + importo + ", stato=" + stato + ", soggetto=" + soggetto + ", sede=" + sede + ", docenti=" + docenti + ", allievi=" + allievi + ", documenti=" + documenti + '}';
+        return ReflectionToStringBuilder.toString(this, JSON_STYLE);
     }
-
 }

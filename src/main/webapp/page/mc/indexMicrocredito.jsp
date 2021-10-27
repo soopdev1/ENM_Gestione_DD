@@ -339,7 +339,7 @@
                                                                     <b style="font-size: 15px;"><%=e1.getProgetti()%></b>
                                                                 </div> 
                                                                 <div class="kt-notification__item-time kt-font-io">
-                                                                    <b><%=Utility.sdfITAC1.format(e1.getTimestamp())%></b><br>
+                                                                    <b><%=e1.getVisualTime()%></b><br>
                                                                 </div>
                                                             </div>
                                                         </a>

@@ -498,12 +498,17 @@
                                                                             <div class="col-2"><b>Importo Orario Riconosciuto</b></div>
                                                                             <div class="col-2"><b>Totale</b></div>
                                                                         </div>
-                                                                        <%for (Allievi al : allievi_faseA) {%>
+                                                                        <%for (Allievi al : allievi_faseA) {
+                                                                        String orerend = Utility.convertToHours_R(oreRendicontabili_faseA.get(al.getId()));
+                                                                        
+                                                                        %>
                                                                         <div class="row" id="farow_<%=al.getId()%>">
                                                                             <div class="col-2"><%=al.getNome()%> <%=al.getCognome()%></div>
                                                                             <div class="col-2"><%=Utility.formatTarget(al.getTarget())%></div>
-                                                                            <div class="col-2"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom" disabled="disabled" type="text" value="<%=Utility.roundTwoDigits(oreRendicontabili_faseA.get(al.getId()) / 3600000)%>" name="fa_ore_<%=al.getId()%>" id="fa_ore_<%=al.getId()%>" /></div>
-                                                                            <div class="col-2"><input class="form-control decimal_custom obbligatory kt-font-bold kt-font-danger ctrl" type="text" value="<%=Utility.roundTwoDigits(oreRendicontabili_faseA.get(al.getId()) / 3600000)%>" name="fa_controllo_ore_<%=al.getId()%>" id="fa_controllo_ore_<%=al.getId()%>" /></div>
+                                                                            <div class="col-2"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom" 
+                                                                                                      disabled="disabled" type="text" value="<%=orerend%>" name="fa_ore_<%=al.getId()%>" id="fa_ore_<%=al.getId()%>" /></div>
+                                                                            <div class="col-2"><input class="form-control decimal_custom obbligatory kt-font-bold kt-font-danger ctrl" 
+                                                                                                      type="text" value="<%=orerend%>" name="fa_controllo_ore_<%=al.getId()%>" id="fa_controllo_ore_<%=al.getId()%>" /></div>
                                                                             <div class="col-2"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom" disabled="disabled" type="text" value="<%=coeff_fa%>" name="fa_coeff_<%=al.getId()%>" id="fa_coeff_<%=al.getId()%>" /></div>
                                                                             <div class="col-2"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom" disabled="disabled" type="text" name="fa_tot_<%=al.getId()%>" id="fa_tot_<%=al.getId()%>" /></div>
                                                                         </div>
@@ -523,12 +528,16 @@
                                                                             <div class="col-2"><b>Importo Orario Riconosciuto</b></div>
                                                                             <div class="col-2"><b>Totale</b></div>
                                                                         </div>
-                                                                        <%for (Allievi al : allievi_faseB) {%>
+                                                                        <%for (Allievi al : allievi_faseB) {
+                                                                        String orerend = Utility.convertToHours_R(oreRendicontabili_faseB.get(al.getId()));
+                                                                        %>
                                                                         <div class="row" id="fbrow_<%=al.getId()%>">
                                                                             <div class="col-2"><%=al.getNome()%> <%=al.getCognome()%></div>
                                                                             <div class="col-2"><%=Utility.formatTarget(al.getTarget())%></div>
-                                                                            <div class="col-2"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom" disabled="disabled" type="text" value="<%=Utility.roundTwoDigits(oreRendicontabili_faseB.get(al.getId()) / 3600000)%>" name="fb_ore_<%=al.getId()%>" id="fb_ore_<%=al.getId()%>" /></div>
-                                                                            <div class="col-2"><input class="form-control decimal_custom obbligatory kt-font-bold kt-font-danger ctrl" type="text" value="<%=Utility.roundTwoDigits(oreRendicontabili_faseB.get(al.getId()) / 3600000)%>" name="fb_controllo_ore_<%=al.getId()%>" id="fb_controllo_ore_<%=al.getId()%>" /></div>
+                                                                            <div class="col-2"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom" 
+                                                                                                      disabled="disabled" type="text" value="<%=orerend%>" name="fb_ore_<%=al.getId()%>" id="fb_ore_<%=al.getId()%>" /></div>
+                                                                            <div class="col-2"><input class="form-control decimal_custom obbligatory kt-font-bold kt-font-danger ctrl" 
+                                                                                                      type="text" value="<%=orerend%>" name="fb_controllo_ore_<%=al.getId()%>" id="fb_controllo_ore_<%=al.getId()%>" /></div>
                                                                             <div class="col-2"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom"  disabled="disabled" type="text" value="<%=coeff_fb%>" name="fb_coeff_<%=al.getId()%>" id="fb_coeff_<%=al.getId()%>" /></div>
                                                                             <div class="col-2"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom" disabled="disabled" type="text" name="fb_tot_<%=al.getId()%>" id="fb_tot_<%=al.getId()%>" /></div>
                                                                         </div>
@@ -546,11 +555,15 @@
                                                                             <div class="col-3"><b>Contributo €/H per fascia (A: 95,00, B: 70,00)</b></div>
                                                                             <div class="col-2"><b>Totale</b></div>
                                                                         </div>
-                                                                        <%for (Docenti al : docenti_tab) {%>
+                                                                        <%for (Docenti al : docenti_tab) {
+                                                                        String orerend = Utility.convertToHours_R(oreRendicontabili_docenti.get(al.getId()));
+                                                                        %>
                                                                         <div class="row" id="dcrow_<%=al.getId()%>">
                                                                             <div class="col-4"><%=al.getNome()%> <%=al.getCognome()%></div>
-                                                                            <div class="col-3"><input class="form-control decimal_custom" disabled="disabled" type="text" value="<%=Utility.roundTwoDigits(oreRendicontabili_docenti.get(al.getId()) / 3600000)%>" name="dc_ore_<%=al.getId()%>" id="dc_ore_<%=al.getId()%>" /></div>
-                                                                            <div class="col-3"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom"  disabled="disabled" type="text" value="<%=fasceDocenti.get(al.getFascia().getId())%>" name="dc_coeff_<%=al.getId()%>" id="dc_coeff_<%=al.getId()%>" /></div>
+                                                                            <div class="col-3"><input class="form-control decimal_custom" disabled="disabled" 
+                                                                                                      type="text" value="<%=orerend%>" name="dc_ore_<%=al.getId()%>" id="dc_ore_<%=al.getId()%>" /></div>
+                                                                            <div class="col-3"><input style="background-color: rgb(237, 243, 255)!important;" 
+                                                                                                      class="form-control decimal_custom"  disabled="disabled" type="text" value="<%=fasceDocenti.get(al.getFascia().getId())%>" name="dc_coeff_<%=al.getId()%>" id="dc_coeff_<%=al.getId()%>" /></div>
                                                                             <div class="col-2"><input style="background-color: rgb(237, 243, 255)!important;" class="form-control decimal_custom" disabled="disabled" type="text" name="dc_tot_<%=al.getId()%>" id="dc_tot_<%=al.getId()%>" /></div>
                                                                         </div>
                                                                         <%}%>
@@ -684,7 +697,8 @@
                                                                     <div class="row">
                                                                         <div class="form-group col-lg-4 col-sm-12 col-md-4">
                                                                             <label>Soggetto Attuatore sottoposto a controllo</label>
-                                                                            <input type="text" disabled class="form-control info-input kt-font-io" style="font-weight: 500; color: #e8f0ff00" value="<%=p.getSoggetto().getNome()%>">
+                                                                            <input type="text" disabled class="form-control info-input kt-font-io"
+                                                                                   style="font-weight: 500; color: #e8f0ff00" value="<%=p.getSoggetto().getRagionesociale()%>" />
                                                                         </div>
                                                                         <div class="form-group col-lg-4 col-sm-12 col-md-4">
                                                                             <label>Protocollo Soggetto Attuatore</label>

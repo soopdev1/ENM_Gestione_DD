@@ -40,7 +40,7 @@ import org.joda.time.DateTime;
     @NamedQuery(name = "sa.byPiva", query = "SELECT sa FROM SoggettiAttuatori sa WHERE sa.piva=:piva"),
     @NamedQuery(name = "sa.byEmail", query = "SELECT sa FROM SoggettiAttuatori sa WHERE sa.email=:email"),
     @NamedQuery(name = "sa.byCF", query = "SELECT sa FROM SoggettiAttuatori sa WHERE sa.codicefiscale=:codicefiscale"),
-    @NamedQuery(name = "sa.listaSA", query = "SELECT sa FROM SoggettiAttuatori sa"),})
+    @NamedQuery(name = "sa.listaSA", query = "SELECT sa FROM SoggettiAttuatori sa")})
 @JsonIgnoreProperties(value = {"allievi", "progettiformativi"})
 public class SoggettiAttuatori implements Serializable {
 

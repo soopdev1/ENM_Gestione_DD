@@ -2827,7 +2827,7 @@ public class OperazioniSA extends HttpServlet {
                     d.setCurriculum(pathcv.replace("\\", "/"));
                 }
                 /*Modifica 14 06 21 - Nuovi campi ed attivita*/
-                String comune_nascita = getRequestValue(request, "com_nas");
+                String comune_nascita = new String(getRequestValue(request, "com_nas").getBytes(Charsets.ISO_8859_1), Charsets.UTF_8);
                 String reg_res = getRequestValue(request, "reg_res");
                 String pec = getRequestValue(request, "pecmail");
                 String cell = getRequestValue(request, "telefono");
@@ -2845,29 +2845,35 @@ public class OperazioniSA extends HttpServlet {
                 d.setTipo_inserimento("MANUALE (PIATTAFORMA GESTIONALE)");
 
                 e.persist(d);
-
-                /*Modifica 14 06 21 - Singole Attivita*/
-                int nroAttivita_max = Integer.parseInt(e.getPath("numAttivita_docente"));
-                List<Attivita_Docente> list_attivita = new ArrayList();
-                Attivita_Docente temp;
-                for (int i = 1; i <= nroAttivita_max; i++) {
-                    if (Integer.parseInt(getRequestValue(request, "attivita_vis_" + i)) == 1) {
-                        temp = new Attivita_Docente(Integer.parseInt(getRequestValue(request, "tipo_att_" + i)),
-                                getRequestValue(request, "committente_" + i),
-                                new SimpleDateFormat("dd/MM/yyyy").parse(getRequestValue(request, "data_inizio_" + i)),
-                                new SimpleDateFormat("dd/MM/yyyy").parse(getRequestValue(request, "data_fine_" + i)),
-                                Integer.parseInt(getRequestValue(request, "durata_" + i)),
-                                getRequestValue(request, "unita_" + i),
-                                Integer.parseInt(getRequestValue(request, "incarico_" + i)),
-                                Integer.parseInt(getRequestValue(request, "fonte_" + i)),
-                                Integer.parseInt(getRequestValue(request, "progr_" + i)),
-                                d);
-                        list_attivita.add(temp);
-                        e.persist(temp);
+                try {
+                    /*Modifica 14 06 21 - Singole Attivita*/
+                    int nroAttivita_max = Integer.parseInt(e.getPath("numAttivita_docente"));
+                    List<Attivita_Docente> list_attivita = new ArrayList();
+                    Attivita_Docente temp;
+                    for (int i = 1; i <= nroAttivita_max; i++) {
+                        if (Integer.parseInt(getRequestValue(request, "attivita_vis_" + i)) == 1) {
+                            temp = new Attivita_Docente(Integer.parseInt(getRequestValue(request, "tipo_att_" + i)),
+                                    getRequestValue(request, "committente_" + i),
+                                    new SimpleDateFormat("dd/MM/yyyy").parse(getRequestValue(request, "data_inizio_" + i)),
+                                    new SimpleDateFormat("dd/MM/yyyy").parse(getRequestValue(request, "data_fine_" + i)),
+                                    Integer.parseInt(getRequestValue(request, "durata_" + i)),
+                                    getRequestValue(request, "unita_" + i),
+                                    Integer.parseInt(getRequestValue(request, "incarico_" + i)),
+                                    Integer.parseInt(getRequestValue(request, "fonte_" + i)),
+                                    Integer.parseInt(getRequestValue(request, "progr_" + i)),
+                                    d);
+                            list_attivita.add(temp);
+                            e.persist(temp);
+                        }
                     }
+                    d.setAttivita(list_attivita);
+                } catch (Exception ex) {
+                    e.rollBack();
+                    resp.addProperty("result", false);
+                    resp.addProperty("message", "RICHIESTA ACCREDITAMENTO DOCENTE ERRATA ERRORE NELLE ATTIVITA'. " + ex.getMessage() + ". CONTROLLARE.");
+                    ex.printStackTrace();
                 }
-                d.setAttivita(list_attivita);
-
+                
                 //CREA DOCUMENTO
                 if (salvataggio) {
 

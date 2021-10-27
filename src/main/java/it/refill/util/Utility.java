@@ -84,6 +84,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.joda.time.DateTimeComparator;
+import org.joda.time.DateTimeZone;
 import org.joda.time.Period;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -111,6 +112,7 @@ public class Utility {
     public static final SimpleDateFormat sdfHHMM = new SimpleDateFormat(patternHHMM);
     public static final NumberFormat numITA = NumberFormat.getCurrencyInstance(Locale.ITALY);
     public static boolean pregresso = false;
+    public static final DateTimeZone dtz_italy = DateTimeZone.forID("Europe/Rome");
 
     //END RAF
     public static void redirect(HttpServletRequest request, HttpServletResponse response, String destination) throws ServletException, IOException {
@@ -827,9 +829,12 @@ public class Utility {
     }
 
     public static List<Allievi> allievi_fb(long idp, List<Allievi> l) {
-        Long hh64 = new Long(230400000);
-        Map<Long, Long> oreRendicontabili_faseB = Action.OreRendicontabiliAlunni((int) (long) idp);
-        return l.stream().filter(a -> oreRendicontabili_faseB.get(a.getId()) != null && oreRendicontabili_faseB.get(a.getId()).compareTo(hh64) > 0).collect(Collectors.toList());
+
+        return l.stream().filter(a -> a.getGruppo_faseB() > 0).collect(Collectors.toList());
+//        
+//        Long hh64 = new Long(230400000);
+//        Map<Long, Long> oreRendicontabili_faseB = Action.OreRendicontabiliAlunni((int) (long) idp);
+//        return l.stream().filter(a -> oreRendicontabili_faseB.get(a.getId()) != null && oreRendicontabili_faseB.get(a.getId()).compareTo(hh64) > 0).collect(Collectors.toList());
     }
 
     public static List<Docenti> docenti_ore(long idp, List<Docenti> l) {
@@ -850,6 +855,17 @@ public class Utility {
             ret += "0";
         }
         return ret;
+    }
+    
+     public static String convertToHours_R(long value1) {
+        try {
+            double hours = value1 / 1000.0 / 60.0 / 60.0;
+            BigDecimal bigDecimal = new BigDecimal(hours);
+            bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_EVEN);
+            return bigDecimal.toString();
+        } catch (Exception e) {
+        }
+        return "0.00";
     }
 
     public static Map<String, String> mapCoeffDocenti(String fasciaA, String fasciaB) {

@@ -29,6 +29,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 /**
  *
@@ -48,7 +50,7 @@ import javax.persistence.Transient;
 })
     
 
-@JsonIgnoreProperties(value = {"progetti", "registri_aula", "registri_allievi"})
+@JsonIgnoreProperties(value = {"progetti", "registri_aula", "registri_allievi","attivita"})
 public class Docenti implements Serializable {
 
     @Id
@@ -456,37 +458,7 @@ public class Docenti implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Docenti{id=").append(id);
-        sb.append(", nome=").append(nome);
-        sb.append(", cognome=").append(cognome);
-        sb.append(", codicefiscale=").append(codicefiscale);
-        sb.append(", datanascita=").append(datanascita);
-        sb.append(", curriculum=").append(curriculum);
-        sb.append(", docId=").append(docId);
-        sb.append(", richiesta_accr=").append(richiesta_accr);
-        sb.append(", stato=").append(stato);
-        sb.append(", scadenza_doc=").append(scadenza_doc);
-        sb.append(", email=").append(email);
-        sb.append(", datawebinair=").append(datawebinair);
-        sb.append(", fascia=").append(fascia);
-        sb.append(", soggetto=").append(soggetto);
-        sb.append(", progetti=").append(progetti);
-        sb.append(", registri_aula=").append(registri_aula);
-        sb.append(", registri_allievi=").append(registri_allievi);
-        sb.append(", lezioni=").append(lezioni);
-        sb.append(", descrizionestato=").append(descrizionestato);
-        sb.append(", pec=").append(pec);
-        sb.append(", cellulare=").append(cellulare);
-        sb.append(", regione_di_residenza=").append(regione_di_residenza);
-        sb.append(", comune_di_nascita=").append(comune_di_nascita);
-        sb.append(", titolo_di_studio=").append(titolo_di_studio);
-        sb.append(", area_prevalente_di_qualificazione=").append(area_prevalente_di_qualificazione);
-        sb.append(", inquadramento=").append(inquadramento);
-        sb.append(", motivo=").append(motivo);
-        sb.append(", attivita=").append(attivita);
-        sb.append('}');
-        return sb.toString();
+        return ReflectionToStringBuilder.toString(this, JSON_STYLE);
     }
 
     

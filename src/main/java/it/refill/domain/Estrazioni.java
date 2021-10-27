@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -42,13 +43,18 @@ public class Estrazioni implements Serializable {
     @Column(name = "path")
     private String path;
 
-    public Estrazioni(Date timestamp, String progetti, String path) {
-        this.timestamp = timestamp;
-        this.progetti = progetti;
-        this.path = path;
-    }
+    @Transient
+    private String visualTime;
 
     public Estrazioni() {
+    }
+
+    public String getVisualTime() {
+        return visualTime;
+    }
+
+    public void setVisualTime(String visualTime) {
+        this.visualTime = visualTime;
     }
 
     public Long getId() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="microcredito" transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <persistence-unit name="microcredito" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>it.refill.domain.TipoDoc_Allievi</class>
         <class>it.refill.domain.TipoFaq</class>
         <class>it.refill.domain.CpiUser</class>
@@ -51,11 +51,10 @@
             <property name="eclipselink.logging.level" value="SEVERE"/>
             <property name="eclipselink.query-results-cache" value="false"/>
             <property name="eclipselink.cache.shared.default" value="false"/>
-            <property name="eclipselink.cache.size.default" value="0"/>
-            <property name="eclipselink.cache.type.default" value="None"/>
+            <property name="eclipselink.cache.size.default" value="5000"/>
+            <property name="eclipselink.cache.type.default" value="Full"/>
             <property name="javax.persistence.schema-generation.database.action" value="create-or-extend-tables"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>      
-            <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
             <property name="javax.persistence.jdbc.user" value="bando"/>
             <property name="javax.persistence.jdbc.password" value="bando"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
@@ -65,8 +64,7 @@
                        value="jdbc:mysql://clustermicrocredito.cluster-c6m6yfqeypv3.eu-south-1.rds.amazonaws.com:3306/enm_gestione_dd?useSSL=false" />
             -->
             <!--    PROD   -->
-            <property name="javax.persistence.jdbc.url" 
-                      value="jdbc:mysql://clustermicrocredito.cluster-c6m6yfqeypv3.eu-south-1.rds.amazonaws.com:3306/enm_gestione_dd_prod?useSSL=false"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://clustermicrocredito.cluster-c6m6yfqeypv3.eu-south-1.rds.amazonaws.com:3306/enm_gestione_dd_prod?useSSL=false"/>
 
                              
         </properties>

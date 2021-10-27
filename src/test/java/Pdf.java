@@ -1,6 +1,11 @@
 
+import it.refill.db.Entity;
+import it.refill.domain.ModelliPrg;
+import it.refill.domain.ProgettiFormativi;
 import it.refill.util.Pdf_new;
+import static it.refill.util.Utility.filterModello6;
 import java.io.File;
+import org.joda.time.DateTime;
 
 
 //import it.refill.db.Entity;
@@ -27,7 +32,30 @@ import java.io.File;
  */
 public class Pdf {
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
+        
+        
+        File downloadFile = null;
+        try {
+            Entity e = new Entity();
+            ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class,
+                    110L);
+            
+            System.out.println("Pdf.main() "+pf.getModelli());
+            
+            ModelliPrg m6 = filterModello6(pf.getModelli());
+            if (m6 != null) {
+                downloadFile = Pdf_new.MODELLO6(e,
+                        "AMMINISTRAZIONE",
+                        pf.getSoggetto(),
+                        pf, m6, new DateTime(), true);
+                System.out.println("Pdf.main() "+downloadFile.getPath());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        
 //
 //        Entity e = new Entity();
 //
@@ -47,11 +75,11 @@ public class Pdf {
 //
 //        System.out.println(f1.getPath());
 //
-//    }
-    public static void main(String[] args) {
-        
-        String o = Pdf_new.checkFirmaQRpdfA("ALLEGATOB1", "", new File("F:\\mnt\\mcn\\test\\RICH_ACCR_20210809_MNGMGR66R65F158L_pdfA.pdf.p7m"), "", "20;0;60;60");
-        System.out.println(o);
     }
+//    public static void main(String[] args) {
+//        
+//        String o = Pdf_new.checkFirmaQRpdfA("ALLEGATOB1", "", new File("F:\\mnt\\mcn\\test\\RICH_ACCR_20210809_MNGMGR66R65F158L_pdfA.pdf.p7m"), "", "20;0;60;60");
+//        System.out.println(o);
+//    }
 //                    
 }

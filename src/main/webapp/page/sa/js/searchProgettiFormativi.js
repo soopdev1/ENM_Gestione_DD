@@ -105,7 +105,7 @@ var KTDatatablesDataSourceAjaxServer = function () {
                                 }
                             } else if (row.stato.id === "ATB") {
                                 option += '<a class="dropdown-item fancyBoxFullReload" href="modello4.jsp?id=' + row.id + '"><i class="fa fa-calendar-check"></i> Visualizza/Modifica Calendario Modello 4</a>';
-                            } else if(row.stato.id === "F"){
+                            } else if (row.stato.id === "F") {
                                 option += '<a class="dropdown-item fancyBoxFullReload" href="modello4.jsp?id=' + row.id + '"><i class="fa fa-calendar-check"></i> Visualizza Calendario Modello 4</a>';
                                 option += '<a class="dropdown-item" href="concludiPrg.jsp?id=' + row.id + '"><i class="fa fa-angle-double-right"></i> Concludi Progetto</a>';
                             }
@@ -239,7 +239,7 @@ var DatatablesAllievi = function () {
                                 option += '<a class="dropdown-item " href="javascript:void(0);" onclick="swalSigma(' + row.id + ',\'' + row.statopartecipazione.id +
                                         '\')"><i class="fa fa-user-check" data-container="body" data-html="true" data-toggle="kt-tooltip" title="Stato '
                                         + row.statopartecipazione.descrizione + '"></i>Cambia stato di partecipazione</a>';
-      
+
                             }
                         }
                         option += '</div></div>';
@@ -610,9 +610,10 @@ function checkStartM4() {
         async: false,
         url: context + "/QuerySA?type=checkModello4Start",
         success: function (resp) {
-            if (resp !== null)
+            if (resp !== null) {
                 temp = JSON.parse(resp);
-            mapM4_start = new Map(temp.map(i => [i.id_prg, i.max_date_m3]));
+                mapM4_start = new Map(temp.map(i => [i.id_prg, i.max_date_m3]));
+            }
         }
     });
     return temp;

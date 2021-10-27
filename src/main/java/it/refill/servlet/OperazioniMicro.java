@@ -2270,6 +2270,7 @@ public class OperazioniMicro extends HttpServlet {
 
                     String oggetto = email_txt.getOggetto() + " " + pf.getCip();
                     String testo = StringUtils.replace(email_txt.getTesto(), "@cipcorso", pf.getCip());
+                    testo = StringUtils.replace(testo, "@nomesa", pf.getSoggetto().getRagionesociale().toUpperCase());
                     boolean ok = SendMailJet.sendMail(e.getPath("mailsender"), new String[]{maildest}, mailcc, testo, oggetto, content);
 
                     if (ok) {

@@ -44,7 +44,9 @@ import it.refill.domain.UnitaDidattiche;
 import it.refill.domain.User;
 import it.refill.entity.Item;
 import it.refill.domain.Cloud;
+import it.refill.util.Utility;
 import static it.refill.util.Utility.convMd5;
+import static it.refill.util.Utility.dtz_italy;
 import static it.refill.util.Utility.maxQueryResult;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,6 +59,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 import static org.apache.commons.io.FilenameUtils.separatorsToSystem;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -94,13 +97,15 @@ public class Entity {
     }
 
     public void rollBack() {
-        this.em.getTransaction().rollback();
+        if (this.em.getTransaction().isActive()) {
+            this.em.getTransaction().rollback();
+        }
     }
 
     public void remove(Object o) {
         this.em.remove(o);
     }
-    
+
     public void flush() {
         this.em.flush();
     }
@@ -160,7 +165,7 @@ public class Entity {
         return out;
 
     }
-    
+
     public List<Item> listaComuni_totale() {
         List<String> cm = this.em.createNamedQuery("comuni.ComuniTotale", String.class).getResultList();
         List<Item> out = new ArrayList<>();
@@ -169,9 +174,9 @@ public class Entity {
         }
         return out;
     }
-    
-    public List<Item> listaNazioni_totale(){
-    List<String> cm = this.em.createNamedQuery("nazioni_rc.NazioniTotale", String.class).getResultList();
+
+    public List<Item> listaNazioni_totale() {
+        List<String> cm = this.em.createNamedQuery("nazioni_rc.NazioniTotale", String.class).getResultList();
         List<Item> out = new ArrayList<>();
         for (String c : cm) {
             out.add(new Item(c.toUpperCase(), c.toUpperCase() + " (STATO ESTERO)", ""));
@@ -234,13 +239,13 @@ public class Entity {
         c1.setRegione(naz.getNome());
         return c1;
     }
-    
+
     public Comuni byIstatEstero(String istat) {
         TypedQuery q = this.em.createNamedQuery("comuni.byIstatEstero", Comuni.class);
         q.setParameter("istat", istat);
         return q.getResultList().isEmpty() ? null : (Comuni) q.getSingleResult();
     }
-    
+
     public Nazioni_rc byCodiceFiscale(String cf) {
         TypedQuery q = this.em.createNamedQuery("nazioni_rc.byCodiceFiscale", Nazioni_rc.class);
         q.setParameter("codicefiscale", cf);
@@ -397,13 +402,12 @@ public class Entity {
                 .setParameter("soggetto", sa);
         return q.getResultList().isEmpty() ? new ArrayList() : (List<Allievi>) q.getResultList();
     }
-    
-      public List<Allievi> getAllieviSoggettoNoPrgAttivi(SoggettiAttuatori sa) {
+
+    public List<Allievi> getAllieviSoggettoNoPrgAttivi(SoggettiAttuatori sa) {
         TypedQuery<Allievi> q = em.createNamedQuery("a.bySoggettoAttuatoreNoProgettoAttivi", Allievi.class)
                 .setParameter("soggetto", sa);
         return q.getResultList().isEmpty() ? new ArrayList() : (List<Allievi>) q.getResultList();
     }
-
 
     public List<Allievi> getAllieviSA(String nome, String cognome, String cf, String stato, SoggettiAttuatori sa) {
         HashMap<String, Object> param = new HashMap<>();
@@ -614,6 +618,7 @@ public class Entity {
         q.setParameter("progetto", p);
         return q.getResultList().size() > 0 ? (List<Allievi>) q.getResultList() : new ArrayList();
     }
+
     public List<Allievi> getAllieviProgettiFormativiAll(ProgettiFormativi p) {
         TypedQuery q = em.createNamedQuery("a.byProgettoAll", Allievi.class);
         q.setParameter("progetto", p);
@@ -623,6 +628,7 @@ public class Entity {
     public List<StatiPrg> getStatiPrg() {
         return (List<StatiPrg>) this.em.createNamedQuery("statiPrg.Tipo").getResultList();
     }
+
     public List<StatiPrg> getStatiPrg_R() {
         return (List<StatiPrg>) this.em.createNamedQuery("statiPrg.TipoR").getResultList();
     }
@@ -852,8 +858,12 @@ public class Entity {
     }
 
     public List<Estrazioni> getEstazioniDesc() {
-        TypedQuery<Estrazioni> q = em.createNamedQuery("estrazioni.timestampDesc", Estrazioni.class).setMaxResults(maxQueryResult);
-        return q.getResultList().size() > 0 ? (List<Estrazioni>) q.getResultList() : new ArrayList();
+        TypedQuery<Estrazioni> q = this.em.createNamedQuery("estrazioni.timestampDesc", Estrazioni.class).setMaxResults(maxQueryResult);
+        List<Estrazioni> result = q.getResultList();
+        result.forEach(r1 -> {
+            r1.setVisualTime(new DateTime(r1.getTimestamp().getTime()).toDateTime(dtz_italy).toString(Utility.patternITACOMPLETE));
+        });
+        return result.size() > 0 ? result : new ArrayList();
     }
 
     public Docenti getDocenteByCf(String cf) {
@@ -1156,18 +1166,18 @@ public class Entity {
         TypedQuery q = this.em.createNamedQuery("d.bySA_Active", Docenti.class).setParameter("soggetto", s);
         return q.getResultList().size() > 0 ? (List<Docenti>) q.getResultList() : new ArrayList();
     }
-    
-    public List<MascheraM5> getM5Loaded_byPF(ProgettiFormativi pf){
+
+    public List<MascheraM5> getM5Loaded_byPF(ProgettiFormativi pf) {
         TypedQuery q = this.em.createNamedQuery("m5.byPF", MascheraM5.class).setParameter("progetto_formativo", pf);
         return q.getResultList().size() > 0 ? (List<MascheraM5>) q.getResultList() : new ArrayList();
     }
-    
-    public MascheraM5 getM5_byAllievo(Allievi a1){
+
+    public MascheraM5 getM5_byAllievo(Allievi a1) {
         TypedQuery q = this.em.createNamedQuery("m5.byAllievo", MascheraM5.class).setParameter("allievo", a1);
         return q.getResultList().isEmpty() ? null : (MascheraM5) q.getSingleResult();
     }
-    
-      public List<Ateco> list_CodiciAteco() {
+
+    public List<Ateco> list_CodiciAteco() {
         TypedQuery<Ateco> q = this.em.createNamedQuery("ate.Elenco", Ateco.class);
         return q.getResultList().isEmpty() ? new ArrayList() : (List<Ateco>) q.getResultList();
     }
@@ -1177,6 +1187,5 @@ public class Entity {
                 .setParameter("tipo", tipo);
         return q.getResultList().size() > 0 ? (List<Cloud>) q.getResultList() : new ArrayList();
     }
-        
-    
+
 }

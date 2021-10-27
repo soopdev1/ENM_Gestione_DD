@@ -305,7 +305,26 @@ var DatatablesAllievi = function () {
             drawCallback: function () {
                 $('[data-toggle="kt-tooltip"]').tooltip();
             },
-            columnDefs: []
+            columnDefs: [
+                {
+                    targets: 5,
+                    className: 'text-center',
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        var opt1 = '<span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">'
+                                + '<label>'
+                                + '<input type="checkbox" data-toggle="toggle" name="mappatura_' + row.id + '" id="mappatura_' + row.id + '"/>'
+                                + '<span></span> </label></span>';
+                        return opt1;
+                        if (row.mappatura === 0 || row.mappatura === '0') {
+                            //    return "NO";
+                        } else if (row.mappatura === 1 || row.mappatura === '1') {
+                            //    return "SI";
+                        } else {
+                            //    return "NON DEFINITO";
+                        }
+                    }
+                }]
         });
     };
 

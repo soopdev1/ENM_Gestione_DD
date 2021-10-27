@@ -1,6 +1,5 @@
 package it.refill.domain;
 
-import it.refill.util.Utility;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -16,6 +15,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 @Entity
 @Table(name = "attivita_docente")
 @NamedQueries(value = {
@@ -191,20 +192,7 @@ public class Attivita_Docente implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Attivita_Docente{id=").append(id);
-        sb.append(", tipologia_di_attivita=").append(tipologia_di_attivita);
-        sb.append(", committente=").append(committente);
-        sb.append(", data_inizio_periodo_di_riferimento=").append(data_inizio_periodo_di_riferimento);
-        sb.append(", data_fine_periodo_di_riferimento=").append(data_fine_periodo_di_riferimento);
-        sb.append(", durata=").append(durata);
-        sb.append(", unita_di_misura=").append(unita_di_misura);
-        sb.append(", tipologia_di_incarico=").append(tipologia_di_incarico);
-        sb.append(", fonte_di_finanziamento=").append(fonte_di_finanziamento);
-        sb.append(", riferimento=").append(riferimento);
-        sb.append(", docente=").append(docente);
-        sb.append('}');
-        return sb.toString();
+        return ReflectionToStringBuilder.toString(this, JSON_STYLE);
     }
 
     

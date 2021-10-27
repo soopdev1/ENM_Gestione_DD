@@ -13,7 +13,7 @@ import java.io.File;
  * @author rcosco
  */
 public class R {
-    public static void main(String[] args) {
-        System.out.println(checkFirmaQRpdfA("MODELLO3", "", new File("C:\\Users\\raf\\Desktop\\SEGRETERIAGENERALE_ULE-UNIONELAVORATORIEUROPEI_131020211011244.M3_pdfA-signed.pdf"), "", "20;0;60;60"));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(checkFirmaQRpdfA("MODELLO3", "", new File("C:\\Users\\raf\\Desktop\\SEGRETERIAGENERALE_ULE-UNIONELAVORATORIEUROPEI_131020211011244.M3_pdfA-signed.pdf"), "", "20;0;60;60"));
+//    }
 }
