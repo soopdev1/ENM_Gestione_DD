@@ -1307,3 +1307,12 @@ function swalSuccessReloadWithHash(title, HTMLmessage, hash) {
         location.reload();
     });
 }
+
+function fieldNOSPecial_2(fieldid) {
+    var stringToReplace = document.getElementById(fieldid).value;
+    var specialChars = "~`#$^&*[];{}|\":<>°§";
+    for (var i = 0; i < specialChars.length; i++) {
+        stringToReplace = stringToReplace.replace(new RegExp("\\" + specialChars[i], 'gi'), '');
+    }
+    document.getElementById(fieldid).value = stringToReplace;
+}

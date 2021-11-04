@@ -5,8 +5,9 @@
  */
 package it.refill.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.RGBLuminanceSource;
@@ -2403,11 +2404,11 @@ public class Pdf_new {
                 setFieldsValue(form, fields, "NOMESA", sa.getRagionesociale().toUpperCase());
                 setFieldsValue(form, fields, "CIP", pf.getCip());
                 setFieldsValue(form, fields, "PROT", sa.getProtocollo());
-                
+
                 //setFieldsValue(form, fields, "CFSA", sa.getCodicefiscale().toUpperCase());
                 setFieldsValue(form, fields, "CFSA", sa.getPiva().toUpperCase());
                 setFieldsValue(form, fields, "EMAILSA", sa.getEmail().toLowerCase());
-                
+
                 setFieldsValue(form, fields, "DATAINIZIO", sdfITA.format(pf.getStart()));
                 setFieldsValue(form, fields, "DATAFINE", sdfITA.format(pf.getEnd()));
                 setFieldsValue(form, fields, "ISCRITTI", String.valueOf(allievi_totali.size()));
@@ -2421,12 +2422,11 @@ public class Pdf_new {
                     setFieldsValue(form, fields, "INPS", "NO");
                 }
                 //PAG 2
-
-                List<OreId> list_orecontrollatefaseA = Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_neet_fa(), OreId[].class));
-                List<OreId> list_orecontrollatefaseB = Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_neet_fb(), OreId[].class));
-
-                List<MappaturaId> list_mappatifaseA = Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_mappatura_neet(), MappaturaId[].class));
-                List<OutputId> list_outputfaseA = Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_completezza_output_neet(), OutputId[].class));
+                Gson gson = new GsonBuilder().create();
+                List<OreId> list_orecontrollatefaseA = Arrays.asList(gson.fromJson(pf.getChecklist_finale().getTab_neet_fa(), OreId[].class));// Arrays.asList(new ObjectMapper().readValue(, OreId[].class));
+                List<OreId> list_orecontrollatefaseB = Arrays.asList(gson.fromJson(pf.getChecklist_finale().getTab_neet_fb(), OreId[].class));// Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_neet_fb(), OreId[].class));
+                List<MappaturaId> list_mappatifaseA = Arrays.asList(gson.fromJson(pf.getChecklist_finale().getTab_mappatura_neet(), MappaturaId[].class));//Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_mappatura_neet(), MappaturaId[].class));
+                List<OutputId> list_outputfaseA = Arrays.asList(gson.fromJson(pf.getChecklist_finale().getTab_completezza_output_neet(), OutputId[].class));// Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_completezza_output_neet(), OutputId[].class));
 
                 AtomicInteger indice1 = new AtomicInteger(1);
 
@@ -2440,7 +2440,6 @@ public class Pdf_new {
                     setFieldsValue(form, fields, "NOMERow" + indice1.get(), al1.getNome().toUpperCase());
 
                     setFieldsValue(form, fields, "ORENEETARow" + indice1.get(), roundFloatAndFormat(oreRendicontabili_faseA.get(al1.getId()), true));
-
 
                     OreId orea = list_orecontrollatefaseA.stream().filter(al2 -> al2.getId().equals(String.valueOf(al1.getId()))).findAny().orElse(null);
                     if (orea != null) {
@@ -2463,7 +2462,6 @@ public class Pdf_new {
 
                             setFieldsValue(form, fields, "ORE PRESENZE ALLIEVI  FASE BRow" + indice1.get(),
                                     roundFloatAndFormat(oreRendicontabili_faseB.get(al1.getId()), true));
-
 
                             setFieldsValue(form, fields, "CONTROLL O ORE PRESENZE ALLIEVI  FASE BRow" + indice1.get(),
                                     Utility.roundFloatAndFormat(Float.parseFloat(oreb.getOre()), false));
@@ -2518,7 +2516,6 @@ public class Pdf_new {
 
                     float tota = Float.parseFloat(convertToHours_R(oreRendicontabili_docenti.get(d1.getId())))
                             * Float.parseFloat(fasceDocenti.get(d1.getFascia().getId()));
-
 
                     setFieldsValue(form, fields, "TOTALE FASE ARow" + indice2.get() + "_2", roundFloatAndFormat(tota, false));
 
@@ -2606,11 +2603,10 @@ public class Pdf_new {
                 setFieldsValue(form, fields, "DATAINIZIO", sdfITA.format(pf.getStart()));
                 setFieldsValue(form, fields, "DATAFINE", sdfITA.format(pf.getEnd()));
                 setFieldsValue(form, fields, "TOTALE", roundDoubleAndFormat(pf.getChecklist_finale().getTot_contributo_ammesso()) + " €");
-
-                List<OreId> list_orecontrollatefaseA = Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_neet_fa(), OreId[].class));
-                List<OreId> list_orecontrollatefaseB = Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_neet_fb(), OreId[].class));
-//                List<MappaturaId> list_mappatifaseA = Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_mappatura_neet(), MappaturaId[].class));
-                List<OutputId> list_completi = Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_completezza_output_neet(), OutputId[].class));
+                Gson gson = new GsonBuilder().create();
+                List<OreId> list_orecontrollatefaseA = Arrays.asList(gson.fromJson(pf.getChecklist_finale().getTab_neet_fa(), OreId[].class));// Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_neet_fa(), OreId[].class));
+                List<OreId> list_orecontrollatefaseB = Arrays.asList(gson.fromJson(pf.getChecklist_finale().getTab_neet_fb(), OreId[].class));// Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_neet_fb(), OreId[].class));
+                List<OutputId> list_completi = Arrays.asList(gson.fromJson(pf.getChecklist_finale().getTab_completezza_output_neet(), OutputId[].class));// Arrays.asList(new ObjectMapper().readValue(pf.getChecklist_finale().getTab_completezza_output_neet(), OutputId[].class));
 
                 AtomicInteger indice1 = new AtomicInteger(1);
                 allievi_faseA.forEach(al1 -> {
@@ -2645,7 +2641,7 @@ public class Pdf_new {
                     setFieldsValue(form, fields, "FASCIAD_A" + indice2.get(),
                             d1.getFascia().getDescrizione());
                     setFieldsValue(form, fields, "TOTALED_B" + indice2.get(),
-                            roundFloatAndFormat(oreRendicontabili_docenti.get(d1.getId()),true));
+                            roundFloatAndFormat(oreRendicontabili_docenti.get(d1.getId()), true));
                     indice2.addAndGet(1);
                 });
 
@@ -2688,23 +2684,23 @@ public class Pdf_new {
         return null;
 
     }
-    
+
     public static void main(String[] args) {
         File downloadFile = null;
         try {
             Entity e = new Entity();
             ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class,
                     110L);
-            
-            System.out.println("Pdf.main() "+pf.getModelli());
-            
+
+            System.out.println("Pdf.main() " + pf.getModelli());
+
             ModelliPrg m6 = filterModello6(pf.getModelli());
             if (m6 != null) {
                 downloadFile = Pdf_new.MODELLO6(e,
                         "AMMINISTRAZIONE",
                         pf.getSoggetto(),
                         pf, m6, new DateTime(), true);
-                System.out.println("Pdf.main() "+downloadFile.getPath());
+                System.out.println("Pdf.main() " + downloadFile.getPath());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

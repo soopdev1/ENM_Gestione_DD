@@ -274,7 +274,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="modal fade" id="allievi_table_mappa" tabindex="-1" role="dialog" aria-labelledby="Allievi Progetto Formativo" aria-hidden="true" style="padding: 0!important;">
             <div class="modal-dialog modal-full modal-dialog-centered" role="document">
                 <div class="modal-content center">
@@ -295,10 +295,11 @@
                                         <th class="text-uppercase text-center">Stato</th>
                                         <th class="text-uppercase text-center">Ore Effettuate</th>
                                         <th class="text-uppercase text-center">Mappatura Finale</th>
+                                        <th class="text-uppercase text-center">Note</th>
                                     </tr>
                                 </thead>
                             </table>
-                             <table class="table table-bordered" style="width: 100%;" >
+                            <table class="table table-bordered" style="width: 100%; display: none;" id="salvamappatura">
                                 <tfoot style="width: 100%;">
                                 <th colspan="6"><div class="kt-align-center">
                                         <a id="mappaprogetto" onclick="mappaprogetto();" href="javascript:void(0);" class="btn btn-success"> 
@@ -311,7 +312,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="modal fade" id="pdfallievi_table" tabindex="-1" role="dialog" aria-labelledby="Allievi Progetto Formativo" aria-hidden="true" style="padding: 0!important;">
             <div class="modal-dialog modal-full modal-dialog-centered" role="document">
                 <div class="modal-content center">
@@ -338,7 +339,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="modal fade" id="doc_modal" tabindex="-1" role="dialog" aria-labelledby="Documenti" aria-hidden="true"> 
             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -400,29 +401,29 @@
         <script id="searchPFMicro" src="<%=src%>/page/mc/js/searchPFMicro.js<%=no_cache%>" defer data-context="<%=request.getContextPath()%>" 
         data-typeuser="<%=us.getTipo()%>" type="text/javascript"></script>
         <script type="text/javascript">
-                                                                        var KTAppOptions = {
-                                                                            "colors": {
-                                                                                "state": {
-                                                                                    "brand": "#5d78ff",
-                                                                                    "dark": "#282a3c",
-                                                                                    "light": "#ffffff",
-                                                                                    "primary": "#5867dd",
-                                                                                    "success": "#34bfa3",
-                                                                                    "info": "#36a3f7",
-                                                                                    "warning": "#ffb822"
-                                                                                },
-                                                                                "base": {
-                                                                                    "label": ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"],
-                                                                                    "shape": ["#f0f3ff", "#d9dffa", "#afb4d4", "#646c9a"]
-                                                                                }
-                                                                            }
-                                                                        };
+                                            var KTAppOptions = {
+                                                "colors": {
+                                                    "state": {
+                                                        "brand": "#5d78ff",
+                                                        "dark": "#282a3c",
+                                                        "light": "#ffffff",
+                                                        "primary": "#5867dd",
+                                                        "success": "#34bfa3",
+                                                        "info": "#36a3f7",
+                                                        "warning": "#ffb822"
+                                                    },
+                                                    "base": {
+                                                        "label": ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"],
+                                                        "shape": ["#f0f3ff", "#d9dffa", "#afb4d4", "#646c9a"]
+                                                    }
+                                                }
+                                            };
         </script>
         <script>
 //            serve a far vedere il filtro rendicontato solo se seleziono archiviato
             let minAllievi = '<%=min_allievi%>';
 
-    $("#stato").change(function () {
+            $("#stato").change(function () {
                 if ($(this).val() == "archiviato") {
                     //$("#rendicontato_filter").css("display", "");
                     $("#rendicontato_filter").css("display", "none");

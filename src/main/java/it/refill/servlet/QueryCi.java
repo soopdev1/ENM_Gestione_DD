@@ -5,7 +5,7 @@
  */
 package it.refill.servlet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -44,8 +44,7 @@ public class QueryCi extends HttpServlet {
                 d.remove(e.getEm().find(Cad.class, Long.parseLong(id)));
             }
 
-            ObjectMapper mapper = new ObjectMapper();
-            response.getWriter().print(mapper.writeValueAsString(d));
+            response.getWriter().print(new Gson().toJson(d));
             response.getWriter().close();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -107,24 +106,7 @@ public class QueryCi extends HttpServlet {
     }
 
     protected void getSingleCad(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Entity e = new Entity();
-        try {
-            Cad cad = e.getEm().find(Cad.class, Long.parseLong(request.getParameter("id")));
-            //aggiungo 2 parametri al json
-            StringWriter sw = new StringWriter();
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(sw, cad);
-            JsonObject jMembers = new JsonParser().parse(sw.toString()).getAsJsonObject();
-            jMembers.addProperty("link", e.getPath("linkfad"));
-            response.setContentType("application/json");
-            response.setHeader("Content-Type", "application/json");
-            response.getWriter().print(jMembers.toString());
-            response.getWriter().close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            e.close();
-        }
+        
     }
 
     /**

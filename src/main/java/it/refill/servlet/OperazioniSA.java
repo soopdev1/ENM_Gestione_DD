@@ -2853,7 +2853,7 @@ public class OperazioniSA extends HttpServlet {
                     for (int i = 1; i <= nroAttivita_max; i++) {
                         if (Integer.parseInt(getRequestValue(request, "attivita_vis_" + i)) == 1) {
                             temp = new Attivita_Docente(Integer.parseInt(getRequestValue(request, "tipo_att_" + i)),
-                                    getRequestValue(request, "committente_" + i),
+                                    new String(getRequestValue(request, "committente_" + i).getBytes(Charsets.ISO_8859_1), Charsets.UTF_8),
                                     new SimpleDateFormat("dd/MM/yyyy").parse(getRequestValue(request, "data_inizio_" + i)),
                                     new SimpleDateFormat("dd/MM/yyyy").parse(getRequestValue(request, "data_fine_" + i)),
                                     Integer.parseInt(getRequestValue(request, "durata_" + i)),

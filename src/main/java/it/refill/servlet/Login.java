@@ -5,7 +5,7 @@
  */
 package it.refill.servlet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import it.refill.db.Entity;
 import it.refill.domain.Comuni;
@@ -89,8 +89,7 @@ public class Login extends HttpServlet {
         Entity e = new Entity();
         ArrayList<Item> provincie = e.listaProvince(regione);
         e.close();
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(provincie));
+        response.getWriter().write(new Gson().toJson(provincie));
     }
 
     protected void getComune(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -100,8 +99,7 @@ public class Login extends HttpServlet {
         Entity e = new Entity();
         ArrayList<Item> comuni = e.listaComuni(provincia);
         e.close();
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(comuni));
+        response.getWriter().write(new Gson().toJson(comuni));
     }
 
     protected void checkPiva(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -111,8 +109,7 @@ public class Login extends HttpServlet {
         Entity e = new Entity();
         SoggettiAttuatori sa = e.getUserPiva(piva);
         e.close();
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(sa));
+        response.getWriter().write(new Gson().toJson(sa));
     }
 
     protected void checkCF(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -122,8 +119,7 @@ public class Login extends HttpServlet {
         Entity e = new Entity();
         SoggettiAttuatori sa = e.getUserCF(cf);
         e.close();
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(sa));
+        response.getWriter().write(new Gson().toJson(sa));
     }
 
     protected void checkEmail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -133,8 +129,7 @@ public class Login extends HttpServlet {
         Entity e = new Entity();
         SoggettiAttuatori us = e.getUserEmail(email);
         e.close();
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(us));
+        response.getWriter().write(new Gson().toJson(us));
     }
 
     protected void checkEmailUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -144,8 +139,7 @@ public class Login extends HttpServlet {
         Entity e = new Entity();
         User us = e.getUserbyEmail(email);
         e.close();
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(us));
+        response.getWriter().write(new Gson().toJson(us));
     }
 
     protected void saveSoggettoAttuatore(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
