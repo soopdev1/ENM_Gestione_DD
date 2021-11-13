@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 public class QueryCi extends HttpServlet {
 

@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 @NamedQueries(value = {
     @NamedQuery(name = "user.UsernamePwd", query = "SELECT u FROM User u WHERE u.username=:username AND u.password=:password"),

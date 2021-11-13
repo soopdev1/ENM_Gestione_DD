@@ -1,7 +1,7 @@
 <%-- 
     Document   : rubrica
     Created on : 18-giu-2019, 9.23.22
-    Author     : agodino
+    Author     : rcosco
 --%>
 <li class="kt-menu__item <%=docenti%>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
     <a href="javascript:;" class="kt-menu__link kt-menu__toggle">

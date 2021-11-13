@@ -25,7 +25,7 @@ import javax.persistence.Transient;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 @Entity
 @Table(name = "sedi_formazione")

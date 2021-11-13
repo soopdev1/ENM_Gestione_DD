@@ -64,7 +64,8 @@ var KTDatatablesDataSourceAjaxServer = function () {
                                 + '<div class="dropdown-menu dropdown-menu-left">';
                         if (typeuser === "2") {
                             option += '<a class="dropdown-item" href="javascript:void(0);" onclick="assegna(' + row.id + ')"><i class="fa fa-user"></i> Assegnazione</a>';
-                            option += '<a class="dropdown-item" href="javascript:void(0);" onclick="uploadDocGenerico(' + row.id + ')"><i class="fa fa-upload" style="margin-top:-2px"></i>Carica Altra Documentazione</a>';
+                            option += '<a class="dropdown-item" href="javascript:void(0);" onclick="uploadDocGenerico(' + row.id + ')"><i class="fa fa-upload" style="margin-top:-2px"></i> Carica Altra Documentazione</a>';
+                            option += '<a class="dropdown-item" href="javascript:void(0);" onclick="caricaexcelcontrollo(' + row.id + ')"><i class="fa fa-file-excel" style="margin-top:-2px"></i>Carica Documento di Controllo</a>';
                             option += '<a class="dropdown-item" href="javascript:void(0);" onclick="modifyDate(' + row.id + ',' + row.start + ',' + row.end + ',' + row.end_fa + ')"><i class="fa fa-calendar-alt"></i> Modifica Date</a>';
                         }
                         option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalTableAllievi(' + row.id + ')"><i class="flaticon-users-1"></i> Visualizza Allievi</a>';
@@ -91,15 +92,31 @@ var KTDatatablesDataSourceAjaxServer = function () {
                                 option += '<a class="dropdown-item kt-font-success" href="compileCL.jsp?id=' + row.id + '" ><i class="fa fa-file-excel kt-font-success"></i> Compila Checklist Finale</a>';
                             } else if (row.stato.id === "CK") {
                                 option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalMappaAllievi(' + row.id + ')"><i class="fa fa-check" style="margin-top:-2px"></i> Mappatura</a>';
-                                option += '<a class="dropdown-item kt-font-success" href="javascript:void(0);" onclick="sendMailEsito(' + row.id + ')"><i class="flaticon2-envelope kt-font-success" style="margin-top:-2px"></i>Invia Esito a ENM</a>';
+                                option += '<a class="dropdown-item kt-font-success" href="javascript:void(0);" onclick="sendMailEsito(' + row.id + ')"><i class="flaticon2-envelope kt-font-success" style="margin-top:-2px"></i> Invia Esito a ENM</a>';
                             } else if (row.stato.id === "EVI") {
                                 option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalMappaAllievi(' + row.id + ')"><i class="fa fa-check" style="margin-top:-2px"></i> Mappatura</a>';
-                                option += '<a class="dropdown-item kt-font-success" href="javascript:void(0);" onclick="uploadEsito(' + row.id + ')"><i class="fa fa-upload kt-font-success" style="margin-top:-2px"></i>Upload Esito Firmato</a>';
+                                option += '<a class="dropdown-item kt-font-success" href="javascript:void(0);" onclick="uploadEsito(' + row.id + ')"><i class="fa fa-upload kt-font-success" style="margin-top:-2px"></i> Upload Esito Firmato</a>';
                             } else if (row.stato.controllare === 1) {
-                                option += '<a class="dropdown-item kt-font-success" href="javascript:void(0);" onclick="valitdatePrg(' + row.id + ',&quot;' + row.stato.id + '&quot;)"><i class="fa fa-check kt-font-success" style="margin-top:-2px"></i>Convalida Progetto</a>';
-                                option += '<a class="dropdown-item kt-font-danger" href="javascript:void(0);" onclick="rejectPrg(' + row.id + ')"><i class="flaticon2-delete kt-font-danger" style="margin-top:-2px"></i>Annulla Progetto</a>';
+                                option += '<a class="dropdown-item kt-font-success" href="javascript:void(0);" onclick="valitdatePrg(' + row.id + ',&quot;' + row.stato.id + '&quot;)"><i class="fa fa-check kt-font-success" style="margin-top:-2px"></i> Convalida Progetto</a>';
+                                option += '<a class="dropdown-item kt-font-danger" href="javascript:void(0);" onclick="rejectPrg(' + row.id + ')"><i class="flaticon2-delete kt-font-danger" style="margin-top:-2px"></i> Rigetta Progetto</a>';
                             } else if (row.stato.id === "CO") {
                                 option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalMappaAllievi(' + row.id + ')"><i class="fa fa-check" style="margin-top:-2px"></i> Mappatura</a>';
+                            }
+
+                            if (
+                                    row.stato.id === "ATA" ||
+                                    row.stato.id === "ATB" ||
+                                    row.stato.id === "F" ||
+                                    row.stato.id === "MA" ||
+                                    row.stato.id === "IV" ||
+                                    row.stato.id === "CK" ||
+                                    row.stato.id === "EVI" ||
+                                    row.stato.id === "CO" ||
+                                    row.stato.id === "SOA" ||
+                                    row.stato.id === "SOB"
+                                    ) {
+                                option += '<a class="dropdown-item kt-font-danger" href="javascript:void(0);" onclick="annullaPrg(' +
+                                        row.id + ')"><i class="flaticon2-delete kt-font-danger" style="margin-top:-2px"></i>Annulla Progetto</a>';
                             }
                         }
 
@@ -475,8 +492,10 @@ function swalDocumentPrg(idprogetto) {
             docente = j.docente !== null ? " " + j.docente.nome + " " + j.docente.cognome : "";
             scadenza = j.scadenza !== null ? "<br>SCADENZA: " + formattedDate(new Date(j.scadenza)) : "";
             var ext = j.tipo.estensione;
-            if (ext === null || ext === undefined || typeof ext === 'undefined' || ext === "p7m" || ext.includes("pdf")) {
+            if (ext === null || ext === undefined || typeof ext === 'undefined' || ext === "p7m" || ext.includes("pdf") || ext.includes("p7m")) {
                 ext = "pdf";
+            } else if (ext.includes("xls")) {
+                ext = "excel";
             }
             $("#prg_docs").append(doc_prg
                     .replace("@href", context + "/OperazioniGeneral?type=showDoc&path=" + j.path)
@@ -671,9 +690,90 @@ function generateCIP(id) {
     return cip;
 }
 
+//UPLOAD DOC CONTROLLO - 11/11/2021
+function caricaexcelcontrollo(id) {
+    var swalDocControllo = getHtml("swalDocControllo", context).replace("@func",
+            "checkFileExtAndDim(&quot;xls,xlsx&quot;)").replace("@mime",
+            'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    swal.fire({
+        title: 'Carica Documento di Controllo',
+        html: swalDocControllo,
+        animation: false,
+        width: '40%',
+        showCancelButton: true,
+        confirmButtonText: '&nbsp;<i class="la la-check"></i>',
+        cancelButtonText: '&nbsp;<i class="la la-close"></i>',
+        cancelButtonClass: "btn btn-io-n",
+        confirmButtonClass: "btn btn-io",
+        customClass: {
+            popup: 'animated bounceInUp'
+        },
+        onOpen: function () {
+            $('#file').change(function (e) {
+                if (e.target.files.length !== 0) {
+                    if (e.target.files[0].name.length > 30) {
+                        $('#label_doc').html(e.target.files[0].name.substring(0, 30) + "...");
+                    } else {
+                        $('#label_doc').html(e.target.files[0].name);
+                    }
+                } else {
+                    $('#label_doc').html("Seleziona File");
+                }
+            });
+        },
+        preConfirm: function () {
+            var err = false;
+            err = !checkRequiredFileContent($('#swalDocControllo')) ? true : err;
+            if (!err) {
+                return new Promise(function (resolve) {
+                    resolve({
+                        "file": $('#file')[0].files[0],
+                        "target": $('#targetfile').val()
+                    });
+                });
+            } else {
+                return false;
+            }
+        }
+    }).then((result) => {
+        if (result.value) {
+            showLoad();
+            var fdata = new FormData();
+            fdata.append("file", result.value.file);
+            fdata.append("target", result.value.target);
+            uploadexcelcontrollo(id, fdata);
+        } else {
+            swal.close();
+        }
+    });
+}
+
+function uploadexcelcontrollo(id, fdata) {
+    $.ajax({
+        type: "POST",
+        url: context + '/OperazioniMicro?type=caricadocumentocontrollo&idpr=' + id,
+        data: fdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            closeSwal();
+            var json = JSON.parse(data);
+            if (json.result) {
+                swalSuccessReload("Operazione Effettuata!", "Documento caricato con successo.");
+            } else {
+                swalError("Errore", json.message);
+            }
+        },
+        error: function () {
+            swalError("Errore", "Non è stato possibile caricare il documento.");
+        }
+    });
+}
+
 //UPLOAD DOC GENERICO - 04-10-21
 function uploadDocGenerico(id) {
-    var swalDoc = getHtml("swalDoc", context).replace("@func", "checkFileExtAndDim(&quot;pdf&quot;,&quot;p7m&quot;)").replace("@mime", 'application/pkcs7-mime,application/pdf');
+    var swalDoc = getHtml("swalDoc", context).replace("@func",
+            "checkFileExtAndDim(&quot;pdf&quot;,&quot;p7m&quot;)").replace("@mime", 'application/pkcs7-mime,application/pdf');
     swal.fire({
         title: 'Carica Altra Documentazione',
         html: swalDoc,
@@ -723,6 +823,8 @@ function uploadDocGenerico(id) {
         }
     });
 }
+
+
 
 function uploadnewdoc(id, fdata) {
     $.ajax({
@@ -1648,4 +1750,64 @@ function orderListAllievi(a) {
         }
     }
     return a;
+}
+
+
+function annullaPrg(id) {
+    var html = "<div class='form-group' id='swal_motivo'><textarea class='form-control obbligatory' id='motivo' placeholder='Motivazione'></textarea></div>";
+    swal.fire({
+        title: '<h2 class="kt-font-io-n"><b>Annulla Progetto</b></h2><br>',
+        html: html,
+        animation: false,
+        width: '50%',
+        showCancelButton: true,
+        confirmButtonText: '&nbsp;<i class="la la-check"></i>',
+        cancelButtonText: '&nbsp;<i class="la la-close"></i>',
+        cancelButtonClass: "btn btn-io-n",
+        confirmButtonClass: "btn btn-io",
+        customClass: {
+            popup: 'animated bounceInUp'
+        },
+        preConfirm: function () {
+            var err = false;
+            err = checkObblFieldsContent($('#swal_motivo')) ? true : err;
+            if (!err) {
+                return new Promise(function (resolve) {
+                    resolve({
+                        "motivo": $('#motivo').val()
+                    });
+                });
+            } else {
+                return false;
+            }
+        }
+    }).then((result) => {
+        if (result.value) {
+            annulla(id, result.value);
+        } else {
+            swal.close();
+        }
+    });
+}
+
+function annulla(id, result) {
+    showLoad();
+    $.ajax({
+        type: "POST",
+        url: context + '/OperazioniMicro?type=annullaPrg&id=' + id,
+        data: result,
+        success: function (data) {
+            closeSwal();
+            var json = JSON.parse(data);
+            if (json.result) {
+                reload();
+                swalSuccess("Progetto Annullato", json.message !== null ? json.message : "Progetto formativo annullato con successo");
+            } else {
+                swalError("Errore", json.message);
+            }
+        },
+        error: function () {
+            swalError("Errore", "Non è stato possibile annullare il progetto formativo");
+        }
+    });
 }

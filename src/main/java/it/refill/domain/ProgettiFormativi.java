@@ -35,7 +35,7 @@ import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 @NamedQueries(value = {
     @NamedQuery(name = "progetti.ProgettiDocente", query = "SELECT p FROM ProgettiFormativi p WHERE p.docenti=:docente"),

@@ -1,7 +1,7 @@
 <%-- 
     Document   : profile
     Created on : 18-set-2019, 12.31.26
-    Author     : agodino
+    Author     : rcosco
 --%>
 <%@page import="it.refill.domain.NomiProgetto"%>
 <%@page import="it.refill.domain.StatiPrg"%>

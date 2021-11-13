@@ -25,10 +25,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 @Entity
 @Table(name = "documenti_progetti")
@@ -83,10 +85,10 @@ public class DocumentiPrg implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idprogetto")
     ProgettiFormativi progetto;
-    
+
     @Transient
     String nome;
-    
+
     @Transient
     List<Presenti> presenti_list = new ArrayList<>();
 
@@ -276,7 +278,7 @@ public class DocumentiPrg implements Serializable {
 
     @Override
     public String toString() {
-        return "DocumentiPrg{" + "id=" + id + ", path=" + path + ", scadenza=" + scadenza + ", deleted=" + deleted + ",\n tipo=" + tipo + ",\n docente=" + docente + ",\n progetto=" + progetto + '}';
+        return ReflectionToStringBuilder.toString(this, JSON_STYLE);
     }
 
 }

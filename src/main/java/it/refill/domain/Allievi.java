@@ -30,7 +30,7 @@ import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 @Entity
 @Table(name = "allievi")

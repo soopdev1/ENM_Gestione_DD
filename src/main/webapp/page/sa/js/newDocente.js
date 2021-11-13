@@ -199,8 +199,8 @@ $('#submit').on('click', function () {
 
 function checkinfoCF_simplified() {
     var cf = $('#cf').val().toUpperCase();
-    var nome = $('#nome').val().toUpperCase();
-    var cognome = $('#cognome').val().toUpperCase();
+    var nome = $('#nome').val().replace(/[^a-zA-Z ]/g, "").toUpperCase();
+    var cognome = $('#cognome').val().replace(/[^a-zA-Z ]/g, "").toUpperCase();
     var data = $('#datanascita').val();
     var checkdata = false;
     var err = false;

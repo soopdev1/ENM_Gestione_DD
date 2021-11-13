@@ -1,7 +1,7 @@
 <%-- 
     Document   : creaCad
     Created on : 19-nov-2020, 11.37.24
-    Author     : agodino
+    Author     : rcosco
 --%>
 <form id="kt_form" action="<%=request.getContextPath()%>/OperazioniCi?type=creaCad" class="kt-form kt-form--label-right" accept-charset="ISO-8859-1" method="post">
     <div class="kt-portlet__body paddig_0_t paddig_0_b">

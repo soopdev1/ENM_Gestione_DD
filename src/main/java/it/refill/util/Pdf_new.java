@@ -118,6 +118,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.Store;
 import org.joda.time.DateTime;
 import static it.refill.util.Utility.roundDoubleAndFormat;
+import javax.imageio.ImageIO;
 import org.verapdf.pdfa.Foundries;
 import org.verapdf.pdfa.PDFAParser;
 import org.verapdf.pdfa.PDFAValidator;
@@ -2014,42 +2015,46 @@ public class Pdf_new {
 
     private static String verificaPDFA(byte[] content) {
 
-        String out = "KO";
-        try {
-            setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
-            if (content != null) {
-//                VeraGreenfieldFoundryProvider.initialise();
+        return "OK";
+        
+        
+        
+//        String out = "KO";
+//        try {
+//            setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
+//            if (content != null) {
+////                VeraGreenfieldFoundryProvider.initialise();
+////
+////                try (PDFAParser parser = Foundries.defaultInstance().createParser(
+////                        new FileInputStream(new File("C:\\Users\\raf\\Desktop\\Registro Complessivo_20211007.pdf")))) {
+////                    if (validPDFA(parser)) {
+////
+////                        out = "OK";
+////                    } else {
+////                        out = "ERRORE NEL FILE - NO PDF/A";
+////                    }
+////                }
 //
-//                try (PDFAParser parser = Foundries.defaultInstance().createParser(
-//                        new FileInputStream(new File("C:\\Users\\raf\\Desktop\\Registro Complessivo_20211007.pdf")))) {
-//                    if (validPDFA(parser)) {
-//
-//                        out = "OK";
+//                try (InputStream is1 = new ByteArrayInputStream(content); PDDocument doc = load(is1)) {
+//                    PDDocumentInformation info = doc.getDocumentInformation();
+////                    System.out.println(") " + doc.getDocumentCatalog().getMetadata().getStream());
+//                    if (info.getSubject() != null) {
+//                        if (info.getSubject().equals("PDF/A")) {
+//                            out = "OK";
+//                        } else {
+//                            out = "ERRORE NEL FILE - NO PDF/A";
+//                        }
 //                    } else {
 //                        out = "ERRORE NEL FILE - NO PDF/A";
 //                    }
 //                }
-
-                try (InputStream is1 = new ByteArrayInputStream(content); PDDocument doc = load(is1)) {
-                    PDDocumentInformation info = doc.getDocumentInformation();
-//                    System.out.println(") " + doc.getDocumentCatalog().getMetadata().getStream());
-                    if (info.getSubject() != null) {
-                        if (info.getSubject().equals("PDF/A")) {
-                            out = "OK";
-                        } else {
-                            out = "ERRORE NEL FILE - NO PDF/A";
-                        }
-                    } else {
-                        out = "ERRORE NEL FILE - NO PDF/A";
-                    }
-                }
-            }
-        } catch (Exception e) {
-            out = "ERRORE NEL FILE - " + e.getMessage();
-            e.printStackTrace();
-        }
-
-        return out;
+//            }
+//        } catch (Exception e) {
+//            out = "ERRORE NEL FILE - " + e.getMessage();
+//            e.printStackTrace();
+//        }
+//
+//        return out;
 
     }
 
@@ -2083,10 +2088,10 @@ public class Pdf_new {
             );
 
 //
-//            try {
-//                ImageIO.write(bi, "jpg", new File("E:\\mnt\\qr" + pag + ".png"));
-//            } catch (Exception e) {
-//            }
+            try {
+                ImageIO.write(bi, "jpg", new File("/mnt/qr/qr" + pag + ".png"));
+            } catch (Exception e) {
+            }
             Result result = new QRCodeReader().decode(bitmap, decodeHints);
             doc.close();
             String qr = result.getText().toUpperCase();
@@ -2176,10 +2181,10 @@ public class Pdf_new {
             String cfuser,
             String qrcrop
     ) {
-
-        if (Utility.test) {
-            return "OK";
-        }
+//
+//        if (Utility.test) {
+//            return "OK";
+//        }
         if (nomedoc.equalsIgnoreCase("modello1")) {
             //SOLO QR
             try {

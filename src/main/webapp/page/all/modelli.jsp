@@ -1,7 +1,7 @@
 <%-- 
     Document   : modelli
     Created on : 2-mar-2020, 12.41.15
-    Author     : agodino
+    Author     : rcosco
 --%>
 <%@page import="it.refill.db.Action"%>
 <%@page import="it.refill.domain.Cloud"%>

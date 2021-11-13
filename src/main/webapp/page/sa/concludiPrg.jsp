@@ -275,7 +275,12 @@
                                                                             <div id="collapse_al_<%=a.getId()%>" class="collapse" aria-labelledby="headingOne" data-parent="#al_<%=a.getId()%>" style="">
                                                                                 <div class="card-body">
                                                                                     <div class="form-group row">
-                                                                                        <label class="col-3 col-form-label"><b>Domanda di ammissione</b></label>
+                                                                                        <label class="col-3 col-form-label"><b>Domanda di ammissione 
+                                                                                                <i class="fa fa-info-circle  kt-font-io-n" data-container="body" data-toggle="kt-popover" 
+                                                                                                   data-placement="top" data-original-title="Domanda di ammissione" 
+                                                                                                   data-content="È possibile caricare SOLO la domanda di Ammissione scaricata dal sito di Invitalia oppure il modello presente nel Gestionale nella cartellina Materiale Didattico."></i>
+                                                                                            </b>
+                                                                                        </label>
                                                                                         <div class="col-3">
                                                                                             <span class="kt-switch kt-switch--lg kt-switch--icon">
                                                                                                 <label>

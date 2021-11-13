@@ -62,6 +62,7 @@ import it.refill.util.Utility;
 import static it.refill.util.Utility.checkPDF;
 import static it.refill.util.Utility.createDir;
 import static it.refill.util.Utility.getRequestValue;
+import static it.refill.util.Utility.getstatoannullato;
 import static it.refill.util.Utility.patternITA;
 import static it.refill.util.Utility.patternSql;
 import static it.refill.util.Utility.redirect;
@@ -88,7 +89,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 public class OperazioniMicro extends HttpServlet {
 
@@ -385,6 +386,40 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().close();
     }
 
+    
+    protected void annullaPrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Entity e = new Entity();
+        JsonObject resp = new JsonObject();
+        try {
+            e.begin();
+            ProgettiFormativi p = e.getEm().find(ProgettiFormativi.class, Long.parseLong(request.getParameter("id")));
+            String stato_prec = p.getStato().getId();
+            p.setMotivo(request.getParameter("motivo"));
+            e.persist(new Storico_Prg("Rigettato: " + request.getParameter("motivo"), new Date(), p, p.getStato()));//storico progetto
+            String stato_succ = getstatoannullato(stato_prec);
+            p.setStato(e.getEm().find(StatiPrg.class, stato_succ));
+            p.getAllievi().forEach(al1 -> {
+                if (al1.getStatopartecipazione().getId().equals("01")) {
+                    al1.setStatopartecipazione(e.getEm().find(StatoPartecipazione.class, "03"));
+                    e.merge(al1);
+                }
+            });
+            e.merge(p);
+            e.commit();
+            resp.addProperty("result", true);
+        } catch (PersistenceException ex) {
+            ex.printStackTrace();
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro annullaPrg: " + ex.getMessage());
+            resp.addProperty("result", false);
+            resp.addProperty("message", "Errore: non &egrave; stato possibile annullare il progetto formativo.");
+        } finally {
+            e.close();
+        }
+        response.getWriter().write(resp.toString());
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+    
     protected void rejectPrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -2331,6 +2366,63 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().close();
     }
 
+    protected void caricadocumentocontrollo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        String idpr = getRequestValue(request, "idpr");
+        String target = getRequestValue(request, "target");
+        JsonObject resp = new JsonObject();
+        Entity e = new Entity();
+        try {
+            e.begin();
+            Part part = request.getPart("file");
+            if (part != null && part.getSubmittedFileName() != null && part.getSubmittedFileName().length() > 0) {
+                ProgettiFormativi prg = e.getEm().find(ProgettiFormativi.class, Long.parseLong(idpr));
+                
+                TipoDoc tipo;
+                if(target.equals("D1")){
+                    tipo = e.getEm().find(TipoDoc.class, 12L);
+                } else {
+                    tipo = e.getEm().find(TipoDoc.class, 13L);
+                }
+                
+                String path = e.getPath("pathDocSA_Prg").replace("@rssa",
+                        prg.getSoggetto().getId().toString()).replace("@folder", prg.getId().toString());
+                File dir = new File(path);
+                createDir(path);
+                String file_path;
+                String today = new SimpleDateFormat("yyyyMMddHHssSSS").format(new Date());
+                //scrivo il file su disco
+                file_path = dir.getAbsolutePath() + File.separator + tipo.getDescrizione() + "_"
+                        + today + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."));
+                part.write(file_path);
+                DocumentiPrg doc = new DocumentiPrg();
+                doc.setPath(file_path);
+                doc.setTipo(tipo);
+                doc.setProgetto(prg);
+                e.persist(doc);
+                e.commit();
+                resp.addProperty("result", true);
+            } else {
+                resp.addProperty("result", false);
+                resp.addProperty("message", "Errore: file corrotto o non conforme.");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            e.rollBack();
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro caricanuovodocumento: " + ex.getMessage());
+            resp.addProperty("result", false);
+            resp.addProperty("message", "Errore: non &egrave; stato possibile caricare il documento selezionato.");
+        } finally {
+            e.close();
+        }
+        response.getWriter().write(resp.toString());
+        response.getWriter().flush();
+        response.getWriter().close();
+        
+        
+    }
+    
     protected void caricanuovodocumento(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -2446,6 +2538,9 @@ public class OperazioniMicro extends HttpServlet {
                     break;
                 case "rejectPrg":
                     rejectPrg(request, response);
+                    break;
+                case "annullaPrg":
+                    annullaPrg(request, response);
                     break;
                 case "validateHourRegistroAula":
                     validateHourRegistroAula(request, response);
@@ -2575,6 +2670,9 @@ public class OperazioniMicro extends HttpServlet {
                     break;
                 case "caricanuovodocumento":
                     caricanuovodocumento(request, response);
+                    break;
+                case "caricadocumentocontrollo":
+                    caricadocumentocontrollo(request, response);
                     break;
                 case "assegnaPrg":
                     assegnaPrg(request, response);

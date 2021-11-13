@@ -151,13 +151,13 @@ $('#target').on("change", function () {
     var v1 = $(this).val();
     if (v1 === 'D2') { //DID OBBLIGATORIA
 //        $('#doc_4').addClass("obbligatory");
-        $('#doc_4').attr('tipo','obbligatory');
-        $('#label_doc_4').html("*");
+//        $('#doc_4').attr('tipo','obbligatory');
+//        $('#label_doc_4').html("*");
     } else {
 //        $('#doc_4').removeClass("obbligatory");
-        $('#doc_4').removeAttr('tipo');
-        $('#doc_4').removeClass("is-invalid");
-        $('#label_doc_4').html("");
+//        $('#doc_4').removeAttr('tipo');
+//        $('#doc_4').removeClass("is-invalid");
+//        $('#label_doc_4').html("");
     }
 });
 
@@ -365,7 +365,7 @@ function checkinfoCF() {
     var err = false;
     var msg = "<b style='padding:10px;color: #fd397a!important;'>Attenzione i seguenti dati anagrafici non sono conformi con il codice fiscale inserito (";
     //CONTROLLO NOME ---> 1,3,4 CONSONANTI SE CE NE SONO ALMENO 4, ALTRIMENTI AGGIUNGO VOCALI NEL LORO ORDINE 
-    if (!check_nome_CF(nome.val().toUpperCase(), cf.val().substring(3, 6).toUpperCase())) {
+    if (!check_nome_CF(nome.val().replace(/[^a-zA-Z ]/g, "").toUpperCase(), cf.val().substring(3, 6).replace(/[^a-zA-Z ]/g, "").toUpperCase())) {
         msg += "Nome";
         $('#nome').removeClass("is-valid").addClass("is-invalid");
         err = true;
@@ -373,7 +373,7 @@ function checkinfoCF() {
         $('#nome').removeClass("is-invalid").addClass("is-valid");
     }
     //CONTROLLO COGNOME ---> 1,2,3 CONSONANTI SE CE NE SONO ALMENO 3, ALTRIMENTI AGGIUNGO VOCALI NEL LORO ORDINE 
-    if (!check_cognome_CF(cognome.val().toUpperCase(), cf.val().substring(0, 3).toUpperCase())) {
+    if (!check_cognome_CF(cognome.val().replace(/[^a-zA-Z ]/g, "").toUpperCase(), cf.val().substring(0, 3).toUpperCase())) {
         msg += err ? ", Cognome" : "Cognome";
         $('#cognome').removeClass("is-valid").addClass("is-invalid");
         err = true;

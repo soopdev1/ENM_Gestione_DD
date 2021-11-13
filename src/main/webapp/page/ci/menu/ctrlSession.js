@@ -10,7 +10,7 @@ function ctrlSession() {
         async: false,
         url: context + "/OperazioniGeneral?type=ctrlSession",
         success: function (data) {
-            if (data != 'false') {
+            if (data !== 'false') {
                 swal.fire({
                     "title": '<h2 class="kt-font-io-n">Sessione Scaduta!</b></h2><br>',
                     "html": "<h4>La tua sessione &egrave; scaduta.<br>&Egrave; necessario rieffettuare l'accesso</h4>",

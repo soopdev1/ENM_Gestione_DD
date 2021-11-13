@@ -21,7 +21,7 @@ import javax.persistence.Transient;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 @NamedQueries(value = {
     @NamedQuery(name = "estrazioni.timestampDesc", query = "SELECT e FROM Estrazioni e ORDER BY e.timestamp DESC")

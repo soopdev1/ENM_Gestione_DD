@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 public class Check2 {
 

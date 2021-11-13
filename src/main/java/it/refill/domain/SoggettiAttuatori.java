@@ -32,7 +32,7 @@ import org.joda.time.DateTime;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 @Entity
 @Table(name = "soggetti_attuatori")

@@ -332,7 +332,7 @@ function checkCF(cf) {
 }
 
 function validateCardNumber(number) {
-    if (number.val() == '' || number.val().split(" ").join("").length < 12 || !Stripe.card.validateCardNumber(number.val())) {
+    if (number.val() === '' || number.val().split(" ").join("").length < 12 || !Stripe.card.validateCardNumber(number.val())) {
         number.attr("class", "form-control is-invalid");
         return true;
     } else {

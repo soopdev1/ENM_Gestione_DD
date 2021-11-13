@@ -18,7 +18,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 @Entity
 @Table(name = "modifiche_stato_prg")

@@ -1,7 +1,7 @@
 <%-- 
     Document   : profile
     Created on : 18-set-2019, 12.31.26
-    Author     : agodino
+    Author     : rcosco
 --%>
 <%@page import="java.util.List"%>
 <%@page import="it.refill.domain.Storico_ModificheInfo"%>

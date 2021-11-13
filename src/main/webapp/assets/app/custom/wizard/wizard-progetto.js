@@ -70,7 +70,7 @@ var KTWizard1 = function () {
                     if (json.result) {
                         swalSuccessReload("Progetto Creato", "Progetto formativo creato con successo!");
                     } else {
-                        swalError('Errore', "<h4>" + json.messagge + "</h4>");
+                        swalError('Errore', "<h4>" + json.message + "</h4>");
                     }
                 }
             });

@@ -182,6 +182,23 @@
     </div>
 </div>
 
+<div id="swalDocControllo">
+    <div class="col-12 kt-align-left kt-font-io">Tipo Target</div>
+    <div class="col-12">
+        <select class="form-control kt-select2-general obbligatory" id="targetfile" name="targetfile"  style="width: 100%">
+            <option value="D1">Donna Inattiva</option>
+            <option value="D2">Disoccupato/a di lunga durata</option>
+        </select>
+    </div>
+    <br>
+    <div class="col-12">
+        <div class="custom-file">
+            <input type="file" tipo="obbligatory" class="custom-file-input" accept="@mime" name="file" id="file" onchange="return @func">
+            <label class="custom-file-label selected" id="label_doc" style="text-align: left;">Seleziona File</label>
+        </div>
+    </div>
+</div>
+
 <div id="pecAnag">
     <br>
     <input type="hidden" id="prevpiva" name="prevpiva" value="@prevpiva">

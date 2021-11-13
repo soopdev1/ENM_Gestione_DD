@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 public class Presenti {
 

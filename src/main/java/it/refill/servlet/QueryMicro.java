@@ -58,7 +58,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 public class QueryMicro extends HttpServlet {
 

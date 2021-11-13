@@ -40,6 +40,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -83,6 +84,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.tika.parser.txt.CharsetDetector;
 import org.joda.time.DateTimeComparator;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Period;
@@ -91,7 +93,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 public class Utility {
 
@@ -841,6 +843,7 @@ public class Utility {
         Map<Long, Long> oreRendicontabili_docenti = Action.OreRendicontabiliDocenti((int) (long) idp);
         return l.stream().filter(a -> oreRendicontabili_docenti.get(a.getId()) != null).collect(Collectors.toList());
     }
+
     public static List<Docenti> docenti_ore_A(long idp, List<Docenti> l) {
         Map<Long, Long> oreRendicontabili_docenti = Action.OreRendicontabiliDocentiFASEA((int) (long) idp);
         return l.stream().filter(a -> oreRendicontabili_docenti.get(a.getId()) != null).collect(Collectors.toList());
@@ -856,8 +859,8 @@ public class Utility {
         }
         return ret;
     }
-    
-     public static String convertToHours_R(long value1) {
+
+    public static String convertToHours_R(long value1) {
         try {
             double hours = value1 / 1000.0 / 60.0 / 60.0;
             BigDecimal bigDecimal = new BigDecimal(hours);
@@ -964,4 +967,30 @@ public class Utility {
         }
         return es;
     }
+
+    public static String getstatoannullato(String stato_prec) {
+        switch (stato_prec) {
+            case "ATA":
+            case "ATB":
+                return stato_prec + "E";
+            case "SOA":
+                return "ATAE";
+            case "SOB":
+                return "ATBE";
+            default:
+                return "DVBE";
+        }
+    }
+
+    public static String conversionText(String ing) {
+        try {
+            CharsetDetector detector = new CharsetDetector();
+            detector.setText(ing.getBytes());
+            return new String(ing.getBytes(detector.detect().getName()), Charset.forName("utf-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ing;
+    }
+
 }

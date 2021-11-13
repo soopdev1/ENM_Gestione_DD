@@ -9,7 +9,7 @@
 //import it.refill.db.Entity;
 /**
  *
- * @author agodino
+ * @author rcosco
  */
 public class Test {
     
