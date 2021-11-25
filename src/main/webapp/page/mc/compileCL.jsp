@@ -465,6 +465,7 @@
                                                                                            target="_blank" class="btn btn-io btn-icon kt-font-bold disablelink" data-container="body" data-html="true" 
                                                                                            data-toggle="kt-tooltip" data-placement="top" title="<h5>Scarica Autocertificazione generata dalla piattaforma</h5>">
                                                                                             <i class="fa fa-download"></i>
+                                                                                        </a>
                                                                                     </div>
                                                                                     <div class="col-lg-4 col-md-12 col-sm-12">
                                                                                         <div class="custom-file">

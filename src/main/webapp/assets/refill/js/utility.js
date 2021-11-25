@@ -89,6 +89,36 @@ function checkEmail(email) {
     }
 }
 
+
+function checkEmail_CC(email, max) {
+
+    var myArr = email.val().split(",");
+    if (myArr.length > max) {
+        email.attr("class", "form-control is-invalid");
+        return true;
+    } else {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var err = 0;
+        for (var indice = 0; indice < myArr.length; indice++) {
+            var cc = myArr[indice].trim().toLowerCase();
+            if (cc !== '') {
+                if (!re.test(cc)) {
+                    err++;
+                }
+            }
+        }
+
+        if (err > 0) {
+            email.attr("class", "form-control is-invalid");
+            return true;
+        } else {
+            email.attr("class", "form-control is-valid");
+            return false;
+        }
+
+    }
+}
+
 function checkPIva(piva) {
     if (piva.val() == '' || piva.val().length != 11) {
         piva.attr("class", "form-control is-invalid");

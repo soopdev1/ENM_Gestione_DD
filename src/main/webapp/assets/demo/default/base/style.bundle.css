@@ -25910,7 +25910,7 @@ body.swal2-height-auto {
     color: #000; }
 
 .dataTables_wrapper {
-    padding: 0 !important;
+    padding: 50px 0px !important;
     /*AGGIUNTO PER FARE SCROLLABLE LE TABELLE*/
     /*overflow: scroll;*/
 }

@@ -1,4 +1,4 @@
-
+<!DOCTYPE HTML>
 <%@page import="com.sun.xml.internal.ws.util.StringUtils"%>
 <%@page import="it.refill.domain.MascheraM5"%>
 <%@page import="it.refill.domain.ModelliPrg"%>
@@ -347,7 +347,7 @@
                                                                                     </div>    
                                                                                     <div class="form-group">
                                                                                         <label for="ideaimpresa_<%=a.getId()%>"><b>Idea d'impresa</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                        <textarea class="form-control obbligatory" maxlenght="600" id="ideaimpresa_<%=a.getId()%>" name="ideaimpresa_<%=a.getId()%>" placeholder="Descrizione Idea d'impresa" rows="5"></textarea>
+                                                                                        <textarea class="form-control obbligatory tinyta" maxlenght="600" id="ideaimpresa_<%=a.getId()%>" name="ideaimpresa_<%=a.getId()%>" placeholder="Descrizione Idea d'impresa" rows="5"></textarea>
                                                                                     </div>
                                                                                     <div class="form-group row">
                                                                                         <div class="form-group col-12">
@@ -393,7 +393,7 @@
                                                                                     </div>    
                                                                                     <div class="form-group">
                                                                                         <label for="motivazione_<%=a.getId()%>"><b>Motivazione</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                        <textarea class="form-control obbligatory" maxlenght="300" id="motivazione_<%=a.getId()%>" name="motivazione_<%=a.getId()%>" placeholder="Perchè questa attività?" rows="3"></textarea>
+                                                                                        <textarea class="form-control obbligatory tinyta" maxlenght="300" id="motivazione_<%=a.getId()%>" name="motivazione_<%=a.getId()%>" placeholder="Perchè questa attività?" rows="3"></textarea>
                                                                                     </div>
 
                                                                                     <div class="form-group row">
@@ -510,7 +510,7 @@
                                                                                         </div>
                                                                                     </div> 
                                                                                     <label style="margin-top:2.5rem;"><b><%=modello7.getDescrizione()%></b></label>
-                                                                                    <%if (oreRendicontabili.get(a.getId()) != null && oreRendicontabili.get(a.getId()).compareTo(hh64) >= 0) {%>
+                                                                                            <%if (oreRendicontabili.get(a.getId()) != null && oreRendicontabili.get(a.getId()).compareTo(hh64) >= 0) {%>
                                                                                     <i class="fa fa-info-circle  kt-font-io-n" data-container="body" data-toggle="kt-popover" data-placement="top" data-original-title="Tabella Premialità" data-content="Per poter usufruire della tabella relativa alla premialità è obbligatorio scaricare il modello 7, firmarlo digitalmente e ricaricarlo."></i>
                                                                                     <div class="hh64_<%=a.getId()%>"></div>
                                                                                     <%}%>
@@ -802,10 +802,23 @@
         <script src="<%=src%>/assets/app/custom/general/crud/forms/widgets/input-mask.js" type="text/javascript"></script>
         <script src="<%=src%>/assets/vendors/general/inputmask/dist/inputmask/inputmask.js" type="text/javascript"></script>
         <script src="<%=src%>/assets/vendors/general/inputmask/dist/inputmask/jquery.inputmask.js" type="text/javascript"></script>
+
+        <script src="https://cdn.tiny.cloud/1/x58q84nl0ol5hipr98106p13ns8tn6unummy0pcynuezjrhf/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
         <script id="concludiPrg" src="<%=src%>/page/sa/js/concludiPrg.js<%="?dummy=" + String.valueOf(new Date().getTime())%>" data-context="<%=request.getContextPath()%>" type="text/javascript"></script>
         <script type="text/javascript">
 
-
+                                                                                       $(function () {
+                                                                                           tinymce.init({
+                                                                                               selector: '.tinyta',
+                                                                                               height: 200,
+                                                                                               menubar: false,
+                                                                                               statusbar: false,
+                                                                                               schema: 'html5',
+                                                                                               toolbar1: 'undo redo',
+                                                                                               language: 'it'
+                                                                                           });
+                                                                                       });
 
                                                                                        var KTAppOptions = {
                                                                                            "colors": {

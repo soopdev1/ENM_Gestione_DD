@@ -310,8 +310,10 @@ function checkObblFields_Allievo(id) {
         }
     });
     $('textarea.obbligatory[id$=' + id + ']').each(function () {
-        if ($(this).val() == '') {
+        var testo1 = tinymce.get($(this).attr('id')).getContent({ format: 'text' });
+        if (testo1 === '') {
             err = true;
+            alert("VERIFICARE TUTTI I CAMPI DI TESTO.")
             $(this).removeClass("is-valid").addClass("is-invalid");
         } else {
             $(this).removeClass("is-invalid").addClass("is-valid");
@@ -423,10 +425,18 @@ $('a[id^=rendiconta_]').on('click', function () {
             if (result.value) {
                 let ragioneSociale = $('#rs_' + idal).val();
                 let formaGiuridica = $('#fg_' + idal).val();
-                let ideaImpresa = $('#ideaimpresa_' + idal).val();
+                
                 let comune = $('#comune_' + idal).val();
                 let ateco = $('#ateco_' + idal).val();
-                let motivazione = $('#motivazione_' + idal).val();
+                
+                
+                let motivazione = $('#motivazione_' + idal).val();                
+                let motivazione2 = tinymce.get('motivazione_' + idal).getContent({ format: 'text' });                
+                let ideaImpresa = $('#ideaimpresa_' + idal).val();
+                let ideaImpresa2 = tinymce.get('ideaimpresa_' + idal).getContent({ format: 'text' });
+                
+                
+                
                 let tff = cleanCurrency($('#tff_' + idal).val());
                 let tfra = cleanCurrency($('#tfra_' + idal).val());
 
@@ -491,10 +501,10 @@ $('a[id^=rendiconta_]').on('click', function () {
                 fdata.append("bando_reg_option", bando_reg_option);
                 fdata.append("ragioneSociale", ragioneSociale);
                 fdata.append("formaGiuridica", formaGiuridica);
-                fdata.append("ideaImpresa", ideaImpresa);
+                fdata.append("ideaImpresa", ideaImpresa2);
                 fdata.append("comune", comune);
                 fdata.append("ateco", ateco);
-                fdata.append("motivazione", motivazione);
+                fdata.append("motivazione", motivazione2);
                 fdata.append("tff", tff);
                 fdata.append("tfra", tfra);
                 fdata.append("sede", sede);
