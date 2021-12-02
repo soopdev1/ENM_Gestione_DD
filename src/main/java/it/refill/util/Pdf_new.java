@@ -55,6 +55,7 @@ import static it.refill.util.Utility.createDir;
 import static it.refill.util.Utility.estraiEccezione;
 import static it.refill.util.Utility.estraiSessodaCF;
 import static it.refill.util.Utility.filterModello6;
+import static it.refill.util.Utility.formatTarget;
 import static it.refill.util.Utility.get_eta;
 import static it.refill.util.Utility.patternITA;
 import static it.refill.util.Utility.roundFloatAndFormat;
@@ -544,7 +545,7 @@ public class Pdf_new {
                         allievo_A.setCognome(n2.getCognome().toUpperCase());
                         allievo_A.setNome(n2.getNome().toUpperCase());
                         allievo_A.setCf(n2.getCodicefiscale().toUpperCase());
-                        allievo_A.setTarget(n2.getTarget());
+                        allievo_A.setTarget(formatTarget(n2.getTarget()));
 
                         if (datiM5 != null) {
                             allievo_A.setDomandaammissione(Utility.convertbooleantostring(datiM5.isDomanda_ammissione_presente()));
@@ -622,7 +623,7 @@ public class Pdf_new {
                         setFieldsValue(form, fields, "Cognome" + indice, al1.getCognome().toUpperCase());
                         setFieldsValue(form, fields, "Nome" + indice, al1.getNome().toUpperCase());
                         setFieldsValue(form, fields, "CF" + indice, al1.getCf().toUpperCase());
-                        setFieldsValue(form, fields, "Target" + indice, al1.getTarget());
+                        setFieldsValue(form, fields, "Target" + indice, formatTarget(al1.getTarget()));
                         setFieldsValue(form, fields, "Domanda di ammissione" + indice, al1.getDomandaammissione());
                         setFieldsValue(form, fields, "Doc di accompag  Modello 5" + indice, al1.getModello5());
 
@@ -922,7 +923,7 @@ public class Pdf_new {
                 setFieldsValue(form, fields, "comune_residenza", al.getComune_residenza().getNome().toUpperCase());
                 setFieldsValue(form, fields, "cap_residenza", al.getCapresidenza());
                 setFieldsValue(form, fields, "provincia_residenza", al.getComune_residenza().getCod_provincia().toUpperCase());
-                setFieldsValue(form, fields, "Target", al.getTarget());         //  Target
+                setFieldsValue(form, fields, "Target", formatTarget(al.getTarget()));         //  Target
                 setFieldsValue(form, fields, "CIP", CIP);
 
                 setFieldsValue(form, fields, "datafinepercorso", datifrequenza[0]);
@@ -1361,7 +1362,7 @@ public class Pdf_new {
                     setFieldsValue(form, fields, "NomeRow" + in.get(), a1.getNome().toUpperCase());
                     setFieldsValue(form, fields, "CodiceFiscaleRow" + in.get(), a1.getCodicefiscale().toUpperCase());
                     setFieldsValue(form, fields, "DataiscrizionepercorsoRow" + in.get(), dataconsegna.toString(patternITA));
-                    setFieldsValue(form, fields, "TargetRow" + in.get(), a1.getTarget());
+                    setFieldsValue(form, fields, "TargetRow" + in.get(), formatTarget(a1.getTarget()));
                     setFieldsValue(form, fields, "EmailRow" + in.get(), a1.getEmail().toLowerCase());
                     setFieldsValue(form, fields, "CellRow" + in.get(), a1.getTelefono());
                     in.addAndGet(1);
@@ -1712,7 +1713,7 @@ public class Pdf_new {
                     setFieldsValue(form, fields, "NomeRow" + in.get(), a1.getNome().toUpperCase());
                     setFieldsValue(form, fields, "CodiceFiscaleRow" + in.get(), a1.getCodicefiscale().toUpperCase());
                     setFieldsValue(form, fields, "DataiscrizionepercorsoRow" + in.get(), dataconsegna.toString(patternITA));
-                    setFieldsValue(form, fields, "TargetRow" + in.get(), a1.getTarget());
+                    setFieldsValue(form, fields, "TargetRow" + in.get(), formatTarget(a1.getTarget()));
                     setFieldsValue(form, fields, "EmailRow" + in.get(), a1.getEmail().toLowerCase());
                     setFieldsValue(form, fields, "CellRow" + in.get(), a1.getTelefono());
                     in.addAndGet(1);
