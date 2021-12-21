@@ -2654,25 +2654,46 @@ public class OperazioniSA extends HttpServlet {
         try {
             String[] gruppi = request.getParameter("gruppi[]").split(",");
             e.begin();
-            ModelliPrg m = e.getEm().find(ModelliPrg.class, Long.parseLong(request.getParameter("id_modello")));
+            ModelliPrg m = e.getEm().find(ModelliPrg.class,
+                    Long.parseLong(request.getParameter("id_modello")));
+//            ProgettiFormativi prg = e.getEm().find(ProgettiFormativi.class, m.getProgetto().getId());
             Allievi a;
+//            int numallievi = 0;
             for (String neet : gruppi) {
                 int gruppo = Integer.parseInt(neet.split("_")[0]);
                 int allievo = Integer.parseInt(neet.split("_")[1]);
-                a = e.getEm().find(Allievi.class, (long) allievo);
+                a = e.getEm().find(Allievi.class,
+                        (long) allievo);
                 a.setGruppo_faseB(gruppo);
                 e.merge(a);
+//                numallievi++;
             }
             m.setStato("L"); //L, pronto per la creazione delle lezioni
             e.merge(m);
-
-            e.commit();
-            resp.addProperty("result", true);
+//            int min_allievi = Integer.parseInt(e.getPath("min_allievi"));
+//            if (numallievi >= min_allievi) {
+                e.commit();
+                resp.addProperty("result", true);
+//            } else {
+//                e.rollBack();
+//                prg.setStato(e.getEm().find(StatiPrg.class, "ATAE"));
+//                prg.getAllievi().forEach(al1 -> {
+//                    if (al1.getStatopartecipazione().getId().equals("01")) {
+//                        al1.setStatopartecipazione(e.getEm().find(StatoPartecipazione.class, "02"));
+//                        e.merge(al1);
+//                    }
+//                });
+//                e.merge(prg);
+//                e.commit();
+//                resp.addProperty("result", false);
+//                resp.addProperty("message", "ERRORE DURANTE LA CREAZIONE DEI GRUPPI. IMPOSSIBILE RAGGIUNGERE IL NUMERO MINIMO DI ALLIEVI. IL PROGETTO VERRA' RIGETTATO. CHIUDERE QUESTA FINESTRA E TORNARE ALL'ELENCO PROGETTI.");
+//            }
         } catch (Exception ex) {
             e.rollBack();
             ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniSA creaGruppi: " + ex.getMessage());
             resp.addProperty("result", false);
+            resp.addProperty("message", "ERRORE DURANTE LA CREAZIONE DEI GRUPPI.");
         } finally {
             e.close();
         }
@@ -2873,7 +2894,7 @@ public class OperazioniSA extends HttpServlet {
                     resp.addProperty("message", "RICHIESTA ACCREDITAMENTO DOCENTE ERRATA ERRORE NELLE ATTIVITA'. " + ex.getMessage() + ". CONTROLLARE.");
                     ex.printStackTrace();
                 }
-                
+
                 //CREA DOCUMENTO
                 if (salvataggio) {
 

@@ -505,7 +505,10 @@ $('a[id=save_step3]').on('click', function () {
             fdata.append("mappatura", mappati);
             fdata.append("allievi_output_ok", $("#allievi_output_ok").val());
             fdata.append("tot_contributo_ammesso", CommaToDot($("#tot_contributo_ammesso").val()));
-            fdata.append("nota_controllore", $("#nota_controllore").val());
+            
+            fdata.append("nota_controllore", tinymce.get("nota_controllore").getContent({ format: 'text' }));
+//            fdata.append("nota_controllore", $("#nota_controllore").val());
+            
             fdata.append("step", 3);
             $.ajax({
                 type: "POST",

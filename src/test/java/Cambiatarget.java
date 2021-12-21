@@ -42,7 +42,7 @@ import org.joda.time.DateTime;
  *
  * @author rcosco
  */
-public class Pdf {
+public class Cambiatarget {
 
 //    public static void main(String[] args) {
 //        
@@ -87,9 +87,9 @@ public class Pdf {
 //    }
     public static void main(String[] args) {
         
-        String idpr = "164";
-        String idall = "581";
-        String usernameSA = "MARA.DISTEFANO978";
+        String idpr = "334";
+        String idall = "1143";
+        String usernameSA = "ALESSANDRA.GANGA";
         
         
         

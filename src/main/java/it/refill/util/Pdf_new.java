@@ -56,6 +56,7 @@ import static it.refill.util.Utility.estraiEccezione;
 import static it.refill.util.Utility.estraiSessodaCF;
 import static it.refill.util.Utility.filterModello6;
 import static it.refill.util.Utility.formatTarget;
+import static it.refill.util.Utility.getOnlyStrings;
 import static it.refill.util.Utility.get_eta;
 import static it.refill.util.Utility.patternITA;
 import static it.refill.util.Utility.roundFloatAndFormat;
@@ -474,7 +475,7 @@ public class Pdf_new {
             createDir(pathtemp);
 
             File pdfOut = new File(pathtemp + username + "_"
-                    + StringUtils.deleteWhitespace(sa.getRagionesociale()) + "_"
+                    + getOnlyStrings(sa.getRagionesociale()) + "_"
                     + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M6.pdf");
 
             try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is); PdfWriter writer = new PdfWriter(pdfOut)) {
@@ -1144,7 +1145,7 @@ public class Pdf_new {
             String pathtemp = e.getPath("pathtemp");
             createDir(pathtemp);
 
-            File pdfOut = new File(pathtemp + username + "_" + StringUtils.deleteWhitespace(sa.getRagionesociale()) + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M4.pdf");
+            File pdfOut = new File(pathtemp + username + "_" + getOnlyStrings(sa.getRagionesociale()) + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M4.pdf");
 
             try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
                 PdfWriter writer = new PdfWriter(pdfOut);
@@ -1321,7 +1322,8 @@ public class Pdf_new {
             createDir(pathtemp);
 
             File pdfOut = new File(pathtemp + username + "_"
-                    + StringUtils.deleteWhitespace(sa.getRagionesociale()) + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M3.pdf");
+                    + getOnlyStrings(sa.getRagionesociale()) 
+                    + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M3.pdf");
             try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
                 PdfWriter writer = new PdfWriter(pdfOut);
                 PdfDocument pdfDoc = new PdfDocument(reader, writer);
@@ -2283,7 +2285,7 @@ public class Pdf_new {
             createDir(pathtemp);
 
             File pdfOut = new File(pathtemp + username + "_"
-                    + StringUtils.deleteWhitespace(sa.getRagionesociale()) + "_"
+                    + getOnlyStrings(sa.getRagionesociale()) + "_"
                     + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".AssenzaINPS.pdf");
 
             try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
@@ -2397,7 +2399,7 @@ public class Pdf_new {
             Map<String, String> fasceDocenti = Utility.mapCoeffDocenti(coeff_fasciaA, coeff_fasciaB);
 
             File pdfOut = new File(startpath + username + "_"
-                    + StringUtils.deleteWhitespace(sa.getRagionesociale()) + "_"
+                    + getOnlyStrings(sa.getRagionesociale()) + "_"
                     + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".CL_FIN.pdf");
 
             try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is); PdfWriter writer = new PdfWriter(pdfOut); PdfDocument pdfDoc = new PdfDocument(reader, writer)) {
@@ -2590,7 +2592,7 @@ public class Pdf_new {
             Map<Long, Long> oreRendicontabili_docenti = Action.OreRendicontabiliDocentiFASEA((int) (long) pf.getId());
 
             File pdfOut = new File(startpath + username + "_"
-                    + StringUtils.deleteWhitespace(sa.getRagionesociale()) + "_"
+                    + getOnlyStrings(sa.getRagionesociale()) + "_"
                     + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".EV.pdf");
 
             try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
@@ -2691,26 +2693,26 @@ public class Pdf_new {
 
     }
 
-    public static void main(String[] args) {
-        File downloadFile = null;
-        try {
-            Entity e = new Entity();
-            ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class,
-                    110L);
-
-            System.out.println("Pdf.main() " + pf.getModelli());
-
-            ModelliPrg m6 = filterModello6(pf.getModelli());
-            if (m6 != null) {
-                downloadFile = Pdf_new.MODELLO6(e,
-                        "AMMINISTRAZIONE",
-                        pf.getSoggetto(),
-                        pf, m6, new DateTime(), true);
-                System.out.println("Pdf.main() " + downloadFile.getPath());
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        File downloadFile = null;
+//        try {
+//            Entity e = new Entity();
+//            ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class,
+//                    110L);
+//
+//            System.out.println("Pdf.main() " + pf.getModelli());
+//
+//            ModelliPrg m6 = filterModello6(pf.getModelli());
+//            if (m6 != null) {
+//                downloadFile = Pdf_new.MODELLO6(e,
+//                        "AMMINISTRAZIONE",
+//                        pf.getSoggetto(),
+//                        pf, m6, new DateTime(), true);
+//                System.out.println("Pdf.main() " + downloadFile.getPath());
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
 }

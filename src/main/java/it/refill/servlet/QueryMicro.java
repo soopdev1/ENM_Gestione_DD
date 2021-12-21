@@ -354,10 +354,10 @@ public class QueryMicro extends HttpServlet {
         }
     }
 
-    protected void getEstrazioni(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void getRendicontazioni(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         try {
-            List<Estrazioni> list = e.getEstazioniDesc();
+            List<Estrazioni> list = e.getRendicontazioni();
             writeJsonResponse(response, list);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -761,8 +761,8 @@ public class QueryMicro extends HttpServlet {
                 case "searchDocentiProgetti":
                     searchDocentiProgetti(request, response);
                     break;
-                case "getEstrazioni":
-                    getEstrazioni(request, response);
+                case "getRendicontazioni":
+                    getRendicontazioni(request, response);
                     break;
                 case "getPec":
                     getPec(request, response);

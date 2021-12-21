@@ -15,7 +15,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
-            <version>18-ea+5</version>
+            <version>18-ea+8</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.6.1.Final</version>
+            <version>5.6.0.Final</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -109,7 +109,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.14</version>
+            <version>4.4.15</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -134,7 +134,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20210307</version>
+            <version>20211205</version>
         </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -189,6 +189,24 @@
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
             <version>1.27</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.17.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.17.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.17.0</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
     <build>

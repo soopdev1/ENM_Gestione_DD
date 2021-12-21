@@ -37,8 +37,7 @@ import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 @NamedQueries(value = {
     @NamedQuery(name = "a.byCF", query = "SELECT a FROM Allievi a WHERE a.codicefiscale=:codicefiscale AND a.statopartecipazione.id = '01'"),
     @NamedQuery(name = "a.bySoggettoAttuatore", query = "SELECT a FROM Allievi a WHERE a.soggetto=:soggetto"),
-    @NamedQuery(name = "a.bySoggettoAttuatoreNoProgetto", query = "SELECT a FROM Allievi a WHERE a.soggetto=:soggetto and a.progetto=null"),
-    @NamedQuery(name = "a.bySoggettoAttuatoreNoProgettoAttivi", query = "SELECT a FROM Allievi a WHERE a.soggetto=:soggetto and a.progetto=null AND a.statopartecipazione.id='01'"),
+    @NamedQuery(name = "a.bySoggettoAttuatoreNoProgettoAttivi", query = "SELECT a FROM Allievi a WHERE a.soggetto=:soggetto and a.progetto=null AND a.statopartecipazione.id='01' AND a.stato='A'"),
     @NamedQuery(name = "a.byProgetto", query = "SELECT a FROM Allievi a WHERE a.progetto=:progetto AND a.statopartecipazione.id = '01'"),
     @NamedQuery(name = "a.byProgettoAll", query = "SELECT a FROM Allievi a WHERE a.progetto=:progetto"),
     @NamedQuery(name = "a.byEmail", query = "SELECT a FROM Allievi a WHERE a.email=:email AND a.statopartecipazione.id = '01'")

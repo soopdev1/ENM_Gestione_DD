@@ -27,7 +27,6 @@
         } else {
             String src = session.getAttribute("src").toString();
             Entity e = new Entity();
-//            List<Allievi> alunni = e.getAllieviSoggettoNoPrg(us.getSoggettoAttuatore());
             List<Allievi> alunni = e.getAllieviSoggettoNoPrgAttivi(us.getSoggettoAttuatore());
 
             List<SediFormazione> sedi = e.getSediFormazione(session);

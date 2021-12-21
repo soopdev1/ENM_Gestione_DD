@@ -397,12 +397,6 @@ public class Entity {
         return q.getResultList().isEmpty() ? new ArrayList() : (List<Allievi>) q.getResultList();
     }
 
-    public List<Allievi> getAllieviSoggettoNoPrg(SoggettiAttuatori sa) {
-        TypedQuery<Allievi> q = em.createNamedQuery("a.bySoggettoAttuatoreNoProgetto", Allievi.class)
-                .setParameter("soggetto", sa);
-        return q.getResultList().isEmpty() ? new ArrayList() : (List<Allievi>) q.getResultList();
-    }
-
     public List<Allievi> getAllieviSoggettoNoPrgAttivi(SoggettiAttuatori sa) {
         TypedQuery<Allievi> q = em.createNamedQuery("a.bySoggettoAttuatoreNoProgettoAttivi", Allievi.class)
                 .setParameter("soggetto", sa);
@@ -852,9 +846,16 @@ public class Entity {
         return q.getResultList().size() > 0 ? (List<SoggettiAttuatori>) q.getResultList() : new ArrayList();
     }
 
-    public List<ProgettiFormativi> getProgettiToExtract() {
-        TypedQuery<ProgettiFormativi> q = em.createNamedQuery("progetti.toExtaxt", ProgettiFormativi.class);
+    public List<ProgettiFormativi> getProgettiDaRendicontare() {
+        TypedQuery<ProgettiFormativi> q = this.em.createNamedQuery("progetti.toRend", ProgettiFormativi.class);
         return q.getResultList().size() > 0 ? (List<ProgettiFormativi>) q.getResultList() : new ArrayList();
+    }
+    
+    public List<Estrazioni> getRendicontazioni() {
+        TypedQuery<Estrazioni> q = this.em.createNamedQuery("estrazioni.rendicontazione", Estrazioni.class).setMaxResults(maxQueryResult);
+        List<Estrazioni> result = q.getResultList();
+        return result.size() > 0 ? result : new ArrayList();
+        
     }
 
     public List<Estrazioni> getEstazioniDesc() {

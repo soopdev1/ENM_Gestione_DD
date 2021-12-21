@@ -29,7 +29,7 @@
             Entity e = new Entity();
             ProgettiFormativi p = e.getEm().find(ProgettiFormativi.class, Long.parseLong(request.getParameter("id")));
             List<SediFormazione> sedi = e.findAll(SediFormazione.class);
-            List<Allievi> alunni = e.getAllieviSoggettoNoPrg(us.getSoggettoAttuatore());
+            List<Allievi> alunni = e.getAllieviSoggettoNoPrgAttivi(us.getSoggettoAttuatore());
             List<Allievi> alunni_prg = e.getAllieviProgettiFormativi(p);
             List<NomiProgetto> nomi = e.findAll(NomiProgetto.class);
 

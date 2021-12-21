@@ -82,6 +82,8 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.tika.parser.txt.CharsetDetector;
@@ -991,6 +993,13 @@ public class Utility {
             e.printStackTrace();
         }
         return ing;
+    }
+    
+    public static String getOnlyStrings(String s) {
+        Pattern pattern = Pattern.compile("[^a-z A-Z]");
+        Matcher matcher = pattern.matcher(s);
+        String number = matcher.replaceAll("");
+        return number;
     }
 
 }

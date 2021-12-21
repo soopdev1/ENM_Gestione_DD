@@ -310,7 +310,7 @@ function checkObblFields_Allievo(id) {
         }
     });
     $('textarea.obbligatory[id$=' + id + ']').each(function () {
-        var testo1 = tinymce.get($(this).attr('id')).getContent({ format: 'text' });
+        var testo1 = tinymce.get($(this).attr('id')).getContent({format: 'text'});
         if (testo1 === '') {
             err = true;
             alert("VERIFICARE TUTTI I CAMPI DI TESTO.")
@@ -425,18 +425,18 @@ $('a[id^=rendiconta_]').on('click', function () {
             if (result.value) {
                 let ragioneSociale = $('#rs_' + idal).val();
                 let formaGiuridica = $('#fg_' + idal).val();
-                
+
                 let comune = $('#comune_' + idal).val();
                 let ateco = $('#ateco_' + idal).val();
-                
-                
-                let motivazione = $('#motivazione_' + idal).val();                
-                let motivazione2 = tinymce.get('motivazione_' + idal).getContent({ format: 'text' });                
+
+
+                let motivazione = $('#motivazione_' + idal).val();
+                let motivazione2 = tinymce.get('motivazione_' + idal).getContent({format: 'text'});
                 let ideaImpresa = $('#ideaimpresa_' + idal).val();
-                let ideaImpresa2 = tinymce.get('ideaimpresa_' + idal).getContent({ format: 'text' });
-                
-                
-                
+                let ideaImpresa2 = tinymce.get('ideaimpresa_' + idal).getContent({format: 'text'});
+
+
+
                 let tff = cleanCurrency($('#tff_' + idal).val());
                 let tfra = cleanCurrency($('#tfra_' + idal).val());
 
@@ -623,14 +623,14 @@ $('button[id^=loadM5_]').click(function () {
 
 function setStep3() {
     let m6 = loadInformazioniStep3();
-    if (m6 == null || m6 == "") {
+    if (m6 === null || m6 === "") {
         $("input:radio[name=scelta_step3]:first").prop('checked', 'checked');
         $('[name=regione_step3]').val('-');
         $('[name=provincia_step3]').val('-');
         $('[name=comune_step3]').val('-');
         $('#info_step3').hide();
     } else {
-        if (m6.scelta_modello6 == 1) {
+        if (m6.scelta_modello6 === 1) {
             $("input:radio[name=scelta_step3]:first").prop('checked', 'checked');
             $('#info_step3').hide();
             $('[name=regione_step3]').val('-');
@@ -644,12 +644,13 @@ function setStep3() {
             setComuneStep3(m6.comune_modello6.nome_provincia, m6.comune_modello6.id);
             $('#indirizzo_step3').val(m6.indirizzo_modello6);
             $('#civico_step3').val(m6.civico_modello6);
+
         }
     }
 }
 
 $("input:radio[name=scelta_step3]").change(function () {
-    if (this.value === 2) {
+    if (this.value === 2 || this.value === "2") {
         $('#info_step3').show();
     } else {
         $('#info_step3').hide();
@@ -662,7 +663,7 @@ function uploadRegistroComplessivo(pf) {
         title: 'Carica Registro complessivo presenze',
         html: '<div id="swal_regC">'
                 + '<div class="custom-file">'
-                + '<input type="file" tipo="obbligatory" class="custom-file-input" accept="application/pkcs7-mime,application/pdf" name="rcp_' 
+                + '<input type="file" tipo="obbligatory" class="custom-file-input" accept="application/pkcs7-mime,application/pdf" name="rcp_'
                 + pf + '" id="rcp_' + pf + '" onchange="return checkFileExtAndDim([&quot;pdf,p7m&quot;]);">'
                 + '<label class="custom-file-label selected" id="label_rcp_' + pf + '" style="text-align: left;">Seleziona File</label>'
                 + '</div>'
@@ -744,7 +745,7 @@ function loadInformazioniStep3() {
         async: false,
         url: context + "/QuerySA?type=loadInfoM6&id=" + $('#pf').val(),
         success: function (resp) {
-            if (resp != null)
+            if (resp !== null)
                 temp = JSON.parse(resp);
         }
     });
@@ -758,7 +759,7 @@ function setComuneStep3(provincia, comune) {
     $.get(context + '/Login?type=getComune&provincia=' + provincia, function (resp) {
         var json = JSON.parse(resp);
         for (var i = 0; i < json.length; i++) {
-            if (comune == json[i].value) {
+            if (comune === json[i].value) {
                 $("#comune_step3").append('<option selected value="' + json[i].value + '">' + json[i].desc + '</option>');
             } else {
                 $("#comune_step3").append('<option value="' + json[i].value + '">' + json[i].desc + '</option>');

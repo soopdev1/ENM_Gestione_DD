@@ -4,6 +4,7 @@
     Author     : rcosco
 --%>
 
+<%@page import="it.refill.db.Action"%>
 <%@page import="it.refill.domain.User"%>
 <%@page import="it.refill.db.Entity"%>
 <%
@@ -12,6 +13,9 @@
     if (us1 != null) {
         tipoR = us1.getTipo();
     }
+    
+    boolean rend = Action.rendicontazione_abilitata(us1.getUsername());
+    
     String uri = request.getRequestURI();
     String pageName = uri.substring(uri.lastIndexOf("/") + 1);
     String home = "", sa = "", allievi = "", docenti = "", aule = "", progettoformativo = "", cloud = "", faq = "", fad = "", activity = "",

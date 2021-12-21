@@ -24,6 +24,7 @@ import it.refill.domain.Documenti_Allievi;
 import it.refill.domain.Documenti_Allievi_Pregresso;
 import it.refill.domain.Documenti_UnitaDidattiche;
 import it.refill.domain.Email;
+import it.refill.domain.Estrazioni;
 import it.refill.domain.FadMicro;
 import it.refill.domain.Faq;
 import it.refill.domain.FasceDocenti;
@@ -72,6 +73,7 @@ import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.nio.file.Files;
 import static java.nio.file.Files.probeContentType;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -814,46 +816,44 @@ public class OperazioniMicro extends HttpServlet {
 //        response.getWriter().close();
     }
 
-    protected void downloadTarGz(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        Entity e = new Entity();
-//        e.begin();
-//        JsonObject resp = new JsonObject();
-//        try {
-//            Date today = new Date();
-//            String[] progetti = request.getParameterValues("progetti[]");
-//            List<ProgettiFormativi> prgs = new ArrayList<>();
-//            ArrayList<String> cip = new ArrayList<>();
-//            ProgettiFormativi prg;
-//            for (String s : progetti) {
-//                prg = e.getEm().find(ProgettiFormativi.class, Long.parseLong(s));
-//                prgs.add(prg);
-//                cip.add(prg.getCip());
-//            }
-//            String path = e.getPath("output_excel_archive") + new SimpleDateFormat("yyyyMMdd_HHmmss").format(today) + ".tar.gz";
-////            File out = 
-//            createTarArchive(prgs, path);
-//
-//            ObjectMapper mapper = new ObjectMapper();
-//            e.persist(new Estrazioni(today, mapper.writeValueAsString(cip), path));
-//
-//            for (ProgettiFormativi p : prgs) {
-//                p.setExtract(1);
-//                e.merge(p);
-//            }
-//            e.commit();
-//            resp.addProperty("result", true);
-//            resp.addProperty("path", path);
-//        } catch (PersistenceException | ParseException ex) {
-//            ex.printStackTrace();
-//            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniSA downloadTarGz: " + ex.getMessage());
-//            resp.addProperty("result", false);
-//            resp.addProperty("message", "Errore: non &egrave; stato possibile creare il file.");
-//        } finally {
-//            e.close();
-//        }
-//        response.getWriter().write(resp.toString());
-//        response.getWriter().flush();
-//        response.getWriter().close();
+    protected void crearendicontazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Entity e = new Entity();
+        e.begin();
+        JsonObject resp = new JsonObject();
+        try {
+            Date today = new Date();
+            String[] progetti = request.getParameterValues("progetti[]");
+            List<ProgettiFormativi> prgs = new ArrayList<>();
+            ArrayList<String> cip = new ArrayList<>();
+            ProgettiFormativi prg;
+            for (String s : progetti) {
+                prg = e.getEm().find(ProgettiFormativi.class, Long.parseLong(s));
+                prgs.add(prg);
+                cip.add(prg.getCip());
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            String path = null;
+            e.persist(new Estrazioni(today, mapper.writeValueAsString(cip), path));
+
+            for (ProgettiFormativi p : prgs) {
+                p.setExtract(2);
+                e.merge(p);
+            }
+            e.commit();
+            resp.addProperty("result", true);
+            resp.addProperty("path", path);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniSA crearendicontazione: " + ex.getMessage());
+            resp.addProperty("result", false);
+            resp.addProperty("message", "Errore: non &egrave; stato possibile creare il file.");
+        } finally {
+            e.close();
+        }
+        response.getWriter().write(resp.toString());
+        response.getWriter().flush();
+        response.getWriter().close();
     }
 
     protected void checkPiva(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -2054,9 +2054,9 @@ public class OperazioniMicro extends HttpServlet {
         try {
             Allievi a1 = e.getEm().find(Allievi.class, Long.parseLong(request.getParameter("idallievo")));
             if (a1 != null) {
-                String nomepdf = a1.getProgetto().getCip() + "_" + a1.getCodicefiscale().toUpperCase().trim() + ".pdf";
+                String nomepdf = a1.getCodicefiscale().toUpperCase().trim() + "_" + a1.getProgetto().getCip() + ".pdf";
                 File downloadFile = new File(a1.getProgetto().getPdfunico());
-                if (downloadFile != null && downloadFile.exists()) {
+                if (downloadFile.exists() && downloadFile.canRead()) {
                     OutputStream outStream;
                     try (FileInputStream inStream = new FileInputStream(downloadFile)) {
                         String mimeType = Files.probeContentType(downloadFile.toPath());
@@ -2563,8 +2563,8 @@ public class OperazioniMicro extends HttpServlet {
                 case "downloadTarGz_only":
                     downloadTarGz_only(request, response);
                     break;
-                case "downloadTarGz":
-                    downloadTarGz(request, response);
+                case "crearendicontazione":
+                    crearendicontazione(request, response);
                     break;
                 case "checkPiva":
                     checkPiva(request, response);

@@ -346,5 +346,12 @@ public class Action {
         db.closeDB();
         return r;
     }
+    
+    public static boolean rendicontazione_abilitata(String username) {
+        Database db = new Database(false, false);
+        String listuser = db.getPathtemp("user_rend");
+        db.closeDB();
+        return listuser.toLowerCase().contains(listuser.toLowerCase());
+    }
 
 }
