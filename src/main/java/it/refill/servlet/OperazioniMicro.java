@@ -2321,7 +2321,7 @@ public class OperazioniMicro extends HttpServlet {
             e.begin();
             ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class, Long.parseLong(idpr));
 //            DocumentiPrg esitovalutazione = pf.getDocumenti().stream().filter(d1 -> d1.getTipo().getId() == 33L).findAny().orElse(null); //R^TEST
-            DocumentiPrg esitovalutazione = pf.getDocumenti().stream().filter(d1 -> d1.getTipo().getId() == 36L).findAny().orElse(null);
+            DocumentiPrg esitovalutazione = pf.getDocumenti().stream().filter(d1 -> d1.getTipo().getId() == 36L && d1.getDeleted() == 0).findAny().orElse(null);
             if (esitovalutazione != null) {
 //                File content = new File("F:\\mnt\\mcn\\BECONSULTING260720211205764.M2_pdfA.pdf");//R^TEST
                 File content = new File(esitovalutazione.getPath());
