@@ -234,14 +234,7 @@ var DatatablesAllievi = function () {
                                 + '<div class="dropdown-menu dropdown-menu-left">';
                         option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalDocumentAllievo(' + row.id + ')"><i class="fa fa-file-alt"></i> Visualizza Documenti</a>';
 
-                        if (row.statopartecipazione.id === "01") {
-                            if (row.progetto.stato.controllare === 0) {
-                                option += '<a class="dropdown-item " href="javascript:void(0);" onclick="swalSigma(' + row.id + ',\'' + row.statopartecipazione.id +
-                                        '\')"><i class="fa fa-user-check" data-container="body" data-html="true" data-toggle="kt-tooltip" title="Stato '
-                                        + row.statopartecipazione.descrizione + '"></i>Cambia stato di partecipazione</a>';
-
-                            }
-                        }
+                        
                         option += '</div></div>';
                         return option;
                     }
@@ -426,32 +419,6 @@ function confirmNext(id, stato) {
     });
 }
 
-function setEsito(id, esito) {
-
-    swalConfirm('Cambio esito',
-            "Sicuro di voler confermare l'esito, <b class='kt-font-danger'>asseganto alla " + esito + "</b>, per il seguente allievo?",
-            function setValueEsito() {
-                showLoad();
-                $.ajax({
-                    type: "POST",
-                    url: context + '/OperazioniSA?type=setEsitoAllievo&id=' + id + '&esito=' + esito,
-                    success: function (data) {
-                        closeSwal();
-                        var json = JSON.parse(data);
-                        if (json.result) {
-                            swalSuccess("Esito allievo", "Esito allievo impostato");
-                            reload_table($('#kt_table_allievi'));
-                        } else {
-                            swalError("Errore", json.message);
-                        }
-                    },
-                    error: function () {
-                        swalError("Errore", "Non è stato possibile impostare l'esito per l'attuale allievo");
-                    }
-                });
-            });
-}
-
 function checkpm() {
     if ($('#check').is(":checked")) {
         $("#orario2_start").removeAttr("disabled");
@@ -515,93 +482,7 @@ function returnTotalHHbyAllievo(idallievo) {
     return [totaleore, today];
 }
 
-function warningSigma() {
-    if ($("#sigma").val() !== "-" || $("#sigma").val() !== "01") {
-        $('#warning_sp').css("display", "");
-        $('#warningmsg').html('Impostando l\'alunno come \'' + $("#sigma option:selected").text() + '\', questo verrà escluso definitivamente.');
-    } else {
-        $('#warning_sp').css("display", "none");
-    }
-}
 
-function swalSigma(id, idsp) {
-    swal.fire({
-        title: 'Stato di partecipazione (Codice SIGMA)',
-        html: '<div id="swalDoc">'
-                + '<div id="warning_sp" class="form-group kt-font-io-n row col" style="margin-left: 0px;margin-right: 0px; display: none;" ><div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;" ></i></div><div id="warningmsg" class="col-10" ></div><div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;"></i></div></div>'
-                + '<div class="select-div" id="sigma_div">'
-                + '<select class="form-control kt-select2-general obbligatory" id="sigma" name="sigma"  style="width: 100%" onchange="return warningSigma();">'
-                + '<option value="-">Seleziona stato di partecipazione</option>'
-                + '</select></div><br>'
-                + '</div>',
-        animation: false,
-        showCancelButton: true,
-        confirmButtonText: '&nbsp;<i class="la la-check"></i>',
-        cancelButtonText: '&nbsp;<i class="la la-close"></i>',
-        cancelButtonClass: "btn btn-io-n",
-        confirmButtonClass: "btn btn-io",
-        customClass: {
-            popup: 'animated bounceInUp'
-        },
-        onOpen: function () {
-            $('#sigma').select2({
-                dropdownCssClass: "select2-on-top",
-                minimumResultsForSearch: -1
-            });
-            $.get(context + "/QuerySA?type=getSIGMA", function (resp) {
-                var json = JSON.parse(resp);
-                for (var i = 0; i < json.length; i++) {
-                    if (json[i].id === idsp) {
-                        $("#sigma").append('<option selected value="' + json[i].id + '">' + json[i].descrizione + '</option>');
-                    } else {
-                        $("#sigma").append('<option value="' + json[i].id + '">' + json[i].descrizione + '</option>');
-                    }
-                }
-            });
-        },
-        preConfirm: function () {
-            var err = false;
-            err = checkObblFieldsContent($('#swalDoc')) ? true : err;
-            if (!err) {
-                return new Promise(function (resolve) {
-                    resolve({
-                        "sigma": $('#sigma').val()
-                    });
-                });
-            } else {
-                return false;
-            }
-        }
-    }).then((result) => {
-        if (result.value) {
-            setValueStato(id, result.value.sigma);
-        } else {
-            swal.close();
-        }
-    }
-    );
-}
-
-function setValueStato(id, sigma) {
-    showLoad();
-    $.ajax({
-        type: "POST",
-        url: context + '/OperazioniSA?type=setSIGMA&id=' + id + '&sigma=' + sigma,
-        success: function (data) {
-            closeSwal();
-            var json = JSON.parse(data);
-            if (json.result) {
-                swalSuccess("Codice SIGMA", "Stato di partecipazione assegnato correttamente");
-                reload_table($('#kt_table_allievi'));
-            } else {
-                swalError("Errore", json.message);
-            }
-        },
-        error: function () {
-            swalError("Errore", "Non è stato possibile impostare lo stato di partecipazione");
-        }
-    });
-}
 
 function checkStartM4() {
     let temp = "";

@@ -20,7 +20,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="stato_partecipazione")
 @NamedQueries(value = {
-    @NamedQuery(name = "sp.Elenco", query = "select sp from StatoPartecipazione sp ORDER BY sp.id")
+    @NamedQuery(name = "sp.Elenco", query = "select sp from StatoPartecipazione sp ORDER BY sp.id"),
+    @NamedQuery(name = "sp.Elencomod", query = "select sp from StatoPartecipazione sp WHERE sp.id<>'01'")
 })
 
 public class StatoPartecipazione implements Serializable {
@@ -65,10 +66,7 @@ public class StatoPartecipazione implements Serializable {
             return false;
         }
         StatoPartecipazione other = (StatoPartecipazione) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

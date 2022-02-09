@@ -243,14 +243,19 @@ public class OperazioniMicro extends HttpServlet {
             e.begin();
 
             SediFormazione p = e.getEm().find(SediFormazione.class, Long.parseLong(getRequestValue(request, "id")));
-            if (status.equals("OK")) {
-                p.setStato("A");
-            } else if (status.equals("OK1")) {
-                p.setStato("A1");
-            } else if (status.equals("KO")) {
-                p.setStato("R");
-            } else {
-                p.setStato("DV");
+            switch (status) {
+                case "OK":
+                    p.setStato("A");
+                    break;
+                case "OK1":
+                    p.setStato("A1");
+                    break;
+                case "KO":
+                    p.setStato("R");
+                    break;
+                default:
+                    p.setStato("DV");
+                    break;
             }
             e.merge(p);
             e.commit();
@@ -388,7 +393,6 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().close();
     }
 
-    
     protected void annullaPrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -421,7 +425,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void rejectPrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -491,24 +495,6 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
-    }
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    private boolean checkFaseAllievi(List<Allievi> allievi) {
-        for (Allievi a : allievi) {
-            if (a.getEsito().equals("Fase B")) {
-                return true;
-            }
-        }
-        return false;
     }
 
     protected void setHoursRegistro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -886,13 +872,13 @@ public class OperazioniMicro extends HttpServlet {
             SoggettiAttuatori sa = e.getEm().find(SoggettiAttuatori.class, Long.parseLong(request.getParameter("idsa")));
             String today = new SimpleDateFormat("yyyyMMddHHssSSS").format(new Date());
             e.begin();
-            String piva = request.getParameter("piva_sa");
-            String cf = request.getParameter("cf_sa");
+            String piva = getRequestValue(request, "piva_sa");
+            String cf = getRequestValue(request, "cf_sa");
             boolean check_piva = e.getUserPiva(piva) == null || piva.equalsIgnoreCase(sa.getPiva() == null ? "" : sa.getPiva());
             boolean check_cf = e.getUserCF(cf) == null || cf.equalsIgnoreCase(sa.getCodicefiscale() == null ? "" : sa.getCodicefiscale());
             String rs_nota = !request.getParameter("rs_sa").equalsIgnoreCase(sa.getRagionesociale()) ? "Rag. Sociale: " + request.getParameter("rs_sa") + " (" + sa.getRagionesociale() + "); " : "";
-            String cf_nota = !cf.equalsIgnoreCase(sa.getCodicefiscale() == null ? "" : sa.getCodicefiscale()) ? ("C.F.: " + (cf == null || cf.equals("") ? "-" : cf) + " (" + (sa.getCodicefiscale() == null ? "-" : sa.getCodicefiscale()) + "); ") : "";
-            String piva_nota = !piva.equalsIgnoreCase(sa.getPiva() == null ? "" : sa.getPiva()) ? ("P.IVA: " + (piva == null || piva.equals("") ? "-" : piva) + " (" + (sa.getPiva() == null ? "-" : sa.getPiva()) + "); ") : "";
+            String cf_nota = !cf.equalsIgnoreCase(sa.getCodicefiscale() == null ? "" : sa.getCodicefiscale()) ? ("C.F.: " + (cf.equals("") ? "-" : cf) + " (" + (sa.getCodicefiscale() == null ? "-" : sa.getCodicefiscale()) + "); ") : "";
+            String piva_nota = !piva.equalsIgnoreCase(sa.getPiva() == null ? "" : sa.getPiva()) ? ("P.IVA: " + (piva.equals("") ? "-" : piva) + " (" + (sa.getPiva() == null ? "-" : sa.getPiva()) + "); ") : "";
             if (check_cf || check_piva) {
                 Part p = request.getPart("file");
                 if (p != null && p.getSubmittedFileName() != null && p.getSubmittedFileName().length() > 0) {
@@ -1143,8 +1129,6 @@ public class OperazioniMicro extends HttpServlet {
 
             ObjectMapper mapper = new ObjectMapper();
 
-            String mailjet_api = e.getPath("mailjet_api");
-            String mailjet_secret = e.getPath("mailjet_secret");
             String link = e.getPath("linkfad");
             String dominio;
             if (request.getContextPath().contains("Enm_DD")) {
@@ -1210,13 +1194,8 @@ public class OperazioniMicro extends HttpServlet {
         Entity e = new Entity();
         try {
             String nome_fad = request.getParameter("name_fad").trim();//.replaceAll("\\s+", "_");rimuove tutti gli spazi
-            String pwd = Utility.getRandomString(8);
             String[] emails = request.getParameterValues("email[]");
             String[] date = request.getParameter("range").split("-");
-            String note = request.getParameter("note") == null || request.getParameter("note").trim().isEmpty()
-                    ? ""
-                    : "Note:<br>" + request.getParameter("note");
-
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
             ObjectMapper mapper = new ObjectMapper();
@@ -1279,8 +1258,6 @@ public class OperazioniMicro extends HttpServlet {
         JsonObject resp = new JsonObject();
         Entity e = new Entity();
         try {
-            String mailjet_api = e.getPath("mailjet_api");
-            String mailjet_secret = e.getPath("mailjet_secret");
             String link = e.getPath("linkfad");
             String dominio;
             if (request.getContextPath().contains("Enm_DD")) {
@@ -1493,7 +1470,7 @@ public class OperazioniMicro extends HttpServlet {
                     ore_convalidate += d.getOrericonosciute();
                 }
                 for (DocumentiPrg r : registri) {
-                    ore_convalidate += r.getPresenti_list().stream().filter(x -> x.getId() == a.getId()).findFirst().orElse(new Presenti()).getOre_riconosciute();
+                    ore_convalidate += r.getPresenti_list().stream().filter(x -> x.getId().equals(a.getId())).findFirst().orElse(new Presenti()).getOre_riconosciute();
                 }
 
                 a.setImporto(ore_convalidate * euro_ore);
@@ -1612,8 +1589,6 @@ public class OperazioniMicro extends HttpServlet {
 
     protected void accreditaSA(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        PrintWriter pw = response.getWriter();
-
         JsonObject resp = new JsonObject();
 
         try {
@@ -1630,13 +1605,13 @@ public class OperazioniMicro extends HttpServlet {
             SoggettiAttuatori sa = db1.estrai_SA_accettare(en, idsa);
             db1.closeDB();
 
-            boolean isneet = false;
-
-            if (sa.getAccreditatoneet() != null && sa.getAccreditatoneet().equals("SI")) {
-                isneet = true;
-            }
-
             if (sa != null) {
+                boolean isneet = false;
+
+                if (sa.getAccreditatoneet() != null && sa.getAccreditatoneet().equals("SI")) {
+                    isneet = true;
+                }
+
                 //  DOCUMENTO SOGGETTO
                 Database dbinfo1 = new Database(true, isneet);
                 FileDownload fw = dbinfo1.getDocumentoIdentitaSA(sa.getUsernameaccr());
@@ -1719,9 +1694,10 @@ public class OperazioniMicro extends HttpServlet {
             resp.addProperty("message", "Errore:4 - " + Utility.estraiEccezione(e));
         }
 
-        pw.write(resp.toString());
-        pw.flush();
-        pw.close();
+        try (PrintWriter pw = response.getWriter()) {
+            pw.write(resp.toString());
+            pw.flush();
+        }
 
     }
 
@@ -2078,24 +2054,32 @@ public class OperazioniMicro extends HttpServlet {
                 } else {
                     User us = (User) request.getSession().getAttribute("user");
                     String page = "page/";
-                    if (us.getTipo() == 1) {
-                        page += "sa/indexSoggettoAttuatore.jsp";
-                    } else if (us.getTipo() == 4) {
-                        page += "ci/indexCi.jsp";
-                    } else {
-                        page += "mc/indexMicrocredito.jsp";
+                    switch (us.getTipo()) {
+                        case 1:
+                            page += "sa/indexSoggettoAttuatore.jsp";
+                            break;
+                        case 4:
+                            page += "ci/indexCi.jsp";
+                            break;
+                        default:
+                            page += "mc/indexMicrocredito.jsp";
+                            break;
                     }
                     response.sendRedirect("redirect.jsp?page=" + page + "&fileNotFound=true");
                 }
             } else {
                 User us = (User) request.getSession().getAttribute("user");
                 String page = "page/";
-                if (us.getTipo() == 1) {
-                    page += "sa/indexSoggettoAttuatore.jsp";
-                } else if (us.getTipo() == 4) {
-                    page += "ci/indexCi.jsp";
-                } else {
-                    page += "mc/indexMicrocredito.jsp";
+                switch (us.getTipo()) {
+                    case 1:
+                        page += "sa/indexSoggettoAttuatore.jsp";
+                        break;
+                    case 4:
+                        page += "ci/indexCi.jsp";
+                        break;
+                    default:
+                        page += "mc/indexMicrocredito.jsp";
+                        break;
                 }
                 response.sendRedirect("redirect.jsp?page=" + page + "&fileNotFound=true");
             }
@@ -2104,12 +2088,16 @@ public class OperazioniMicro extends HttpServlet {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro deleteDocCloud: " + ex.getMessage());
             User us = (User) request.getSession().getAttribute("user");
             String page = "page/";
-            if (us.getTipo() == 1) {
-                page += "sa/indexSoggettoAttuatore.jsp";
-            } else if (us.getTipo() == 4) {
-                page += "ci/indexCi.jsp";
-            } else {
-                page += "mc/indexMicrocredito.jsp";
+            switch (us.getTipo()) {
+                case 1:
+                    page += "sa/indexSoggettoAttuatore.jsp";
+                    break;
+                case 4:
+                    page += "ci/indexCi.jsp";
+                    break;
+                default:
+                    page += "mc/indexMicrocredito.jsp";
+                    break;
             }
             response.sendRedirect("redirect.jsp?page=" + page + "&fileNotFound=true");
         }
@@ -2273,7 +2261,8 @@ public class OperazioniMicro extends HttpServlet {
                 e.begin();
                 ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class, Long.parseLong(idpr));
                 DocumentiPrg esitovalutazione = pf.getDocumenti().stream().filter(d1 -> d1.getTipo().getId() == 36L).findAny().orElse(null);
-                String destpath = esitovalutazione.getPath() + "SIGNED" + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."));;
+                String destpath = esitovalutazione.getPath() + "SIGNED"
+                        + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."));
                 part.write(destpath);
                 esitovalutazione.setDeleted(1);
                 e.merge(esitovalutazione);
@@ -2378,14 +2367,14 @@ public class OperazioniMicro extends HttpServlet {
             Part part = request.getPart("file");
             if (part != null && part.getSubmittedFileName() != null && part.getSubmittedFileName().length() > 0) {
                 ProgettiFormativi prg = e.getEm().find(ProgettiFormativi.class, Long.parseLong(idpr));
-                
+
                 TipoDoc tipo;
-                if(target.equals("D1")){
+                if (target.equals("D1")) {
                     tipo = e.getEm().find(TipoDoc.class, 12L);
                 } else {
                     tipo = e.getEm().find(TipoDoc.class, 13L);
                 }
-                
+
                 String path = e.getPath("pathDocSA_Prg").replace("@rssa",
                         prg.getSoggetto().getId().toString()).replace("@folder", prg.getId().toString());
                 File dir = new File(path);
@@ -2419,10 +2408,9 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
-        
-        
+
     }
-    
+
     protected void caricanuovodocumento(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -2497,6 +2485,37 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
 
+    }
+
+    protected void setSIGMA(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        JsonObject resp = new JsonObject();
+        Entity e = new Entity();
+        e.begin();
+
+        try {
+            Allievi a = e.getEm().find(Allievi.class,
+                    Long.parseLong(request.getParameter("id")));
+            if (request.getParameter("sigma") != null) {
+                a.setStatopartecipazione((StatoPartecipazione) e.getEm().find(StatoPartecipazione.class,
+                        request.getParameter("sigma")));
+                e.merge(a);
+            }
+            e.commit();
+            resp.addProperty("result", true);
+        } catch (PersistenceException ex) {
+            e.rollBack();
+            ex.printStackTrace();
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro setSIGMA: " + ex.getMessage());
+            resp.addProperty("result", false);
+            resp.addProperty("message", "Errore: non &egrave; stato possibile impostare lo stato di partecipazione dell'allievo.");
+        } finally {
+            e.close();
+        }
+        response.getWriter().write(resp.toString());
+        response.getWriter().flush();
+        response.getWriter().close();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -2676,6 +2695,9 @@ public class OperazioniMicro extends HttpServlet {
                     break;
                 case "assegnaPrg":
                     assegnaPrg(request, response);
+                    break;
+                case "setSIGMA":
+                    setSIGMA(request, response);
                     break;
                 default:
                     break;

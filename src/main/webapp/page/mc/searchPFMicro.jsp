@@ -265,6 +265,7 @@
                                         <th class="text-uppercase text-center">Target</th>
                                         <th class="text-uppercase text-center">Stato</th>
                                         <th class="text-uppercase text-center">Motivazione</th>
+                                        <th class="text-uppercase text-center">Questionari</th>
                                         <th class="text-uppercase text-center">Documento Id.</th>
                                     </tr>
                                 </thead>
@@ -424,7 +425,7 @@
             let minAllievi = '<%=min_allievi%>';
 
             $("#stato").change(function () {
-                if ($(this).val() == "archiviato") {
+                if ($(this).val() === "archiviato") {
                     //$("#rendicontato_filter").css("display", "");
                     $("#rendicontato_filter").css("display", "none");
                     $("#rendicontato").val("-");

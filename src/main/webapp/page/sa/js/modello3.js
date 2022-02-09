@@ -902,12 +902,11 @@ $('button[id=revert]').on('click', function () {
         showCancelButton: true,
         confirmButtonText: '&nbsp;<i class="la la-check"></i>',
         cancelButtonText: '&nbsp;<i class="la la-close"></i>',
-        cancelButtonClass: "btn btn-io-n",
-        confirmButtonClass: "btn btn-io",
         customClass: {
-            popup: 'animated bounceInUp'
-        },
-
+            popup: 'animated bounceInUp',
+            cancelButton: "btn btn-io-n",
+            confirmButton: "btn btn-io"
+        }
     }).then((result) => {
         if (result.value) {
             showLoad();

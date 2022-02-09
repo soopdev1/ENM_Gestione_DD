@@ -816,6 +816,10 @@ public class Entity {
         TypedQuery<StatoPartecipazione> q = this.em.createNamedQuery("sp.Elenco", StatoPartecipazione.class);
         return q.getResultList().isEmpty() ? new ArrayList() : (List<StatoPartecipazione>) q.getResultList();
     }
+    public List<StatoPartecipazione> lista_StatoPartecipazioneMOD() {
+        TypedQuery<StatoPartecipazione> q = this.em.createNamedQuery("sp.Elencomod", StatoPartecipazione.class);
+        return q.getResultList().isEmpty() ? new ArrayList() : (List<StatoPartecipazione>) q.getResultList();
+    }
 
     public Allievi getAllievoEmail(String email) {
         TypedQuery q = this.em.createNamedQuery("a.byEmail", Allievi.class);

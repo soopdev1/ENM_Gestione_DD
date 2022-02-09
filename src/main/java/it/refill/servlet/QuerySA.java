@@ -26,7 +26,6 @@ import it.refill.domain.ProgettiFormativi;
 import it.refill.domain.Selfiemployment_Prestiti;
 import it.refill.domain.StaffModelli;
 import it.refill.domain.StatiPrg;
-import it.refill.domain.StatoPartecipazione;
 import it.refill.domain.TipoDoc;
 import it.refill.domain.TipoDoc_Allievi;
 import it.refill.domain.User;
@@ -271,19 +270,6 @@ public class QuerySA extends HttpServlet {
             List<Selfiemployment_Prestiti> se_p = e.listaSE_P();
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(se_p));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            e.close();
-        }
-    }
-
-    protected void getSIGMA(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Entity e = new Entity();
-        try {
-            List<StatoPartecipazione> sp = e.lista_StatoPartecipazione();
-            ObjectMapper mapper = new ObjectMapper();
-            response.getWriter().write(mapper.writeValueAsString(sp));
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -551,9 +537,6 @@ public class QuerySA extends HttpServlet {
                     break;
                 case "getSE_Prestiti":
                     getSE_Prestiti(request, response);
-                    break;
-                case "getSIGMA":
-                    getSIGMA(request, response);
                     break;
                 case "getRegistriDay":
                     getRegistriDay(request, response);

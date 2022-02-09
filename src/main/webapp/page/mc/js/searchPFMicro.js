@@ -192,11 +192,12 @@ var DatatablesAllievi = function () {
             order: [],
             columns: [
                 {defaultContent: ''},
-                {data: 'nome'},
-                {data: 'cognome'},
-                {data: 'codicefiscale'},
+                {data: 'nome', className: 'text-center text-uppercase'},
+                {data: 'cognome', className: 'text-center text-uppercase'},
+                {data: 'codicefiscale', className: 'text-center text-uppercase'},
                 {data: 'target',
                     render: function (data, type, row) {
+                        var tgt = "";
                         switch (row.target) {
                             case "D1":
                                 tgt = "Donna inattiva";
@@ -211,8 +212,24 @@ var DatatablesAllievi = function () {
                         return tgt;
                     }
                 },
-                {data: 'statopartecipazione.descrizione'},
-                {data: 'esclusione_prg'},
+                {data: 'statopartecipazione.descrizione', className: 'text-center text-uppercase'},
+                {data: 'esclusione_prg', className: 'text-center'},
+                {data: '', className: 'text-center',
+                    render: function (data, type, row) {
+                        var quest = "";
+                        if (row.surveyin === null || !row.surveyin) {
+                            quest += "ING. KO";
+                        } else {
+                            quest += "ING. OK";
+                        }
+                        quest += " - ";
+                        if (row.surveyout === null || !row.surveyout) {
+                            quest += "USC. KO";
+                        } else {
+                            quest += "USC. OK";
+                        }
+                        return quest;
+                    }},
                 {defaultContent: ''}
             ],
             drawCallback: function () {
@@ -221,7 +238,7 @@ var DatatablesAllievi = function () {
             columnDefs: [
                 {
                     targets: 0,
-                    className: 'text-center',
+                    className: 'text-center text-uppercase',
                     orderable: false,
                     render: function (data, type, row, meta) {
                         var option = '<div class="dropdown dropdown-inline">'
@@ -229,13 +246,19 @@ var DatatablesAllievi = function () {
                                 + '<i class="flaticon-more-1"></i>'
                                 + '</button>'
                                 + '<div class="dropdown-menu dropdown-menu-left">';
-                        option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalDocumentAllievo(' + row.id + ');"><i class="fa fa-file-alt"></i> Visualizza Documenti</a>';
+                        option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalDocumentAllievo(' 
+                                + row.id + ');"><i class="fa fa-file-alt"></i> Visualizza Documenti</a>';
+                        if (row.statopartecipazione.id === "01") {
+                            option += '<a class="dropdown-item " href="javascript:void(0);" onclick="swalSigma(' + row.id + ',\'' 
+                                    + row.statopartecipazione.id +
+                                    '\')"><i class="fa fa-user-check" data-container="body" data-html="true" data-toggle="kt-tooltip" title="Stato '
+                                    + row.statopartecipazione.descrizione + '"></i>Cambia stato di partecipazione</a>';
+                        }
                         option += '</div></div>';
-
                         return option;
                     }
                 }, {
-                    targets: 7,
+                    targets: 8,
                     className: 'text-center',
                     orderable: false,
                     render: function (data, type, row, meta) {
@@ -360,7 +383,6 @@ var DatatablesAllievi = function () {
                             var ta_as = '<textarea class="form-control" placeholder="Inserire eventuali note PRIMA di salvare" name="notesmappatura_'
                                     + row.id + '" id="notesmappatura_' + row.id
                                     + '" rows="3" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 71px;" onchange="return fieldNOSPecial_2(this.id)"></textarea>';
-
                             return ta_as;
                         } else {
                             $("#salvamappatura").toggle(false);
@@ -384,6 +406,89 @@ var DatatablesAllievi = function () {
         }
     };
 }();
+
+function swalSigma(id, idsp) {
+    swal.fire({
+        title: 'Stato di partecipazione',
+        html: '<div id="swalModificaStato">'
+                + '<div id="warning_sp" class="form-group kt-font-io-n row col" style="margin-left: 0px;margin-right: 0px; display: none;" ><div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;" ></i></div><div id="warningmsg" class="col-10" ></div><div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;"></i></div></div>'
+                + '<div class="select-div" id="sigma_div">'
+                + '<select class="form-control kt-select2-general obbligatory" id="sigma" name="sigma"  style="width: 100%" >'
+                + '<option value="-">Seleziona stato di partecipazione</option>'
+                + '</select></div><br>'
+                + '</div>',
+        animation: false,
+        showCancelButton: true,
+        confirmButtonText: '&nbsp;<i class="la la-check"></i>',
+        cancelButtonText: '&nbsp;<i class="la la-close"></i>',
+
+        customClass: {
+            popup: 'animated bounceInUp',
+            cancelButton: "btn btn-io-n",
+            confirmButton: "btn btn-io"
+        },
+        onOpen: function () {
+            $('#sigma').select2({
+                dropdownCssClass: "select2-on-top",
+                minimumResultsForSearch: -1
+            });
+            $.get(context + "/QueryMicro?type=getSIGMA", function (resp) {
+                var json = JSON.parse(resp);
+                for (var i = 0; i < json.length; i++) {
+                    if (json[i].id === idsp) {
+                        $("#sigma").append('<option selected value="' + json[i].id + '">' + json[i].descrizione + '</option>');
+                    } else {
+                        $("#sigma").append('<option value="' + json[i].id + '">' + json[i].descrizione + '</option>');
+                    }
+                }
+            });
+        },
+        preConfirm: function () {
+            var err = false;
+            err = checkObblFieldsContent($('#swalModificaStato')) ? true : err;
+            if (!err) {
+                return new Promise(function (resolve) {
+                    resolve({
+                        "sigma": $('#sigma').val()
+                    });
+                });
+            } else {
+                return false;
+            }
+        }
+    }).then((result) => {
+        if (result.value) {
+            setValueStato(id, result.value.sigma);
+        } else {
+            swal.close();
+        }
+    }
+    );
+}
+
+function setValueStato(id, sigma) {
+    showLoad();
+    $.ajax({
+        type: "POST",
+        url: context + '/OperazioniMicro?type=setSIGMA&id=' + id + '&sigma=' + sigma,
+        success: function (data) {
+            closeSwal();
+            console.log(data);
+            var json = JSON.parse(data);
+            if (json.result) {
+                swalSuccess("Modifica Stato Allievo", "Stato di partecipazione impostato correttamente");
+                reload_table($('#kt_table_allievi'));
+            } else {
+                swalError("Errore", json.message);
+            }
+        },
+        error: function () {
+            swalError("Errore", "Non è stato possibile impostare lo stato di partecipazione");
+        }
+    });
+}
+
+
 
 function mappaprogetto() {
     var idpr = $('#idprmappa').val();

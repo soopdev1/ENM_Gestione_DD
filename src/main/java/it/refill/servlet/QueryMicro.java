@@ -31,6 +31,7 @@ import it.refill.domain.ProgettiFormativi;
 import it.refill.domain.SediFormazione;
 import it.refill.domain.SoggettiAttuatori;
 import it.refill.domain.StatiPrg;
+import it.refill.domain.StatoPartecipazione;
 import it.refill.domain.Storico_ModificheInfo;
 import it.refill.domain.Storico_Prg;
 import it.refill.domain.TipoDoc;
@@ -636,6 +637,19 @@ public class QueryMicro extends HttpServlet {
             e.close();
         }
     }
+    
+    protected void getSIGMA(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Entity e = new Entity();
+        try {
+            List<StatoPartecipazione> sp = e.lista_StatoPartecipazioneMOD();
+            ObjectMapper mapper = new ObjectMapper();
+            response.getWriter().write(mapper.writeValueAsString(sp));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            e.close();
+        }
+    }
 
     protected void verificaassegnazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
@@ -676,7 +690,7 @@ public class QueryMicro extends HttpServlet {
             e.close();
         }
     }
-    
+
     protected void getChecklistfinale(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         ProgettiFormativi d = e.getEm().find(ProgettiFormativi.class, Long.parseLong(request.getParameter("pf")));
@@ -811,6 +825,9 @@ public class QueryMicro extends HttpServlet {
                     break;
                 case "searchMappaAllievi":
                     searchMappaAllievi(request, response);
+                    break;
+                case "getSIGMA":
+                    getSIGMA(request, response);
                     break;
                 default:
                     break;

@@ -19,6 +19,7 @@ import it.refill.domain.Condizione_Mercato;
 import it.refill.domain.Docenti;
 import it.refill.domain.DocumentiPrg;
 import it.refill.domain.Documenti_Allievi;
+import it.refill.domain.Email;
 import it.refill.domain.Faq;
 import it.refill.domain.FasceDocenti;
 import it.refill.domain.Formagiuridica;
@@ -46,6 +47,7 @@ import it.refill.domain.User;
 import it.refill.entity.Presenti;
 import it.refill.util.Pdf_new;
 import static it.refill.util.Pdf_new.checkFirmaQRpdfA;
+import it.refill.util.SendMailJet;
 import it.refill.util.Utility;
 import static it.refill.util.Utility.copyR;
 import static it.refill.util.Utility.createDir;
@@ -76,6 +78,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 
@@ -1547,7 +1550,7 @@ public class OperazioniSA extends HttpServlet {
         //check se il numero di alunni o le date sono state modificate
         boolean modified = false;
         //check se la modifica riguarda le date, in tal caso non va ricaricato il modello 2, ma vanno eliminate le lezioni del modello 3 (setto l'id del progetto a null)
-        boolean dates_modified = false;
+//        boolean dates_modified = false;
         try {
             ProgettiFormativi p = e.getEm().find(ProgettiFormativi.class,
                     Long.parseLong(request.getParameter("id_progetto")));
@@ -1563,8 +1566,8 @@ public class OperazioniSA extends HttpServlet {
                 String[] date = request.getParameter("date").split("-");
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-                dates_modified = !p.getStart().equals(sdf.parse(date[0].trim()));
-                dates_modified = dates_modified ? true : !p.getEnd().equals(sdf.parse(date[1].trim()));
+//                dates_modified = !p.getStart().equals(sdf.parse(date[0].trim()));
+//                dates_modified = dates_modified ? true : !p.getEnd().equals(sdf.parse(date[1].trim()));
                 p.setStart(sdf.parse(date[0].trim()));
                 p.setEnd(sdf.parse(date[1].trim()));
             }
@@ -2287,37 +2290,6 @@ public class OperazioniSA extends HttpServlet {
             e.close();
         }
 
-        response.getWriter().write(resp.toString());
-        response.getWriter().flush();
-        response.getWriter().close();
-    }
-
-    protected void setSIGMA(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-        JsonObject resp = new JsonObject();
-        Entity e = new Entity();
-        e.begin();
-
-        try {
-            Allievi a = e.getEm().find(Allievi.class,
-                    Long.parseLong(request.getParameter("id")));
-            if (request.getParameter("sigma") != null) {
-                a.setStatopartecipazione((StatoPartecipazione) e.getEm().find(StatoPartecipazione.class,
-                        request.getParameter("sigma")));
-                e.merge(a);
-            }
-            e.commit();
-            resp.addProperty("result", true);
-        } catch (PersistenceException ex) {
-            e.rollBack();
-            ex.printStackTrace();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniSA setSIGMA: " + ex.getMessage());
-            resp.addProperty("result", false);
-            resp.addProperty("message", "Errore: non &egrave; stato possibile impostare lo stato di partecipazione dell'allievo.");
-        } finally {
-            e.close();
-        }
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
@@ -3121,16 +3093,29 @@ public class OperazioniSA extends HttpServlet {
 
             Part p = request.getPart("doc");
             if (Boolean.parseBoolean(request.getParameter("domanda_ammissione")) && (p != null && p.getSubmittedFileName() != null && p.getSubmittedFileName().length() > 0)) {
-                mask.setDomanda_ammissione_presente(true);
-
-                String path = e.getPath("pathDocSA_Allievi").replace("@rssa", Utility.correctName(us.getSoggettoAttuatore().getId() + "")).replace("@folder", a.getCodicefiscale());
-                File dir = new File(path);
-                createDir(path);
-
-                String ext = p.getSubmittedFileName().substring(p.getSubmittedFileName().lastIndexOf("."));
-                path += "domanda_ammissione_" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "_" + a.getCodicefiscale() + ext;
-                p.write(dir.getAbsolutePath() + File.separator + "domanda_ammissione_" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "_" + a.getCodicefiscale() + ext);
-                mask.setDomanda_ammissione(path.replace("\\", "/"));
+                try {
+                    String path = e.getPath("pathDocSA_Allievi").replace("@rssa", Utility.correctName(us.getSoggettoAttuatore().getId() + "")).replace("@folder", a.getCodicefiscale());
+                    File dir = new File(path);
+                    createDir(path);
+                    String ext = p.getSubmittedFileName().substring(p.getSubmittedFileName().lastIndexOf("."));
+                    path += "domanda_ammissione_" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "_" + a.getCodicefiscale() + ext;
+                    File damm = new File(dir.getAbsolutePath() + File.separator + "domanda_ammissione_"
+                            + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "_" + a.getCodicefiscale() + ext);
+                    p.write(damm.getPath());
+                    mask.setDomanda_ammissione_presente(true);
+                    mask.setDomanda_ammissione(path.replace("\\", "/"));
+                    
+                    Email email_txt = (Email) e.getEmail("domanda_amm");
+                    String testomail = StringUtils.replace(email_txt.getTesto(), "@nomecognome", a.getNome().toUpperCase() + " " 
+                            + a.getCognome().toUpperCase());
+                    testomail = StringUtils.replace(testomail, "@nomeprogetto", "YES I START UP DONNE E DISOCCUPATI DI LUNGA DURATA");
+                    testomail = StringUtils.replace(testomail, "@nomesa", a.getSoggetto().getRagionesociale().toUpperCase());
+                    SendMailJet.sendMail(e.getPath("mailsender"), new String[]{a.getEmail()}, new String[]{a.getSoggetto().getEmail()},
+                            testomail, email_txt.getOggetto(),damm);
+                } catch (Exception ex1) {
+                    mask.setDomanda_ammissione_presente(false);
+                    e.insertTracking("System", "ERROR DOMANDA AMMISSIONE: "+Utility.estraiEccezione(ex1));
+                }
             } else {
                 mask.setDomanda_ammissione_presente(false);
             }
@@ -3533,7 +3518,7 @@ public class OperazioniSA extends HttpServlet {
                     Long.parseLong(request.getParameter("id")));
             DocumentiPrg registroComplessivoPresente = pf.getDocumenti().stream().filter(dc -> dc.getDeleted() == 0 && dc.getTipo().getId() == 30L).findFirst().orElse(null);
 
-            boolean registroOK = false;
+            boolean registroOK;
             String erroreregistroOK = "REGISTRO COMPLESSIVO ERRATO. CONTROLLARE.";
 
             if (registroComplessivoPresente != null) {
@@ -3865,11 +3850,9 @@ public class OperazioniSA extends HttpServlet {
         Allievi a = e.getEm().find(Allievi.class, Long.parseLong(getRequestValue(request, "id")));
         boolean domiciliouguale = a.getIndirizzodomicilio().equalsIgnoreCase(a.getIndirizzoresidenza())
                 && a.getCivicodomicilio().equalsIgnoreCase(a.getCivicoresidenza())
-                && a.getComune_domicilio().getId() == a.getComune_residenza().getId();
-        File downloadFile = null;
+                && a.getComune_domicilio().getId().equals(a.getComune_residenza().getId());
         User us = (User) request.getSession().getAttribute("user");
-        downloadFile = Pdf_new.MODELLO1(e, "3", us.getUsername(), us.getSoggettoAttuatore(), a, new DateTime(), domiciliouguale, true);
-
+        File downloadFile = Pdf_new.MODELLO1(e, "3", us.getUsername(), us.getSoggettoAttuatore(), a, new DateTime(), domiciliouguale, true);
         e.close();
         if (downloadFile != null && downloadFile.exists()) {
             OutputStream outStream;
@@ -4049,9 +4032,7 @@ public class OperazioniSA extends HttpServlet {
                 case "uploadRegistrioAula":
                     uploadRegistrioAula(request, response);
                     break;
-                case "setSIGMA":
-                    setSIGMA(request, response);
-                    break;
+                
                 case "modifyRegistrioAula":
                     modifyRegistrioAula(request, response);
                     break;

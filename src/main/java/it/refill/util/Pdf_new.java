@@ -54,7 +54,6 @@ import static it.refill.util.Utility.convertToHours_R;
 import static it.refill.util.Utility.createDir;
 import static it.refill.util.Utility.estraiEccezione;
 import static it.refill.util.Utility.estraiSessodaCF;
-import static it.refill.util.Utility.filterModello6;
 import static it.refill.util.Utility.formatTarget;
 import static it.refill.util.Utility.getOnlyStrings;
 import static it.refill.util.Utility.get_eta;
@@ -1533,9 +1532,9 @@ public class Pdf_new {
 
             File pdfOut = new File(pathtemp + username + "_" + StringUtils.deleteWhitespace(al.getCognome() + "_" + al.getNome()) + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M1.pdf");
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
-                PdfWriter writer = new PdfWriter(pdfOut);
-                PdfDocument pdfDoc = new PdfDocument(reader, writer);
+            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); 
+                    PdfReader reader = new PdfReader(is); PdfWriter writer = new PdfWriter(pdfOut); 
+                    PdfDocument pdfDoc = new PdfDocument(reader, writer)) {
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
                 form.setGenerateAppearance(true);
                 Map<String, PdfFormField> fields = form.getFormFields();
@@ -1645,8 +1644,6 @@ public class Pdf_new {
                         + StringUtils.deleteWhitespace(al.getCognome() + "_" + al.getNome())
                         + " / " + dataconsegna.toString("ddMMyyyyHHmmSSS"));
                 printbarcode(barcode, pdfDoc);
-                pdfDoc.close();
-                writer.close();
 
             }
             if (checkPDF(pdfOut)) {
@@ -1770,76 +1767,75 @@ public class Pdf_new {
             return null;
         }
         try {
-            File pdfOutA = new File(replace(pdf_ing.getPath(), ".pdf", "_pdfA.pdf"));
-            FileInputStream in = new FileInputStream(pdf_ing);
             setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
-            PDDocument doc = PDDocument.load(pdf_ing);
-            int numPageTOT = 0;
-            Iterator<PDPage> it1 = doc.getPages().iterator();
-            while (it1.hasNext()) {
-                numPageTOT++;
-                it1.next();
-            }
-            PDPage page = new PDPage();
-            doc.setVersion(1.7f);
-            try (PDPageContentStream contents = new PDPageContentStream(doc, page)) {
-                PDDocument docSource = PDDocument.load(in);
-                PDFRenderer pdfRenderer = new PDFRenderer(docSource);
-                for (int i = 0; i < numPageTOT; i++) {
-                    BufferedImage imagePage = pdfRenderer.renderImageWithDPI(i, 200);
-                    PDImageXObject pdfXOImage = createFromImage(doc, imagePage);
-                    contents.drawImage(pdfXOImage, 0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight());
+            File pdfOutA = new File(replace(pdf_ing.getPath(), ".pdf", "_pdfA.pdf"));
+            try (FileInputStream in = new FileInputStream(pdf_ing);PDDocument doc = PDDocument.load(pdf_ing)) {
+                int numPageTOT = 0;
+                Iterator<PDPage> it1 = doc.getPages().iterator();
+                while (it1.hasNext()) {
+                    numPageTOT++;
+                    it1.next();
+                }
+                PDPage page = new PDPage();
+                doc.setVersion(1.7f);
+                try (PDPageContentStream contents = new PDPageContentStream(doc, page)) {
+                    PDDocument docSource = PDDocument.load(in);
+                    PDFRenderer pdfRenderer = new PDFRenderer(docSource);
+                    for (int i = 0; i < numPageTOT; i++) {
+                        BufferedImage imagePage = pdfRenderer.renderImageWithDPI(i, 200);
+                        PDImageXObject pdfXOImage = createFromImage(doc, imagePage);
+                        contents.drawImage(pdfXOImage, 0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight());
+                    }
+                }
+                XMPMetadata xmp = createXMPMetadata();
+                PDDocumentCatalog catalogue = doc.getDocumentCatalog();
+                Calendar cal = getInstance();
+                try {
+                    DublinCoreSchema dc = xmp.createAndAddDublinCoreSchema();
+                    dc.addCreator("YISU");
+                    dc.addDate(cal);
+                    PDFAIdentificationSchema id = xmp.createAndAddPFAIdentificationSchema();
+                    id.setPart(3);  //value => 2|3
+                    id.setConformance("A"); // value => A|B|U
+                    XmpSerializer serializer = new XmpSerializer();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    serializer.serialize(xmp, baos, true);
+                    PDMetadata metadata = new PDMetadata(doc);
+                    metadata.importXMPMetadata(baos.toByteArray());
+                    catalogue.setMetadata(metadata);
+                } catch (BadFieldValueException ex) {
+                    throw new IllegalArgumentException(ex);
+                }
+                try ( 
+                        InputStream colorProfile = new Pdf_new().getClass().getResourceAsStream("/sRGB.icc")) {
+                    //            InputStream colorProfile = new ByteArrayInputStream(decodeBase64(e.getPath("pdf.icc")));
+                    //            InputStream colorProfile = new FileInputStream("C:\\mnt\\mcn\\gestione_neet\\sRGB.icc");
+                    PDOutputIntent intent = new PDOutputIntent(doc, colorProfile);
+                    intent.setInfo("sRGB IEC61966-2.1");
+                    intent.setOutputCondition("sRGB IEC61966-2.1");
+                    intent.setOutputConditionIdentifier("sRGB IEC61966-2.1");
+                    intent.setRegistryName("http://www.color.org");
+                    catalogue.addOutputIntent(intent);
+                    catalogue.setLanguage("it-IT");
+                    PDViewerPreferences pdViewer = new PDViewerPreferences(page.getCOSObject());
+                    pdViewer.setDisplayDocTitle(true);
+                    catalogue.setViewerPreferences(pdViewer);
+                    PDMarkInfo mark = new PDMarkInfo(); // new PDMarkInfo(page.getCOSObject());
+                    PDStructureTreeRoot treeRoot = new PDStructureTreeRoot();
+                    catalogue.setMarkInfo(mark);
+                    catalogue.setStructureTreeRoot(treeRoot);
+                    catalogue.getMarkInfo().setMarked(true);
+                    PDDocumentInformation info = doc.getDocumentInformation();
+                    info.setCreationDate(cal);
+                    info.setModificationDate(cal);
+                    info.setAuthor("YISU");
+                    info.setProducer("YISU");
+                    info.setCreator("YISU");
+                    info.setTitle(nomepdf);
+                    info.setSubject("PDF/A");
+                    doc.save(pdfOutA);
                 }
             }
-            XMPMetadata xmp = createXMPMetadata();
-            PDDocumentCatalog catalogue = doc.getDocumentCatalog();
-            Calendar cal = getInstance();
-            try {
-                DublinCoreSchema dc = xmp.createAndAddDublinCoreSchema();
-                dc.addCreator("YISU");
-                dc.addDate(cal);
-                PDFAIdentificationSchema id = xmp.createAndAddPFAIdentificationSchema();
-                id.setPart(3);  //value => 2|3
-                id.setConformance("A"); // value => A|B|U
-                XmpSerializer serializer = new XmpSerializer();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                serializer.serialize(xmp, baos, true);
-                PDMetadata metadata = new PDMetadata(doc);
-                metadata.importXMPMetadata(baos.toByteArray());
-                catalogue.setMetadata(metadata);
-            } catch (BadFieldValueException ex) {
-                throw new IllegalArgumentException(ex);
-            }
-//            InputStream colorProfile = new FileInputStream("C:\\mnt\\mcn\\gestione_neet\\sRGB.icc");
-            InputStream colorProfile = new Pdf_new().getClass().getResourceAsStream("/sRGB.icc");
-//            InputStream colorProfile = new ByteArrayInputStream(decodeBase64(e.getPath("pdf.icc")));
-            PDOutputIntent intent = new PDOutputIntent(doc, colorProfile);
-            intent.setInfo("sRGB IEC61966-2.1");
-            intent.setOutputCondition("sRGB IEC61966-2.1");
-            intent.setOutputConditionIdentifier("sRGB IEC61966-2.1");
-            intent.setRegistryName("http://www.color.org");
-            catalogue.addOutputIntent(intent);
-            catalogue.setLanguage("it-IT");
-            PDViewerPreferences pdViewer = new PDViewerPreferences(page.getCOSObject());
-            pdViewer.setDisplayDocTitle(true);
-            catalogue.setViewerPreferences(pdViewer);
-            PDMarkInfo mark = new PDMarkInfo(); // new PDMarkInfo(page.getCOSObject()); 
-            PDStructureTreeRoot treeRoot = new PDStructureTreeRoot();
-            catalogue.setMarkInfo(mark);
-            catalogue.setStructureTreeRoot(treeRoot);
-            catalogue.getMarkInfo().setMarked(true);
-
-            PDDocumentInformation info = doc.getDocumentInformation();
-            info.setCreationDate(cal);
-            info.setModificationDate(cal);
-            info.setAuthor("YISU");
-            info.setProducer("YISU");
-            info.setCreator("YISU");
-            info.setTitle(nomepdf);
-            info.setSubject("PDF/A");
-
-            doc.save(pdfOutA);
-            doc.close();
             return pdfOutA;
         } catch (Exception ex) {
             ex.printStackTrace();

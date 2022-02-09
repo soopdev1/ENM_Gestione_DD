@@ -180,7 +180,8 @@
                                                         <th class="text-uppercase text-center">Target</th>
                                                         <th class="text-uppercase text-center">Data inserimento ANPAL</th>
                                                         <th class="text-uppercase text-center">Stato partecipazione</th>
-                                                        <th class="text-uppercase text-center">Stato Allievo</th>
+                                                        <th class="text-uppercase text-center">Stato allievo</th>
+                                                        <th class="text-uppercase text-center">Questionari</th>
                                                         <th class="text-uppercase text-center">Documento Id.</th>
                                                     </tr>
                                                 </thead>
@@ -296,6 +297,7 @@
                             {data: 'indirizzodomicilio'},
                             {data: 'target',
                                 render: function (data, type, row) {
+                                    var tgt = "";
                                     switch (row.target) {
                                         case "D1":
                                             tgt = "Donna inattiva";
@@ -332,6 +334,22 @@
                                     return stato;
                                 }
                             },
+                            {data: '', className: 'text-center',
+                                render: function (data, type, row) {
+                                    var quest = "";
+                                    if (row.surveyin === null || !row.surveyin) {
+                                        quest += "ING. KO";
+                                    } else {
+                                        quest += "ING. OK";
+                                    }
+                                    quest += " - ";
+                                    if (row.surveyout === null || !row.surveyout) {
+                                        quest += "USC. KO";
+                                    } else {
+                                        quest += "USC. OK";
+                                    }
+                                    return quest;
+                                }},
                             {defaultContent: ''}
                         ],
                         drawCallback: function () {
@@ -394,7 +412,7 @@
                                     return comune + ",<br> " + row.indirizzodomicilio + " " + row.civicodomicilio;
                                 }
                             }, {
-                                targets: 12,
+                                targets: 13,
                                 className: 'text-center',
                                 orderable: false,
                                 render: function (data, type, row, meta) {
