@@ -1346,3 +1346,36 @@ function fieldNOSPecial_2(fieldid) {
     }
     document.getElementById(fieldid).value = stringToReplace;
 }
+
+//08-03-22 - numeri di telefono cellulare per allievi
+function check_mobiletel_aft(evt, input) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    } else {
+        if (input.value.trim().length > 1) {
+            var mobile_pattern = /^[3]{1}[0-9]+/;
+            var found = input.value.trim().match(mobile_pattern);
+            if (!found || input.value.trim().length > 10) { //massimo 10 numeri
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function check_mobiletel_bef(evt, input) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    } else {
+        if (input.value.trim().length === 0) { //solo 3 come primo carattere
+            return charCode === 51;
+        } else if (input.value.trim().length > 10) { //massimo 10 numeri
+            return false;
+        }
+    }
+    return true;
+}

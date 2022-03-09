@@ -28,7 +28,7 @@
                     <span class="kt-menu__link-text">Unità Didattiche</span>
                 </a>
             </li>
-            <%if(rend){%>
+            <%if(tipoR == 2 && rend){%>
                 <li class="kt-menu__item <%=pageName.equals("rend.jsp") ? "kt-menu__item--active" : ""%>" aria-haspopup="true">
                 <a href="rend.jsp" class="kt-menu__link">
                     <i class="kt-menu__link-bullet fa fa-money-bill">

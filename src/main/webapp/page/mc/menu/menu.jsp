@@ -99,6 +99,9 @@
                     <%@include file="general/Cloud.jsp"%>
                     <%@include file="general/Faq.jsp"%>
                     <%} else if (tipoR == 5) {%>
+                     <%@include file="general/soggettiattuatori.jsp"%>
+                    <%@include file="general/Aule.jsp"%>
+                    <%@include file="general/Docenti.jsp"%>
                     <%@include file="general/ProgettiFormativi.jsp"%>
                     <%@include file="general/Cloud.jsp"%>
                     <%}%>

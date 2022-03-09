@@ -87,9 +87,9 @@ public class Cambiatarget {
 //    }
     public static void main(String[] args) {
         
-        String idpr = "393";
+        String idpr = "537";
         String idall = "1279";
-        String usernameSA = "DIREZIONE4";
+        String usernameSA = "GIANLUCAMILLESIMI147";
         
         
         
@@ -105,8 +105,8 @@ public class Cambiatarget {
         ModelliPrg m3 = Utility.filterModello3(prg.getModelli());
         ModelliPrg m4 = Utility.filterModello4(prg.getModelli());
         
-        File f1 = Pdf_new.MODELLO1(e, "3", usernameSA, prg.getSoggetto(), al, new DateTime(), true, true);
-        System.out.println(f1.getPath());
+//        File f1 = Pdf_new.MODELLO1(e, "3", usernameSA, prg.getSoggetto(), al, new DateTime(), true, true);
+//        System.out.println(f1.getPath());
         
         File f2 = Pdf_new.MODELLO2(e,
                             "1",
@@ -125,10 +125,10 @@ public class Cambiatarget {
                             new DateTime(), true);
         System.out.println(f3.getPath());
         
-        File f4 = Pdf_new.MODELLO4(e, usernameSA, prg.getSoggetto(), prg, prg.getAllievi().stream().filter(p1 -> p1.getStatopartecipazione().getId().equals("01")).collect(Collectors.toList()),
-                prg.getDocenti(), m4.getLezioni(), prg.getStaff_modelli().stream().filter(m -> m.getAttivo() == 1).collect(Collectors.toList()), new DateTime(), true);
-        
-        System.out.println(f4.getPath());
+//        File f4 = Pdf_new.MODELLO4(e, usernameSA, prg.getSoggetto(), prg, prg.getAllievi().stream().filter(p1 -> p1.getStatopartecipazione().getId().equals("01")).collect(Collectors.toList()),
+//                prg.getDocenti(), m4.getLezioni(), prg.getStaff_modelli().stream().filter(m -> m.getAttivo() == 1).collect(Collectors.toList()), new DateTime(), true);
+//        
+//        System.out.println(f4.getPath());
         
         
         e.close();

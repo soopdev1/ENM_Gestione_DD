@@ -20,6 +20,7 @@
                     <span class="kt-menu__link-text">Cerca</span>
                 </a>
             </li>
+            <%if (tipoR == 2) {%>
             <li class="kt-menu__item <%=pageName.equals("addSA.jsp") ? "kt-menu__item--active" : ""%>" aria-haspopup="true">
                 <a href="addSA.jsp" class="kt-menu__link ">
                     <i class="kt-menu__link-bullet fa fa-edit">
@@ -28,6 +29,7 @@
                     <span class="kt-menu__link-text">Gestisci Nuovi</span>
                 </a>
             </li>
+            <%}%>
         </ul>
     </div>
 </li>

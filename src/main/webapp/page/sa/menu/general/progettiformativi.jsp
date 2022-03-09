@@ -4,6 +4,7 @@
     Author     : dolivo
 --%>
 
+<%@page import="it.refill.db.Action"%>
 <li class="kt-menu__item <%=progettiformativi%>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
     <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
         <span class="kt-menu__link-icon"><i class="fa fa-file-alt"></i></span>
@@ -13,6 +14,7 @@
     <div class="kt-menu__submenu">
         <span class="kt-menu__arrow"></span>
         <ul class="kt-menu__subnav">
+            <%if (Action.nuoviprogettiattivi()) {%>
             <li class="kt-menu__item <%=pageName.equals("newProgettoFormativo.jsp") ? "kt-menu__item--active" : ""%>" aria-haspopup="true">
                 <a href="newProgettoFormativo.jsp" class="kt-menu__link ">
                     <i class="kt-menu__link-bullet fa fa-cloud-upload-alt">
@@ -21,6 +23,7 @@
                     <span class="kt-menu__link-text">Aggiungi</span>
                 </a>
             </li>
+            <%}%>
             <li class="kt-menu__item <%=pageName.equals("searchProgettiFormativi.jsp") ? "kt-menu__item--active" : ""%>" aria-haspopup="true">
                 <a href="searchProgettiFormativi.jsp" class="kt-menu__link ">
                     <i class="kt-menu__link-bullet fa fa-search">
@@ -29,7 +32,7 @@
                     <span class="kt-menu__link-text">Cerca</span>
                 </a>
             </li>
-            
+
         </ul>
     </div>
 </li>

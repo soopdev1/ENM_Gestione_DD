@@ -290,6 +290,7 @@
             });
         </script>
         <script>
+            var tipouser = '<%=tipoR%>';
             var KTDatatablesDataSourceAjaxServer = function () {
                 var initTable1 = function () {
                     var table = $('#kt_table_1');
@@ -338,7 +339,7 @@
                                 className: 'text-center',
                                 orderable: false,
                                 render: function (data, type, row, meta) {
-                                    if (row.stato === "DV") {
+                                    if (tipouser === "2" && row.stato === "DV") {
                                         var option = '<div class="dropdown dropdown-inline">'
                                                 + '<button type="button" class="btn btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
                                                 + '   <i class="flaticon-more-1"></i>'

@@ -353,5 +353,14 @@ public class Action {
         db.closeDB();
         return listuser.toLowerCase().contains(listuser.toLowerCase());
     }
+    
+    public static boolean nuoviprogettiattivi() {
+        Database db = new Database(false, false);
+        String nuoviprogetti = db.getPathtemp("nuoviprogetti");
+        db.closeDB();
+        return nuoviprogetti.equals("1");
+    }
+    
+    
 
 }

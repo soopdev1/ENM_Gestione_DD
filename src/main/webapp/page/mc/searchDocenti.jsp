@@ -227,7 +227,7 @@
         </script>
 
         <script>
-
+            var tipouser = '<%=tipoR%>';
             var context = '<%=request.getContextPath()%>';
 
             var KTDatatablesDataSourceAjaxServer = function () {
@@ -284,13 +284,14 @@
                                             + '   <i class="flaticon-more-1"></i>'
                                             + '</button>'
                                             + '<div class="dropdown-menu dropdown-menu-left">';
-
-                                    if (row.stato === "A") {
-                                        option += '<a class="fancyBoxReload dropdown-item" href="modifyDocente.jsp?id=' + row.id + '"><i class="fa fa-edit"></i>Modifica</a>';
-                                        option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalTablePrg(' + row.id + ')"><i class="fa fa-list"></i>Progetti Formativi</a>';
-                                    } else if (row.stato === "DV") {
-                                        option += '<a class="fancyBoxReload dropdown-item kt-font-success" href="modifyDocente.jsp?id=' + row.id + '"><i class="fa fa-check kt-font-success" style="margin-top:-2px"></i>Accredita</a>';
-                                        option += '<a class="dropdown-item kt-font-danger" href="javascript:void(0);" onclick="rejectDocente(' + row.id + ')"><i class="flaticon2-delete kt-font-danger" style="margin-top:-2px"></i>Rigetta</a>';
+                                    if (tipouser === "2") {
+                                        if (row.stato === "A") {
+                                            option += '<a class="fancyBoxReload dropdown-item" href="modifyDocente.jsp?id=' + row.id + '"><i class="fa fa-edit"></i>Modifica</a>';
+                                            option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalTablePrg(' + row.id + ')"><i class="fa fa-list"></i>Progetti Formativi</a>';
+                                        } else if (row.stato === "DV") {
+                                            option += '<a class="fancyBoxReload dropdown-item kt-font-success" href="modifyDocente.jsp?id=' + row.id + '"><i class="fa fa-check kt-font-success" style="margin-top:-2px"></i>Accredita</a>';
+                                            option += '<a class="dropdown-item kt-font-danger" href="javascript:void(0);" onclick="rejectDocente(' + row.id + ')"><i class="flaticon2-delete kt-font-danger" style="margin-top:-2px"></i>Rigetta</a>';
+                                        }
                                     }
 
                                     if (row.docId !== null) {
@@ -316,8 +317,8 @@
                                 className: 'text-center',
                                 render: function (data, type, row, meta) {
                                     if (data === "RIGETTATO" && row.motivo !== null) {
-                                        data += "&nbsp;<i class='fa fa-info-circle kt-font-danger' data-container='body' data-html='true' data-toggle='kt-tooltip' data-placement='top' "+
-                                                "title=\"<h6><b>MOTIVO RIGETTO</b>:<br><h6 style='text-align:justify;'>"+ row.motivo.replace(/"/g, '\'') + "</h6>\"></i>";
+                                        data += "&nbsp;<i class='fa fa-info-circle kt-font-danger' data-container='body' data-html='true' data-toggle='kt-tooltip' data-placement='top' " +
+                                                "title=\"<h6><b>MOTIVO RIGETTO</b>:<br><h6 style='text-align:justify;'>" + row.motivo.replace(/"/g, '\'') + "</h6>\"></i>";
                                     }
                                     return data;
                                 }

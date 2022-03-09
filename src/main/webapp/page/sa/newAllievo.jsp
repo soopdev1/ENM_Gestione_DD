@@ -241,9 +241,13 @@
                                                                 </div>
                                                                 <div class="form-row">
                                                                     <div class="form-group col-xl-3 col-lg-6">
-                                                                        <label>Telefono </label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                        <input type="text" class="form-control obbligatory" id="telefono" name="telefono" onkeypress="return isNumber(event);" />
+                                                                        <label>Telefono (Cellulare, senza +39) </label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                        <input type="text" class="form-control obbligatory" 
+                                                                               id="telefono" name="telefono" 
+                                                                               onkeypress="return check_mobiletel_bef(event, this);" 
+                                                                               onkeyup="return check_mobiletel_aft(event, this);"/>
                                                                     </div>
+                                                                    
                                                                     <div class="form-group col-xl-3 col-lg-6">
                                                                         <label>Documento di identità </label><label class="kt-font-danger kt-font-boldest">*</label>
                                                                         <div class="custom-file">
