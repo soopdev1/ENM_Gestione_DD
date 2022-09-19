@@ -27,6 +27,15 @@ import static org.apache.commons.io.FilenameUtils.separatorsToSystem;
  */
 public class Action {
 
+    public static void insertTR(String type, String user, String descr) {
+        try {
+            Database db = new Database(false, false);
+            db.insertTR(type, user, descr);
+            db.closeDB();
+        } catch (Exception e) {
+        }
+   }
+
     public static File createFile_R(String path) {
         try {
             File out = new File(separatorsToSystem(path));
@@ -90,7 +99,7 @@ public class Action {
         db.closeDB();
         return out;
     }
-    
+
     public static String[] contatoriHomeSA(User us) {
         String[] out = {
             "0", "0", "0",
@@ -177,7 +186,7 @@ public class Action {
                 && !pr.getStato().getTipo().equalsIgnoreCase("sospeso")
         )
                 .collect(Collectors.toList());
-        
+
         List<ProgettiFormativi> conclusi = allpr.stream().filter(pr
                 -> pr.getStato().getId().equalsIgnoreCase("F")
                 || pr.getStato().getId().equalsIgnoreCase("DVB")
@@ -346,21 +355,19 @@ public class Action {
         db.closeDB();
         return r;
     }
-    
+
     public static boolean rendicontazione_abilitata(String username) {
         Database db = new Database(false, false);
         String listuser = db.getPathtemp("user_rend");
         db.closeDB();
         return listuser.toLowerCase().contains(listuser.toLowerCase());
     }
-    
+
     public static boolean nuoviprogettiattivi() {
         Database db = new Database(false, false);
         String nuoviprogetti = db.getPathtemp("nuoviprogetti");
         db.closeDB();
         return nuoviprogetti.equals("1");
     }
-    
-    
 
 }

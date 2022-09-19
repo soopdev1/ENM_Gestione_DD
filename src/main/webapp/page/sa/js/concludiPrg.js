@@ -30,7 +30,7 @@ $('select[id^=regione_]').on('change', function (e) {
 $('select[id^=provincia_]').on('change', function (e) {
     let alp = this.id.split("_")[1];
     $("#comune_" + alp).empty();
-    if ($('#provincia_' + alp).val() != '-') {
+    if ($('#provincia_' + alp).val() !== '-') {
         startBlockUILoad("#comune_" + alp + "_div");
         $("#comune_" + alp).append('<option value="-">Seleziona Comune</option>');
         $.get(context + '/Login?type=getComune&provincia=' + $('#provincia_' + alp).val(), function (resp) {
@@ -56,8 +56,8 @@ function deleteModello(id) {
         cancelButtonClass: "btn btn-io-n",
         confirmButtonClass: "btn btn-io",
         customClass: {
-            popup: 'large-swal animated bounceInUp',
-        },
+            popup: 'large-swal animated bounceInUp'
+        }
     }).then((result) => {
         if (result.value) {
             deleteConfirmedM5(id);
@@ -90,10 +90,18 @@ function deleteConfirmedM5(id) {
 
 
 function domAmm_check(id) {
+    $('#doc_' + id).removeClass("is-invalid");
+    $('#doc_' + id).removeClass("is-valid");
     if ($('#domanda_a_' + id).is(":checked")) {
         $('#doc_' + id).removeAttr('disabled');
+        $('#doc_' + id).attr('tipo', 'obbligatory');
+        $('#cont_daok_' + id).toggle(true);
+        $('#file_daok_' + id).toggle(true);
     } else {
+        $('#doc_' + id).removeAttr('tipo');
         $('#doc_' + id).attr('disabled', 'disabled');
+        $('#cont_daok_' + id).toggle(false);
+        $('#file_daok_' + id).toggle(false);
     }
 }
 
@@ -147,7 +155,7 @@ $('input[type=radio][name^=sud_option_]').click(function () {
 
 $('input[type=radio][class^=bandosud]').click(function () {
     let allievo_id = this.name.split("_")[3];
-    $('input[name^="sud_option_"][name$="' + allievo_id + '"]:checked').length == 3 ? $('input[name^="sud_option_"][name$="' + allievo_id + '"]').not(':checked').attr('disabled', true) : $('input[name^="sud_option_"][name$="' + allievo_id + '"]').not(':checked').attr('disabled', false);
+    $('input[name^="sud_option_"][name$="' + allievo_id + '"]:checked').length === 3 ? $('input[name^="sud_option_"][name$="' + allievo_id + '"]').not(':checked').attr('disabled', true) : $('input[name^="sud_option_"][name$="' + allievo_id + '"]').not(':checked').attr('disabled', false);
 });
 
 $('input[type=radio][name^=noagevolazione]').click(function () {
@@ -179,7 +187,7 @@ $('.decimal_custom.ctrl').on('change', function () {
     }
     ;
     val = this.value;
-    if (this.value == "") {
+    if (this.value === "") {
         val = 0;
     }
     let colA = "#A_" + this.id.split("_")[1] + "_" + this.id.split("_")[2];
@@ -266,21 +274,22 @@ function resetForm() {
     $("#kt_form").find('input[type=text]:not([id^=A_],.hidden), select, textarea').val('');
     $("#kt_form").find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
     $('#kt_form').find('input[type=file]').val("");
-
+    $("input[name^='domanda_a_']").prop('checked', true);
 }
 
 function ctrlForm(id) {
     var err = false;
-    err = checkObblFields_Allievo(id) ? true : err;
     if ($('#domanda_a_' + id).is(":checked")) {
+        err = checkObblFields_Allievo(id) ? true : err;
         err = !checkRequiredFileAlunno(id) ? true : err;
     }
+    err = !checkRequiredM7Alunno(id) ? true : err;
     return !err;
 }
 
 function ctrlFormStep3() {
     var err = false;
-    if ($("input:radio[name=scelta_step3]:checked").val() == 2) {
+    if ($("input:radio[name=scelta_step3]:checked").val() === 2) {
         err = checkObblFieldsContent($('#step3')) ? true : err;
     }
     return !err;
@@ -309,18 +318,18 @@ function checkObblFields_Allievo(id) {
             $(this).removeClass("is-valid").removeClass("is-invalid");
         }
     });
-    $('textarea.obbligatory[id$=' + id + ']').each(function () {
-        var testo1 = tinymce.get($(this).attr('id')).getContent({format: 'text'});
-        if (testo1 === '') {
-            err = true;
-            alert("VERIFICARE TUTTI I CAMPI DI TESTO.")
-            $(this).removeClass("is-valid").addClass("is-invalid");
-        } else {
-            $(this).removeClass("is-invalid").addClass("is-valid");
-        }
-    });
+//    $('textarea.obbligatory[id$=' + id + ']').each(function () {
+//        var testo1 = tinymce.get($(this).attr('id')).getContent({format: 'text'});
+//        if (testo1 === '') {
+//            err = true;
+//            alert("VERIFICARE TUTTI I CAMPI DI TESTO.")
+//            $(this).removeClass("is-valid").addClass("is-invalid");
+//        } else {
+//            $(this).removeClass("is-invalid").addClass("is-valid");
+//        }
+//    });
     $('select.obbligatory[id$=' + id + ']').each(function () {
-        if ($(this).val() == '' || $(this).val() == '-' || $(this).val() == null) {
+        if ($(this).val() === '' || $(this).val() === '-' || $(this).val() === null) {
             err = true;
             $('#' + this.id + '_div').removeClass("is-valid-select").addClass("is-invalid-select");
         } else {
@@ -383,7 +392,7 @@ function checkObblFields_Allievo(id) {
 function checkRequiredFileAlunno(id) {
     var err = false;
     $('input:file[tipo=obbligatory][id=doc_' + id + ']').each(function () {
-        if ($(this)[0].files.length == 0) {
+        if ($(this)[0].files.length === 0) {
             err = true;
             $(this).attr("class", "custom-file-input is-invalid");
         } else {
@@ -393,6 +402,18 @@ function checkRequiredFileAlunno(id) {
     return !err;
 }
 
+function checkRequiredM7Alunno(id) {
+    var err = false;
+    $('input:file[tipo=obbligatory][id=m7_' + id + ']').each(function () {
+        if ($(this)[0].files.length === 0) {
+            err = true;
+            $(this).attr("class", "custom-file-input is-invalid");
+        } else {
+            $(this).attr("class", "custom-file-input is-valid");
+        }
+    });
+    return !err;
+}
 
 function cleanCurrency(v) {
     v = v.substring(v.lastIndexOf("_") + 1);
@@ -419,8 +440,7 @@ $('a[id^=rendiconta_]').on('click', function () {
             confirmButtonClass: "btn btn-io",
             customClass: {
                 popup: 'animated bounceInUp'
-            },
-
+            }
         }).then((result) => {
             if (result.value) {
                 let ragioneSociale = $('#rs_' + idal).val();
@@ -430,10 +450,10 @@ $('a[id^=rendiconta_]').on('click', function () {
                 let ateco = $('#ateco_' + idal).val();
 
 
-                let motivazione = $('#motivazione_' + idal).val();
-                let motivazione2 = tinymce.get('motivazione_' + idal).getContent({format: 'text'});
-                let ideaImpresa = $('#ideaimpresa_' + idal).val();
-                let ideaImpresa2 = tinymce.get('ideaimpresa_' + idal).getContent({format: 'text'});
+                let motivazione2 = $('#motivazione_' + idal).val();
+//                let motivazione2 = tinymce.get('motivazione_' + idal).getContent({format: 'text'});
+                let ideaImpresa2 = $('#ideaimpresa_' + idal).val();
+//                let ideaImpresa2 = tinymce.get('ideaimpresa_' + idal).getContent({format: 'text'});
 
 
 
@@ -583,7 +603,7 @@ function uploadModello5(idallievo, title) {
             } else {
                 return false;
             }
-        },
+        }
     }).then((result) => {
         if (result.value) {
             showLoad();
@@ -701,7 +721,7 @@ function uploadRegistroComplessivo(pf) {
             } else {
                 return false;
             }
-        },
+        }
     }).then((result) => {
         if (result.value) {
             showLoad();
@@ -776,7 +796,7 @@ function setProvinciaStep3(regione, provincia) {
     $.get(context + '/Login?type=getProvincia&regione=' + regione, function (resp) {
         var json = JSON.parse(resp);
         for (var i = 0; i < json.length; i++) {
-            if (provincia.toLowerCase() == json[i].value.toLowerCase()) {
+            if (provincia.toLowerCase() === json[i].value.toLowerCase()) {
                 $("#provincia_step3").append('<option selected value="' + json[i].value + '">' + json[i].desc + '</option>');
             } else {
                 $("#provincia_step3").append('<option value="' + json[i].value + '">' + json[i].desc + '</option>');

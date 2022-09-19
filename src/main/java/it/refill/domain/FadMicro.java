@@ -6,6 +6,8 @@
 package it.refill.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import static it.refill.db.Action.insertTR;
+import static it.refill.util.Utility.estraiEccezione;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,8 +115,8 @@ public class FadMicro implements Serializable {
         if (this.partecipanti != null && !this.partecipanti.equals("") && this.list_partecipanti.isEmpty()) {
             try {
                 this.list_partecipanti = Arrays.asList(new ObjectMapper().readValue(this.partecipanti, String[].class));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                insertTR("E", "System", estraiEccezione(ex));
             }
         }
     }
@@ -123,8 +125,8 @@ public class FadMicro implements Serializable {
         if (this.partecipanti != null && !this.partecipanti.equals("") && this.list_partecipanti.isEmpty()) {
             try {
                 this.list_partecipanti = Arrays.asList(new ObjectMapper().readValue(this.partecipanti, String[].class));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                insertTR("E", "System", estraiEccezione(ex));
             }
         }
         return list_partecipanti;

@@ -6,6 +6,7 @@
 package it.refill.servlet;
 
 import com.google.gson.JsonObject;
+import static it.refill.db.Action.insertTR;
 import it.refill.db.Entity;
 import it.refill.domain.Cad;
 import it.refill.domain.Email;
@@ -13,6 +14,7 @@ import it.refill.domain.User;
 import it.refill.util.SendMailJet;
 import it.refill.util.Skebby;
 import it.refill.util.Utility;
+import static it.refill.util.Utility.estraiEccezione;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
@@ -89,8 +91,7 @@ public class OperazioniCi extends HttpServlet {
 
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro creaCad: " + ex.getMessage());
+            insertTR("E", "System", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile rendicontare progetto.");
         } finally {
@@ -126,8 +127,7 @@ public class OperazioniCi extends HttpServlet {
 
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro creaCad: " + ex.getMessage());
+            insertTR("E", "System", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile rendicontare progetto.");
         } finally {
@@ -151,8 +151,7 @@ public class OperazioniCi extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro changeStateCAD: " + ex.getMessage());
+            insertTR("E", "System", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile modificare il CAD.");
         } finally {

@@ -1798,7 +1798,6 @@ public class OperazioniMicro extends HttpServlet {
                 Part p = request.getPart("file");
                 if (p != null && p.getSubmittedFileName() != null && p.getSubmittedFileName().length() > 0) {
                     abs_file_path = "C:/" + doc.getPath(); //MODIFICARE
-                    System.out.println(abs_file_path);
                     p.write(abs_file_path);
                 }
                 doc.setData_modifica(new Date());

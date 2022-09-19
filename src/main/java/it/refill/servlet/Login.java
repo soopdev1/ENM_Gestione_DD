@@ -7,6 +7,7 @@ package it.refill.servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import static it.refill.db.Action.insertTR;
 import it.refill.db.Entity;
 import it.refill.domain.Comuni;
 import it.refill.domain.SoggettiAttuatori;
@@ -16,6 +17,7 @@ import it.refill.entity.Item;
 import it.refill.util.GoogleRecaptcha;
 import it.refill.util.SendMailJet;
 import it.refill.util.Utility;
+import static it.refill.util.Utility.estraiEccezione;
 import static it.refill.util.Utility.redirect;
 import java.io.IOException;
 import java.text.ParseException;
@@ -229,8 +231,7 @@ public class Login extends HttpServlet {
                 resp.addProperty("message", "Ci dispiace ma Google ti ha rilevato come bot");
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
-            e.insertTracking(null, "saveSoggettoAttuatore Errore: " + ex.getMessage());
+            insertTR("E", "System", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile registrarsi.<br>Riprovare, se l'errore persiste contattare l'assistenza");
         } finally {
@@ -277,9 +278,8 @@ public class Login extends HttpServlet {
                 resp.addProperty("result", false);
                 resp.addProperty("messagge", "<b>" + username + "</b><br/> non è associato a nessun account.");
             }
-        } catch (Exception | Error ex) {
-            ex.printStackTrace();
-            e.insertTracking(null, "forgotPwd Errore: " + ex.getMessage());
+        } catch (Exception ex) {
+            insertTR("E", "System", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("messagge", "Errore durante il recupero password. Se l'errore persiste contattare il servizio assistenza.");
         } finally {
@@ -324,9 +324,8 @@ public class Login extends HttpServlet {
                     resp.addProperty("messagge", "La password nuova non coincide.");
                 }
             }
-        } catch (Exception | Error ex) {
-            ex.printStackTrace();
-            e.insertTracking(null, "changePwd Errore: " + ex.getMessage());
+        } catch (Exception ex) {
+            insertTR("E", "System", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("messagge", "Errore durante il cambio password. Se l'errore persiste contattare il servizio assistenza.");
         } finally {
@@ -346,7 +345,7 @@ public class Login extends HttpServlet {
             result.put("result", GoogleRecaptcha.isValid(request.getParameter("g-recaptcha-response")));
         } catch (Exception ex) {
             result.put("result", false);
-            ex.printStackTrace();
+            insertTR("E", "System", estraiEccezione(ex));
         }
         response.getWriter().write(result.toString());
         response.getWriter().flush();

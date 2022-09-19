@@ -289,7 +289,7 @@
                                                                                                 </label>
                                                                                             </span>
                                                                                         </div>
-                                                                                        <div class="col-6">
+                                                                                        <div class="col-6" id="file_daok_<%=a.getId()%>">
                                                                                             <div class="custom-file">
                                                                                                 <input type="file" <%=doc_allievo.getObbligatorio() == 1 ? "tipo='obbligatory'" : ""%> 
                                                                                                        class="custom-file-input" id="doc_<%=a.getId()%>" disabled="disabled"
@@ -300,221 +300,222 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <h5 style="color:#b9003d; font-weight: 800;">PROGETTO D'IMPRESA</h5>
-                                                                                    <br>
-                                                                                    <div class="form-group">
-                                                                                        <label for="rs_<%=a.getId()%>"><b>Ragione Sociale iniziativa proposta</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                        <input type="text" class="form-control obbligatory" name="rs_<%=a.getId()%>" id="rs_<%=a.getId()%>" placeholder="Ragione Sociale iniziativa proposta">
-                                                                                    </div>
-                                                                                    <div class="form-group">
-                                                                                        <label for="fg_<%=a.getId()%>"><b>Forma giuridica</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                        <div class="dropdown bootstrap-select form-control kt-" id="fg_<%=a.getId()%>_div" style="padding: 0;">
-                                                                                            <select class="form-control kt-select2-general obbligatory" id="fg_<%=a.getId()%>" name="fg_<%=a.getId()%>"  style="width: 100%">
-                                                                                                <option selected value="-">Seleziona forma giuridica</option>
-                                                                                                <%for (Formagiuridica f : list_fg) {%>
-                                                                                                <option value="<%=f.getId()%>"><%=f.getDescrizione()%></option>
-                                                                                                <%}%>
-                                                                                            </select>
+                                                                                    <div id="cont_daok_<%=a.getId()%>">
+                                                                                        <h5 style="color:#b9003d; font-weight: 800;">PROGETTO D'IMPRESA</h5>
+                                                                                        <br>
+                                                                                        <div class="form-group">
+                                                                                            <label for="rs_<%=a.getId()%>"><b>Ragione Sociale iniziativa proposta</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                            <input type="text" class="form-control obbligatory" name="rs_<%=a.getId()%>" id="rs_<%=a.getId()%>" placeholder="Ragione Sociale iniziativa proposta">
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div class="form-group row">
-                                                                                        <div class="col-6">
-                                                                                            <label for="check_sede_<%=a.getId()%>"><b>Sede individuata?</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                            <div class="kt-radio-inline radioGroup_<%=a.getId()%>">
-                                                                                                <label class="kt-radio" name="check_sede_<%=a.getId()%>">
-                                                                                                    <input type="radio" name="check_sede_<%=a.getId()%>" value="SI"> SI
-                                                                                                    <span></span>
-                                                                                                </label>
-                                                                                                <label class="kt-radio" name="check_sede_<%=a.getId()%>">
-                                                                                                    <input type="radio" name="check_sede_<%=a.getId()%>" value="NO"> NO
-                                                                                                    <span></span>
-                                                                                                </label>
-                                                                                            </div>
-                                                                                        </div>  
-                                                                                        <div class="col-6">
-                                                                                            <label for="check_colloquio_<%=a.getId()%>"><b>Disponibile a colloquio di approfondimento?</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                            <div class="kt-radio-inline radioGroup_<%=a.getId()%>">
-                                                                                                <label class="kt-radio"  name="check_colloquio_<%=a.getId()%>">
-                                                                                                    <input type="radio"  name="check_colloquio_<%=a.getId()%>" value="SI"> SI
-                                                                                                    <span></span>
-                                                                                                </label>
-                                                                                                <label class="kt-radio"  name="check_colloquio_<%=a.getId()%>">
-                                                                                                    <input type="radio" name="check_colloquio_<%=a.getId()%>" value="NO"> NO
-                                                                                                    <span></span>
-                                                                                                </label>
-                                                                                            </div>
-                                                                                        </div>                  
-                                                                                    </div>    
-                                                                                    <div class="form-group">
-                                                                                        <label for="ideaimpresa_<%=a.getId()%>"><b>Idea d'impresa</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                        <textarea class="form-control obbligatory tinyta" maxlenght="600" id="ideaimpresa_<%=a.getId()%>" name="ideaimpresa_<%=a.getId()%>" placeholder="Descrizione Idea d'impresa" rows="5"></textarea>
-                                                                                    </div>
-                                                                                    <div class="form-group row">
-                                                                                        <div class="form-group col-12">
-                                                                                            <label for="ateco_<%=a.getId()%>"><b>Codice Ateco</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                            <div class="dropdown bootstrap-select form-control kt-" id="ateco_<%=a.getId()%>_div" style="padding: 0;">
-                                                                                                <select class="form-control kt-select2-general obbligatory" id="ateco_<%=a.getId()%>" name="ateco_<%=a.getId()%>"  style="width: 100%">
-                                                                                                    <option selected value="-">Seleziona Codice Ateco</option>
-                                                                                                    <%for (Ateco i : list_codes) {%>
-                                                                                                    <option value="<%=i.getId()%>"><%=i.getId()%> - <%=i.getDescrizione()%></option>
+                                                                                        <div class="form-group">
+                                                                                            <label for="fg_<%=a.getId()%>"><b>Forma giuridica</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                            <div class="dropdown bootstrap-select form-control kt-" id="fg_<%=a.getId()%>_div" style="padding: 0;">
+                                                                                                <select class="form-control kt-select2-general obbligatory" id="fg_<%=a.getId()%>" name="fg_<%=a.getId()%>"  style="width: 100%">
+                                                                                                    <option selected value="-">Seleziona forma giuridica</option>
+                                                                                                    <%for (Formagiuridica f : list_fg) {%>
+                                                                                                    <option value="<%=f.getId()%>"><%=f.getDescrizione()%></option>
                                                                                                     <%}%>
                                                                                                 </select>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div class="form-group row">
-                                                                                        <div class="form-group col-4">
-                                                                                            <label for="regione_<%=a.getId()%>"><b>Regione di localizzazione</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                            <div class="dropdown bootstrap-select form-control kt-" id="regione_<%=a.getId()%>_div" style="padding: 0;">
-                                                                                                <select class="form-control kt-select2-general obbligatory" id="regione_<%=a.getId()%>" name="regione_<%=a.getId()%>"  style="width: 100%">
-                                                                                                    <option selected value="-">Seleziona Regione</option>
-                                                                                                    <%for (Item i : regioni) {%>
-                                                                                                    <option value="<%=i.getValue()%>"><%=i.getDesc()%></option>
-                                                                                                    <%}%>
-                                                                                                </select>
+                                                                                        <div class="form-group row">
+                                                                                            <div class="col-6">
+                                                                                                <label for="check_sede_<%=a.getId()%>"><b>Sede individuata?</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                                <div class="kt-radio-inline radioGroup_<%=a.getId()%>">
+                                                                                                    <label class="kt-radio" name="check_sede_<%=a.getId()%>">
+                                                                                                        <input type="radio" name="check_sede_<%=a.getId()%>" value="SI"> SI
+                                                                                                        <span></span>
+                                                                                                    </label>
+                                                                                                    <label class="kt-radio" name="check_sede_<%=a.getId()%>">
+                                                                                                        <input type="radio" name="check_sede_<%=a.getId()%>" value="NO"> NO
+                                                                                                        <span></span>
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </div>  
+                                                                                            <div class="col-6">
+                                                                                                <label for="check_colloquio_<%=a.getId()%>"><b>Disponibile a colloquio di approfondimento?</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                                <div class="kt-radio-inline radioGroup_<%=a.getId()%>">
+                                                                                                    <label class="kt-radio"  name="check_colloquio_<%=a.getId()%>">
+                                                                                                        <input type="radio"  name="check_colloquio_<%=a.getId()%>" value="SI"> SI
+                                                                                                        <span></span>
+                                                                                                    </label>
+                                                                                                    <label class="kt-radio"  name="check_colloquio_<%=a.getId()%>">
+                                                                                                        <input type="radio" name="check_colloquio_<%=a.getId()%>" value="NO"> NO
+                                                                                                        <span></span>
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </div>                  
+                                                                                        </div>    
+                                                                                        <div class="form-group">
+                                                                                            <label for="ideaimpresa_<%=a.getId()%>"><b>Idea d'impresa</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                            <textarea class="form-control obbligatory tinyta" maxlenght="600" id="ideaimpresa_<%=a.getId()%>" name="ideaimpresa_<%=a.getId()%>" placeholder="Descrizione Idea d'impresa" rows="5"></textarea>
+                                                                                        </div>
+                                                                                        <div class="form-group row">
+                                                                                            <div class="form-group col-12">
+                                                                                                <label for="ateco_<%=a.getId()%>"><b>Codice Ateco</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                                <div class="dropdown bootstrap-select form-control kt-" id="ateco_<%=a.getId()%>_div" style="padding: 0;">
+                                                                                                    <select class="form-control kt-select2-general obbligatory" id="ateco_<%=a.getId()%>" name="ateco_<%=a.getId()%>"  style="width: 100%">
+                                                                                                        <option selected value="-">Seleziona Codice Ateco</option>
+                                                                                                        <%for (Ateco i : list_codes) {%>
+                                                                                                        <option value="<%=i.getId()%>"><%=i.getId()%> - <%=i.getDescrizione()%></option>
+                                                                                                        <%}%>
+                                                                                                    </select>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="form-group col-4">
-                                                                                            <label for="provincia_<%=a.getId()%>"><b>Provincia di localizzazione</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                            <div class="dropdown bootstrap-select form-control kt-" id="provincia_<%=a.getId()%>_div" style="padding: 0;">
-                                                                                                <select class="form-control kt-select2-general obbligatory" id="provincia_<%=a.getId()%>" name="provincia_<%=a.getId()%>"  style="width: 100%;">
-                                                                                                    <option value="-">Seleziona Provincia</option>
-                                                                                                </select>
+                                                                                        <div class="form-group row">
+                                                                                            <div class="form-group col-4">
+                                                                                                <label for="regione_<%=a.getId()%>"><b>Regione di localizzazione</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                                <div class="dropdown bootstrap-select form-control kt-" id="regione_<%=a.getId()%>_div" style="padding: 0;">
+                                                                                                    <select class="form-control kt-select2-general obbligatory" id="regione_<%=a.getId()%>" name="regione_<%=a.getId()%>"  style="width: 100%">
+                                                                                                        <option selected value="-">Seleziona Regione</option>
+                                                                                                        <%for (Item i : regioni) {%>
+                                                                                                        <option value="<%=i.getValue()%>"><%=i.getDesc()%></option>
+                                                                                                        <%}%>
+                                                                                                    </select>
+                                                                                                </div>
                                                                                             </div>
-                                                                                        </div>
-                                                                                        <div class="form-group col-4">
-                                                                                            <label for="comune_<%=a.getId()%>"><b>Comune di localizzazione</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                            <div class="dropdown bootstrap-select form-control kt-" id="comune_<%=a.getId()%>_div" style="padding: 0;">
-                                                                                                <select class="form-control kt-select2-general obbligatory" id="comune_<%=a.getId()%>" name="comune_<%=a.getId()%>"  style="width: 100%;">
-                                                                                                    <option value="-">Seleziona Comune</option>
-                                                                                                </select>
+                                                                                            <div class="form-group col-4">
+                                                                                                <label for="provincia_<%=a.getId()%>"><b>Provincia di localizzazione</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                                <div class="dropdown bootstrap-select form-control kt-" id="provincia_<%=a.getId()%>_div" style="padding: 0;">
+                                                                                                    <select class="form-control kt-select2-general obbligatory" id="provincia_<%=a.getId()%>" name="provincia_<%=a.getId()%>"  style="width: 100%;">
+                                                                                                        <option value="-">Seleziona Provincia</option>
+                                                                                                    </select>
+                                                                                                </div>
                                                                                             </div>
+                                                                                            <div class="form-group col-4">
+                                                                                                <label for="comune_<%=a.getId()%>"><b>Comune di localizzazione</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                                <div class="dropdown bootstrap-select form-control kt-" id="comune_<%=a.getId()%>_div" style="padding: 0;">
+                                                                                                    <select class="form-control kt-select2-general obbligatory" id="comune_<%=a.getId()%>" name="comune_<%=a.getId()%>"  style="width: 100%;">
+                                                                                                        <option value="-">Seleziona Comune</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>    
+                                                                                        <div class="form-group">
+                                                                                            <label for="motivazione_<%=a.getId()%>"><b>Motivazione</b></label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                                            <textarea class="form-control obbligatory tinyta" maxlenght="300" id="motivazione_<%=a.getId()%>" name="motivazione_<%=a.getId()%>" placeholder="Perchè questa attività?" rows="3"></textarea>
                                                                                         </div>
-                                                                                    </div>    
-                                                                                    <div class="form-group">
-                                                                                        <label for="motivazione_<%=a.getId()%>"><b>Motivazione</b></label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                                        <textarea class="form-control obbligatory tinyta" maxlenght="300" id="motivazione_<%=a.getId()%>" name="motivazione_<%=a.getId()%>" placeholder="Perchè questa attività?" rows="3"></textarea>
-                                                                                    </div>
 
-                                                                                    <div class="form-group row">
-                                                                                        <div class="col-6">
-                                                                                            <label><b>Totale fabbisogno finanziario</b></label><label class="kt-font-danger kt-font-boldest">*</label> <i class="fa fa-info-circle kt-font-io-n" data-container="body" data-toggle="kt-popover" data-placement="top" data-original-title="Formato" data-content="€ ___.__1.234,56"></i>
-                                                                                            <div>
-                                                                                                <input class="form-control col-lg-6 currencymask obbligatory" name="tff_<%=a.getId()%>" id="tff_<%=a.getId()%>" data-inputmask="'removeMaskOnSubmit': true" type="text"/>
+                                                                                        <div class="form-group row">
+                                                                                            <div class="col-6">
+                                                                                                <label><b>Totale fabbisogno finanziario</b></label><label class="kt-font-danger kt-font-boldest">*</label> <i class="fa fa-info-circle kt-font-io-n" data-container="body" data-toggle="kt-popover" data-placement="top" data-original-title="Formato" data-content="€ ___.__1.234,56"></i>
+                                                                                                <div>
+                                                                                                    <input class="form-control col-lg-6 currencymask obbligatory" name="tff_<%=a.getId()%>" id="tff_<%=a.getId()%>" data-inputmask="'removeMaskOnSubmit': true" type="text"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <label><b>Totale finanziamento richiesto ad agevolazione</b></label><label class="kt-font-danger kt-font-boldest">*</label> <i class="fa fa-info-circle  kt-font-io-n" data-container="body" data-toggle="kt-popover" data-placement="top" data-original-title="Formato" data-content="€ ___.__1.234,56"></i>
+                                                                                                <div>
+                                                                                                    <input class="form-control col-lg-6 currencymask obbligatory" name="tfra_<%=a.getId()%>" id="tfra_<%=a.getId()%>" data-inputmask="'removeMaskOnSubmit': true" type="text"/>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-6">
-                                                                                            <label><b>Totale finanziamento richiesto ad agevolazione</b></label><label class="kt-font-danger kt-font-boldest">*</label> <i class="fa fa-info-circle  kt-font-io-n" data-container="body" data-toggle="kt-popover" data-placement="top" data-original-title="Formato" data-content="€ ___.__1.234,56"></i>
-                                                                                            <div>
-                                                                                                <input class="form-control col-lg-6 currencymask obbligatory" name="tfra_<%=a.getId()%>" id="tfra_<%=a.getId()%>" data-inputmask="'removeMaskOnSubmit': true" type="text"/>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
 
-                                                                                    <label><b>AGEVOLAZIONE RICHIESTA</b></label> <label id="alert_radio<%=a.getId()%>" style="margin-bottom:20px; margin-top: 20px; display:none;color:#fd397a !important">Non è stata selezionata nessuna opzione. Ricordiamo che nel caso di Bandi, è possibile la selezione multipla.</label>
-                                                                                    <div class="form-group row">
-                                                                                        <div class="col-2">
-                                                                                            <label class="kt-radio bandose_<%=a.getId()%>">
-                                                                                                <input class="optionsRadio<%=a.getId()%>" type="radio" name="bandose_<%=a.getId()%>"> Bando Selfiemployement
-                                                                                                <span></span>
-                                                                                            </label>
-                                                                                        </div>
-                                                                                        <div class="col-6">
-                                                                                            <div class="kt-radio-list">
-                                                                                                <%for (Map.Entry<Integer, String> se : bando_SE.entrySet()) {%>
-                                                                                                <label class="bandose_<%=a.getId()%> kt-radio">
-                                                                                                    <input type="radio" class="bandose_<%=a.getId()%>" value="<%=se.getKey()%>" disabled="disabled" name="se_option_<%=a.getId()%>"> <%=se.getValue()%>
+                                                                                        <label><b>AGEVOLAZIONE RICHIESTA</b></label> <label id="alert_radio<%=a.getId()%>" style="margin-bottom:20px; margin-top: 20px; display:none;color:#fd397a !important">Non è stata selezionata nessuna opzione. Ricordiamo che nel caso di Bandi, è possibile la selezione multipla.</label>
+                                                                                        <div class="form-group row">
+                                                                                            <div class="col-2">
+                                                                                                <label class="kt-radio bandose_<%=a.getId()%>">
+                                                                                                    <input class="optionsRadio<%=a.getId()%>" type="radio" name="bandose_<%=a.getId()%>"> Bando Selfiemployement
                                                                                                     <span></span>
                                                                                                 </label>
-                                                                                                <%}%>     
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="kt-radio-list">
+                                                                                                    <%for (Map.Entry<Integer, String> se : bando_SE.entrySet()) {%>
+                                                                                                    <label class="bandose_<%=a.getId()%> kt-radio">
+                                                                                                        <input type="radio" class="bandose_<%=a.getId()%>" value="<%=se.getKey()%>" disabled="disabled" name="se_option_<%=a.getId()%>"> <%=se.getValue()%>
+                                                                                                        <span></span>
+                                                                                                    </label>
+                                                                                                    <%}%>     
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-4" id="alert_bandose<%=a.getId()%>" style="display:none;color:#fd397a !important">
+                                                                                                <label>E' obbligatorio selezionare un'opzione</label>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-4" id="alert_bandose<%=a.getId()%>" style="display:none;color:#fd397a !important">
-                                                                                            <label>E' obbligatorio selezionare un'opzione</label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="form-group row">
-                                                                                        <div class="col-2">
-                                                                                            <label class="kt-radio bandosud_<%=a.getId()%>">
-                                                                                                <input class="optionsRadio<%=a.getId()%>" type="radio" name="bandosud_<%=a.getId()%>"> Bando Resto al Sud
-                                                                                                <span></span>
-                                                                                            </label>
-                                                                                        </div>
-                                                                                        <div class="col-6">
-                                                                                            <div class="kt-radio-list">
-                                                                                                <%for (Map.Entry<Integer, String> su : bando_SUD.entrySet()) {%>
+                                                                                        <div class="form-group row">
+                                                                                            <div class="col-2">
                                                                                                 <label class="kt-radio bandosud_<%=a.getId()%>">
-                                                                                                    <input type="radio" class="bandosud_<%=a.getId()%>" disabled="disabled"  value="<%=su.getKey()%>" name="sud_option_<%=su.getKey()%>_<%=a.getId()%>"> <%=su.getValue()%>
+                                                                                                    <input class="optionsRadio<%=a.getId()%>" type="radio" name="bandosud_<%=a.getId()%>"> Bando Resto al Sud
                                                                                                     <span></span>
                                                                                                 </label>
-                                                                                                <%}%>  
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="kt-radio-list">
+                                                                                                    <%for (Map.Entry<Integer, String> su : bando_SUD.entrySet()) {%>
+                                                                                                    <label class="kt-radio bandosud_<%=a.getId()%>">
+                                                                                                        <input type="radio" class="bandosud_<%=a.getId()%>" disabled="disabled"  value="<%=su.getKey()%>" name="sud_option_<%=su.getKey()%>_<%=a.getId()%>"> <%=su.getValue()%>
+                                                                                                        <span></span>
+                                                                                                    </label>
+                                                                                                    <%}%>  
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-4" id="alert_bandosud<%=a.getId()%>" style="display:none;color:#fd397a !important">
+                                                                                                <label>E' obbligatorio selezionare una o più opzioni (max 3)</label>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-4" id="alert_bandosud<%=a.getId()%>" style="display:none;color:#fd397a !important">
-                                                                                            <label>E' obbligatorio selezionare una o più opzioni (max 3)</label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="form-group row">
-                                                                                        <div class="col-2">
-                                                                                            <label class="kt-radio bandoreg_<%=a.getId()%>">
-                                                                                                <input class="optionsRadio<%=a.getId()%>" type="radio" name="bandoreg_<%=a.getId()%>"> Bando Regionale
-                                                                                                <span></span>
-                                                                                            </label>
-                                                                                        </div>
-                                                                                        <div class="col-6">   
-                                                                                            <input type="text" class="form-control bandoreg_<%=a.getId()%> obbligatory" disabled="disabled" name="bando_reg_nome_<%=a.getId()%>" id="bando_reg_nome_<%=a.getId()%>" placeholder="Indicare il nome del Bando Pubblico"></div>
-                                                                                    </div>
-                                                                                    <div class="form-group row">
-                                                                                        <div class="col-2">
-                                                                                            <label class="kt-radio">
-                                                                                                <input class="optionsRadio<%=a.getId()%>" type="radio" name="noagevolazione_<%=a.getId()%>"> Nessuna agevolazione
-                                                                                                <span></span>
-                                                                                            </label>
-                                                                                        </div>
-                                                                                        <div class="col-6">
-                                                                                            <div class="kt-radio-list">
-                                                                                                <%for (Map.Entry<Integer, String> n : no_agevolazione.entrySet()) {%>
-                                                                                                <label class="kt-radio noagevolazione_<%=a.getId()%>">
-                                                                                                    <input type="radio" class="noagevolazione_<%=a.getId()%>" disabled="disabled" value="<%=n.getKey()%>" name="no_option_<%=a.getId()%>"> <%=n.getValue()%>
+                                                                                        <div class="form-group row">
+                                                                                            <div class="col-2">
+                                                                                                <label class="kt-radio bandoreg_<%=a.getId()%>">
+                                                                                                    <input class="optionsRadio<%=a.getId()%>" type="radio" name="bandoreg_<%=a.getId()%>"> Bando Regionale
                                                                                                     <span></span>
                                                                                                 </label>
-                                                                                                <%}%>  
+                                                                                            </div>
+                                                                                            <div class="col-6">   
+                                                                                                <input type="text" class="form-control bandoreg_<%=a.getId()%> obbligatory" disabled="disabled" name="bando_reg_nome_<%=a.getId()%>" id="bando_reg_nome_<%=a.getId()%>" placeholder="Indicare il nome del Bando Pubblico"></div>
+                                                                                        </div>
+                                                                                        <div class="form-group row">
+                                                                                            <div class="col-2">
+                                                                                                <label class="kt-radio">
+                                                                                                    <input class="optionsRadio<%=a.getId()%>" type="radio" name="noagevolazione_<%=a.getId()%>"> Nessuna agevolazione
+                                                                                                    <span></span>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="kt-radio-list">
+                                                                                                    <%for (Map.Entry<Integer, String> n : no_agevolazione.entrySet()) {%>
+                                                                                                    <label class="kt-radio noagevolazione_<%=a.getId()%>">
+                                                                                                        <input type="radio" class="noagevolazione_<%=a.getId()%>" disabled="disabled" value="<%=n.getKey()%>" name="no_option_<%=a.getId()%>"> <%=n.getValue()%>
+                                                                                                        <span></span>
+                                                                                                    </label>
+                                                                                                    <%}%>  
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-4" id="alert_noagevolazione<%=a.getId()%>" style="display:none;color:#fd397a !important">
+                                                                                                <label>E' obbligatorio selezionare un'opzione</label>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-4" id="alert_noagevolazione<%=a.getId()%>" style="display:none;color:#fd397a !important">
-                                                                                            <label>E' obbligatorio selezionare un'opzione</label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <br>
-                                                                                    <label style="color:#b9003d; font-weight: 800;">VALUTAZIONE FINALE</label>
-                                                                                    <div class="form-group" id="val_finale<%=a.getId()%>">
-                                                                                        <div class="row">
-                                                                                            <div class="col-7"><b>Descrizione</b></div>
-                                                                                            <div class="col-1"><b>Peso</b></div>
-                                                                                            <div class="col-2"><b>Punteggio da parte dell’Ente Erogatore della 7.1 (da 0 a 9)</b></div>
-                                                                                            <div class="col-2"><b>Punteggio ponderato per assegnazione premialità</b></div>
-                                                                                        </div>
-                                                                                        <%for (ValutazioneFinaleM5 v : list_valutazione) {%>
-                                                                                        <div class="row">
-                                                                                            <div class="col-7"><%=v.getDescrizione()%></div>
-                                                                                            <div class="col-1"><input class="form-control decimal_custom" disabled="disabled" type="text" value="<%=v.getPeso()%>" name="A_<%=v.getId()%>_<%=a.getId()%>" id="A_<%=v.getId()%>_<%=a.getId()%>" /></div>
-                                                                                            <div class="col-2"><input class="form-control decimal_custom ctrl obbligatory" type="text" value="0.00" name="B_<%=v.getId()%>_<%=a.getId()%>" id="B_<%=v.getId()%>_<%=a.getId()%>" /></div>
-                                                                                            <div class="col-2"><input style="background-color: rgb(219, 230, 253) !important;" class="form-control decimal_custom" disabled="disabled" type="text" name="C_<%=v.getId()%>_<%=a.getId()%>" id="C_<%=v.getId()%>_<%=a.getId()%>" /></div>
-                                                                                        </div>
+                                                                                        <br>
+                                                                                        <label style="color:#b9003d; font-weight: 800;">VALUTAZIONE FINALE</label>
+                                                                                        <div class="form-group" id="val_finale<%=a.getId()%>">
+                                                                                            <div class="row">
+                                                                                                <div class="col-7"><b>Descrizione</b></div>
+                                                                                                <div class="col-1"><b>Peso</b></div>
+                                                                                                <div class="col-2"><b>Punteggio da parte dell’Ente Erogatore della 7.1 (da 0 a 9)</b></div>
+                                                                                                <div class="col-2"><b>Punteggio ponderato per assegnazione premialità</b></div>
+                                                                                            </div>
+                                                                                            <%for (ValutazioneFinaleM5 v : list_valutazione) {%>
+                                                                                            <div class="row">
+                                                                                                <div class="col-7"><%=v.getDescrizione()%></div>
+                                                                                                <div class="col-1"><input class="form-control decimal_custom" disabled="disabled" type="text" value="<%=v.getPeso()%>" name="A_<%=v.getId()%>_<%=a.getId()%>" id="A_<%=v.getId()%>_<%=a.getId()%>" /></div>
+                                                                                                <div class="col-2"><input class="form-control decimal_custom ctrl obbligatory" type="text" value="0.00" name="B_<%=v.getId()%>_<%=a.getId()%>" id="B_<%=v.getId()%>_<%=a.getId()%>" /></div>
+                                                                                                <div class="col-2"><input style="background-color: rgb(219, 230, 253) !important;" class="form-control decimal_custom" disabled="disabled" type="text" name="C_<%=v.getId()%>_<%=a.getId()%>" id="C_<%=v.getId()%>_<%=a.getId()%>" /></div>
+                                                                                            </div>
+                                                                                            <%}%>
+                                                                                            <div class="row">
+                                                                                                <div class="col-5 kt-align-right"><b>Punteggio attribuito</b></div>
+                                                                                                <div class="col-1"><input style="background-color: #a8c3f9!important;" class="form-control decimal_custom" disabled="disabled" type="text" id="totalB_<%=a.getId()%>" name="totalB_<%=a.getId()%>" /></div>
+                                                                                                <div class="col-5 kt-align-right"><b>Valutazione Finale</b></div>
+                                                                                                <div class="col-1"><input style="background-color: #a8c3f9!important;" class="form-control decimal_custom" disabled="disabled" type="text"  id="final_<%=a.getId()%>" name="final_<%=a.getId()%>" /></div>
+                                                                                            </div>
+                                                                                        </div> 
+                                                                                        <label style="margin-top:2.5rem;"><b><%=modello7.getDescrizione()%></b></label>
+                                                                                                <%if (oreRendicontabili.get(a.getId()) != null && oreRendicontabili.get(a.getId()).compareTo(hh64) >= 0) {%>
+                                                                                        <i class="fa fa-info-circle  kt-font-io-n" data-container="body" data-toggle="kt-popover" data-placement="top" data-original-title="Tabella Premialità" data-content="Per poter usufruire della tabella relativa alla premialità è obbligatorio scaricare il modello 7, firmarlo digitalmente e ricaricarlo."></i>
+                                                                                        <div class="hh64_<%=a.getId()%>"></div>
                                                                                         <%}%>
-                                                                                        <div class="row">
-                                                                                            <div class="col-5 kt-align-right"><b>Punteggio attribuito</b></div>
-                                                                                            <div class="col-1"><input style="background-color: #a8c3f9!important;" class="form-control decimal_custom" disabled="disabled" type="text" id="totalB_<%=a.getId()%>" name="totalB_<%=a.getId()%>" /></div>
-                                                                                            <div class="col-5 kt-align-right"><b>Valutazione Finale</b></div>
-                                                                                            <div class="col-1"><input style="background-color: #a8c3f9!important;" class="form-control decimal_custom" disabled="disabled" type="text"  id="final_<%=a.getId()%>" name="final_<%=a.getId()%>" /></div>
-                                                                                        </div>
-                                                                                    </div> 
-                                                                                    <label style="margin-top:2.5rem;"><b><%=modello7.getDescrizione()%></b></label>
-                                                                                            <%if (oreRendicontabili.get(a.getId()) != null && oreRendicontabili.get(a.getId()).compareTo(hh64) >= 0) {%>
-                                                                                    <i class="fa fa-info-circle  kt-font-io-n" data-container="body" data-toggle="kt-popover" data-placement="top" data-original-title="Tabella Premialità" data-content="Per poter usufruire della tabella relativa alla premialità è obbligatorio scaricare il modello 7, firmarlo digitalmente e ricaricarlo."></i>
-                                                                                    <div class="hh64_<%=a.getId()%>"></div>
-                                                                                    <%}%>
-
+                                                                                    </div>
                                                                                     <div class="form-group row">
                                                                                         <div class="col-6">
                                                                                             <a href="<%=request.getContextPath()%>/OperazioniSA?type=scaricaModello7&iduser=<%=a.getId()%>&orerendicontabili=<%=oreRendicontabili.get(a.getId())%>" target="_blank" class="btn btn-success"><i class="fa fa-user-graduate" style='position: absolute; right: 5rem'></i>&nbsp; Scarica attestato di frequenza (Modello 7)</a>

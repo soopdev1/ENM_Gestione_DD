@@ -41,25 +41,22 @@ public class OperazioniGeneral extends HttpServlet {
     protected void onlyDownload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getParameter("path");
         File downloadFile = createFile_R(path);
-        System.out.println("it.refill.servlet.OperazioniGeneral.onlyDownload() " + path);
         if (downloadFile != null
                 && downloadFile.exists()) {
 
-            FileInputStream inStream = new FileInputStream(downloadFile);
-            String mimeType = Files.probeContentType(downloadFile.toPath());
-            if (mimeType == null) {
-                mimeType = "application/pdf";
-            }
-            response.setContentType(mimeType);
-            String headerKey = "Content-Disposition";
-            String headerValue = format("attach; filename=\"%s\"", downloadFile.getName());
-            response.setHeader(headerKey, headerValue);
-            response.setContentLength(-1);
-            try (OutputStream outStream = response.getOutputStream()) {
-                outStream.write(FileUtils.readFileToByteArray(downloadFile));
-            }
-            inStream.close();
-
+            try (FileInputStream inStream = new FileInputStream(downloadFile)) {
+                String mimeType = Files.probeContentType(downloadFile.toPath());
+                if (mimeType == null) {
+                    mimeType = "application/pdf";
+                }
+                response.setContentType(mimeType);
+                String headerKey = "Content-Disposition";
+                String headerValue = format("attach; filename=\"%s\"", downloadFile.getName());
+                response.setHeader(headerKey, headerValue);
+                response.setContentLength(-1);
+                try (final OutputStream outStream = response.getOutputStream()) {
+                    outStream.write(FileUtils.readFileToByteArray(downloadFile));
+                }
 //            FileInputStream inStream = new FileInputStream(downloadFile);
 //            String mimeType = Files.probeContentType(downloadFile.toPath());
 //            if (mimeType == null) {
@@ -77,6 +74,7 @@ public class OperazioniGeneral extends HttpServlet {
 //            }
 //            inStream.close();
 //            outStream.close();
+            }
         } else {
             response.sendRedirect("404.jsp");
         }

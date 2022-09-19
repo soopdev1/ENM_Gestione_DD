@@ -119,12 +119,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.Store;
 import org.joda.time.DateTime;
 import static it.refill.util.Utility.roundDoubleAndFormat;
+import java.util.Comparator;
 import javax.imageio.ImageIO;
-import org.verapdf.pdfa.Foundries;
-import org.verapdf.pdfa.PDFAParser;
-import org.verapdf.pdfa.PDFAValidator;
-import org.verapdf.pdfa.flavours.PDFAFlavour;
-import org.verapdf.pdfa.results.ValidationResult;
 
 /**
  *
@@ -295,7 +291,7 @@ public class Pdf_new {
             db.closeDB();
             List<Item> um = Utility.unitamisura();
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is); PdfWriter writer = new PdfWriter(pdfOut)) {
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is);  PdfWriter writer = new PdfWriter(pdfOut)) {
                 PdfDocument pdfDoc = new PdfDocument(reader, writer);
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
                 form.setGenerateAppearance(true);
@@ -409,7 +405,7 @@ public class Pdf_new {
             createDir(pathtemp);
             File pdfOut = new File(pathtemp + username + "_" + StringUtils.deleteWhitespace(al.getCognome() + "_" + al.getNome()) + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M7.pdf");
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is); PdfWriter writer = new PdfWriter(pdfOut)) {
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is);  PdfWriter writer = new PdfWriter(pdfOut)) {
                 PdfDocument pdfDoc = new PdfDocument(reader, writer);
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
                 form.setGenerateAppearance(true);
@@ -477,7 +473,7 @@ public class Pdf_new {
                     + getOnlyStrings(sa.getRagionesociale()) + "_"
                     + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M6.pdf");
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is); PdfWriter writer = new PdfWriter(pdfOut)) {
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is);  PdfWriter writer = new PdfWriter(pdfOut)) {
                 PdfDocument pdfDoc = new PdfDocument(reader, writer);
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
                 form.setGenerateAppearance(true);
@@ -535,6 +531,7 @@ public class Pdf_new {
                     List<Registro_completo> allieviFaseA = new ArrayList<>();
                     List<Integer> neetID = faseA.stream().map(r1 -> r1.getIdutente()).distinct().collect(Collectors.toList());
                     AtomicInteger index_allieviA = new AtomicInteger(1);
+
 
                     neetID.forEach(n1 -> {
                         Allievi n2 = e.getEm().find(Allievi.class, Long.parseLong(String.valueOf(n1)));
@@ -619,7 +616,6 @@ public class Pdf_new {
 
                     allieviFaseA.forEach(al1 -> {
                         int indice = al1.getId();
-                        System.out.println(al1.toString());
                         setFieldsValue(form, fields, "Cognome" + indice, al1.getCognome().toUpperCase());
                         setFieldsValue(form, fields, "Nome" + indice, al1.getNome().toUpperCase());
                         setFieldsValue(form, fields, "CF" + indice, al1.getCf().toUpperCase());
@@ -662,7 +658,6 @@ public class Pdf_new {
                                 .collect(Collectors.toCollection(LinkedList::new));
                         if (lezioniB.isEmpty()) {
                             System.out.println("B) GRUPPO " + i + " VUOTO");
-
                         } else {
                             String DATAINIZIOFASEB = lezioniB.getFirst();
                             String DATAFINEFASEB = lezioniB.getLast();
@@ -717,7 +712,6 @@ public class Pdf_new {
                                 allievo_B.setData4(orarioB.get(4));
                                 allievo_B.setTotaleore(totaleB.get());
                                 allieviFaseB.add(allievo_B);
-                                System.out.println(allievo_B.toString());
                                 index_allieviB.addAndGet(1);
                             });
 
@@ -888,9 +882,7 @@ public class Pdf_new {
             createDir(pathtemp);
             File pdfOut = new File(pathtemp + username + "_" + StringUtils.deleteWhitespace(al.getCognome() + "_" + al.getNome()) + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M5.pdf");
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
-                PdfWriter writer = new PdfWriter(pdfOut);
-                PdfDocument pdfDoc = new PdfDocument(reader, writer);
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is);  PdfWriter writer = new PdfWriter(pdfOut);  PdfDocument pdfDoc = new PdfDocument(reader, writer)) {
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
                 form.setGenerateAppearance(true);
                 Map<String, PdfFormField> fields = form.getFormFields();
@@ -935,13 +927,21 @@ public class Pdf_new {
                 });
                 setFieldsValue(form, fields, "ELENCODOCENTI", listadocenti.toString());
                 setFieldsValue(form, fields, "RAGIONESOCIALE", m5.getRagione_sociale().toUpperCase());
-                setFieldsValue(form, fields, "FORMAGIURIDICA", m5.getForma_giuridica().getDescrizione().toUpperCase());
+
+                if (m5.getForma_giuridica() != null) {
+                    setFieldsValue(form, fields, "FORMAGIURIDICA", m5.getForma_giuridica().getDescrizione().toUpperCase());
+                }
                 setFieldsValue(form, fields, "SEDEINDIVIDUATA", Utility.convertbooleantostring(m5.isSede()));
                 setFieldsValue(form, fields, "COLLOQUIO", Utility.convertbooleantostring(m5.isColloquio()));
                 setFieldsValue(form, fields, "IDEAIMPRESA", m5.getIdea_impresa().toUpperCase());
-                setFieldsValue(form, fields, "ATECO", m5.getAteco().getId());
-                setFieldsValue(form, fields, "COMUNE_NUOVO", m5.getComune_localizzazione().getNome().toUpperCase());
-                setFieldsValue(form, fields, "REGIONE_NUOVO", m5.getComune_localizzazione().getRegione().toUpperCase());
+                if (m5.getAteco() != null) {
+                    setFieldsValue(form, fields, "ATECO", m5.getAteco().getId());
+                }
+
+                if (m5.getComune_localizzazione() != null) {
+                    setFieldsValue(form, fields, "COMUNE_NUOVO", m5.getComune_localizzazione().getNome().toUpperCase());
+                    setFieldsValue(form, fields, "REGIONE_NUOVO", m5.getComune_localizzazione().getRegione().toUpperCase());
+                }
                 setFieldsValue(form, fields, "MOTIVAZIONEATTIVITA", m5.getMotivazione().toUpperCase());
                 setFieldsValue(form, fields, "FABBISOGNO", Utility.numITA.format(m5.getFabbisogno_finanziario()));
                 setFieldsValue(form, fields, "RICHIESTO", Utility.numITA.format(m5.getFinanziamento_richiesto_agevolazione()));
@@ -1112,8 +1112,6 @@ public class Pdf_new {
                         + StringUtils.deleteWhitespace(al.getCognome() + "_" + al.getNome())
                         + " / " + dataconsegna.toString("ddMMyyyyHHmmSSS"));
                 printbarcode(barcode, pdfDoc);
-                pdfDoc.close();
-                writer.close();
             }
             if (checkPDF(pdfOut)) {
                 return pdfOut;
@@ -1137,7 +1135,12 @@ public class Pdf_new {
             boolean flatten) {
 
         try {
-
+            Comparator<Lezioni_Modelli> bydate = new Comparator<Lezioni_Modelli>() {
+                @Override
+                public int compare(Lezioni_Modelli o1, Lezioni_Modelli o2) {
+                    return o1.getGiorno().compareTo(o2.getGiorno());
+                }
+            };
             TipoDoc p = e.getEm().find(TipoDoc.class, 6L);
             String contentb64 = p.getModello();
 
@@ -1145,8 +1148,8 @@ public class Pdf_new {
             createDir(pathtemp);
 
             File pdfOut = new File(pathtemp + username + "_" + getOnlyStrings(sa.getRagionesociale()) + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M4.pdf");
-
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
+            lezioni.sort(bydate);
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is)) {
                 PdfWriter writer = new PdfWriter(pdfOut);
                 PdfDocument pdfDoc = new PdfDocument(reader, writer);
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
@@ -1321,9 +1324,9 @@ public class Pdf_new {
             createDir(pathtemp);
 
             File pdfOut = new File(pathtemp + username + "_"
-                    + getOnlyStrings(sa.getRagionesociale()) 
+                    + getOnlyStrings(sa.getRagionesociale())
                     + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M3.pdf");
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is)) {
                 PdfWriter writer = new PdfWriter(pdfOut);
                 PdfDocument pdfDoc = new PdfDocument(reader, writer);
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
@@ -1532,9 +1535,7 @@ public class Pdf_new {
 
             File pdfOut = new File(pathtemp + username + "_" + StringUtils.deleteWhitespace(al.getCognome() + "_" + al.getNome()) + "_" + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M1.pdf");
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); 
-                    PdfReader reader = new PdfReader(is); PdfWriter writer = new PdfWriter(pdfOut); 
-                    PdfDocument pdfDoc = new PdfDocument(reader, writer)) {
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is);  PdfWriter writer = new PdfWriter(pdfOut);  PdfDocument pdfDoc = new PdfDocument(reader, writer)) {
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
                 form.setGenerateAppearance(true);
                 Map<String, PdfFormField> fields = form.getFormFields();
@@ -1670,7 +1671,7 @@ public class Pdf_new {
 
             File pdfOut = new File(pathtemp + username + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".M2.pdf");
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is)) {
 
                 PdfWriter writer = new PdfWriter(pdfOut);
                 PdfDocument pdfDoc = new PdfDocument(reader, writer);
@@ -1769,7 +1770,7 @@ public class Pdf_new {
         try {
             setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
             File pdfOutA = new File(replace(pdf_ing.getPath(), ".pdf", "_pdfA.pdf"));
-            try (FileInputStream in = new FileInputStream(pdf_ing);PDDocument doc = PDDocument.load(pdf_ing)) {
+            try ( FileInputStream in = new FileInputStream(pdf_ing);  PDDocument doc = PDDocument.load(pdf_ing)) {
                 int numPageTOT = 0;
                 Iterator<PDPage> it1 = doc.getPages().iterator();
                 while (it1.hasNext()) {
@@ -1778,7 +1779,7 @@ public class Pdf_new {
                 }
                 PDPage page = new PDPage();
                 doc.setVersion(1.7f);
-                try (PDPageContentStream contents = new PDPageContentStream(doc, page)) {
+                try ( PDPageContentStream contents = new PDPageContentStream(doc, page)) {
                     PDDocument docSource = PDDocument.load(in);
                     PDFRenderer pdfRenderer = new PDFRenderer(docSource);
                     for (int i = 0; i < numPageTOT; i++) {
@@ -1806,8 +1807,8 @@ public class Pdf_new {
                 } catch (BadFieldValueException ex) {
                     throw new IllegalArgumentException(ex);
                 }
-                try ( 
-                        InputStream colorProfile = new Pdf_new().getClass().getResourceAsStream("/sRGB.icc")) {
+                try (
+                         InputStream colorProfile = new Pdf_new().getClass().getResourceAsStream("/sRGB.icc")) {
                     //            InputStream colorProfile = new ByteArrayInputStream(decodeBase64(e.getPath("pdf.icc")));
                     //            InputStream colorProfile = new FileInputStream("C:\\mnt\\mcn\\gestione_neet\\sRGB.icc");
                     PDOutputIntent intent = new PDOutputIntent(doc, colorProfile);
@@ -1897,7 +1898,7 @@ public class Pdf_new {
             if (!allCerts.isEmpty()) {
                 X509CertificateHolder x509h = allCerts.iterator().next();
                 CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-                try (InputStream in = new ByteArrayInputStream(x509h.getEncoded())) {
+                try ( InputStream in = new ByteArrayInputStream(x509h.getEncoded())) {
                     X509Certificate cert = (X509Certificate) certFactory.generateCertificate(in);
                     Principal principal = cert.getSubjectDN();
                     try {
@@ -1933,7 +1934,7 @@ public class Pdf_new {
         try {
             BouncyCastleProvider provider = new BouncyCastleProvider();
             addProvider(provider);
-            try (InputStream is = new ByteArrayInputStream(pdf_bytes)) {
+            try ( InputStream is = new ByteArrayInputStream(pdf_bytes)) {
                 PdfReader read = new PdfReader(is);
                 PdfDocument pdfDoc = new PdfDocument(read);
                 AtomicInteger error = new AtomicInteger(0);
@@ -1982,42 +1983,39 @@ public class Pdf_new {
         }
     }
 
-    public static boolean validPDFA(PDFAParser parser) {
-
-        try {
-            List<PDFAFlavour> tocheck = new ArrayList<>();
-            tocheck.add(PDFAFlavour.fromString("1a"));
-            tocheck.add(PDFAFlavour.fromString("1b"));
-            tocheck.add(PDFAFlavour.fromString("2a"));
-            tocheck.add(PDFAFlavour.fromString("2b"));
-            tocheck.add(PDFAFlavour.fromString("3a"));
-            tocheck.add(PDFAFlavour.fromString("3b"));
-            tocheck.add(PDFAFlavour.fromString("3u"));
-            tocheck.add(PDFAFlavour.fromString("ua1"));
-            for (PDFAFlavour v1 : tocheck) {
-                PDFAValidator validator = Foundries.defaultInstance().createValidator(v1, true);
-                ValidationResult result = validator.validate(parser);
-                if (result.isCompliant()) {
-                    System.out.println(v1.getId() + " OK");
-                    return true;
-                } else {
-                    System.out.println(v1.getId() + " KO");
-                }
-
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return false;
-    }
-
+//    public static boolean validPDFA(PDFAParser parser) {
+//
+//        try {
+//            List<PDFAFlavour> tocheck = new ArrayList<>();
+//            tocheck.add(PDFAFlavour.fromString("1a"));
+//            tocheck.add(PDFAFlavour.fromString("1b"));
+//            tocheck.add(PDFAFlavour.fromString("2a"));
+//            tocheck.add(PDFAFlavour.fromString("2b"));
+//            tocheck.add(PDFAFlavour.fromString("3a"));
+//            tocheck.add(PDFAFlavour.fromString("3b"));
+//            tocheck.add(PDFAFlavour.fromString("3u"));
+//            tocheck.add(PDFAFlavour.fromString("ua1"));
+//            for (PDFAFlavour v1 : tocheck) {
+//                PDFAValidator validator = Foundries.defaultInstance().createValidator(v1, true);
+//                ValidationResult result = validator.validate(parser);
+//                if (result.isCompliant()) {
+//                    System.out.println(v1.getId() + " OK");
+//                    return true;
+//                } else {
+//                    System.out.println(v1.getId() + " KO");
+//                }
+//
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        return false;
+//    }
     private static String verificaPDFA(byte[] content) {
 
         return "OK";
-        
-        
-        
+
 //        String out = "KO";
 //        try {
 //            setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
@@ -2054,7 +2052,6 @@ public class Pdf_new {
 //        }
 //
 //        return out;
-
     }
 
     private static String estraiResult(PDDocument doc, String qrcrop, int pag) {
@@ -2180,6 +2177,9 @@ public class Pdf_new {
             String cfuser,
             String qrcrop
     ) {
+        if (true) {
+            return "OK";
+        }
 //
 //        if (Utility.test) {
 //            return "OK";
@@ -2284,7 +2284,7 @@ public class Pdf_new {
                     + getOnlyStrings(sa.getRagionesociale()) + "_"
                     + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".AssenzaINPS.pdf");
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is)) {
                 PdfWriter writer = new PdfWriter(pdfOut);
                 PdfDocument pdfDoc = new PdfDocument(reader, writer);
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
@@ -2398,7 +2398,7 @@ public class Pdf_new {
                     + getOnlyStrings(sa.getRagionesociale()) + "_"
                     + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".CL_FIN.pdf");
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is); PdfWriter writer = new PdfWriter(pdfOut); PdfDocument pdfDoc = new PdfDocument(reader, writer)) {
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is);  PdfWriter writer = new PdfWriter(pdfOut);  PdfDocument pdfDoc = new PdfDocument(reader, writer)) {
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
                 form.setGenerateAppearance(true);
 
@@ -2591,7 +2591,7 @@ public class Pdf_new {
                     + getOnlyStrings(sa.getRagionesociale()) + "_"
                     + dataconsegna.toString("ddMMyyyyHHmmSSS") + ".EV.pdf");
 
-            try (InputStream is = new ByteArrayInputStream(decodeBase64(contentb64)); PdfReader reader = new PdfReader(is)) {
+            try ( InputStream is = new ByteArrayInputStream(decodeBase64(contentb64));  PdfReader reader = new PdfReader(is)) {
                 PdfWriter writer = new PdfWriter(pdfOut);
                 PdfDocument pdfDoc = new PdfDocument(reader, writer);
                 PdfAcroForm form = getAcroForm(pdfDoc, true);
@@ -2710,5 +2710,4 @@ public class Pdf_new {
 //            ex.printStackTrace();
 //        }
 //    }
-
 }

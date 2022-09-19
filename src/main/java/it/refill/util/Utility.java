@@ -110,6 +110,7 @@ public class Utility {
     public static final String patternITA = "dd/MM/yyyy";
     public static final String patternFile = "yyyyMMdd";
     public static final String patternITACOMPLETE = "dd/MM/yyyy HH:mm:ss";
+    public static final String pat_5 = "yyyy-MM-dd HH:mm:ss";
     public static final String patternHHMM = "HH:mm";
     public static final SimpleDateFormat sdfITA = new SimpleDateFormat(patternITA);
     public static final SimpleDateFormat sdfITAC1 = new SimpleDateFormat(patternITACOMPLETE);
@@ -521,7 +522,6 @@ public class Utility {
             JsonParser parser = new JsonParser();
             JsonElement tradeElement = parser.parse(json_s);
             jMembers.add("aaData", tradeElement.getAsJsonArray());
-            System.out.println(jMembers.toString());
             return jMembers.toString();
         } catch (IOException ex) {
             ex.printStackTrace();

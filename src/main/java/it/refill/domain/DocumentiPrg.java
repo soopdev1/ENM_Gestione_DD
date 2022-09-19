@@ -6,7 +6,9 @@
 package it.refill.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import static it.refill.db.Action.insertTR;
 import it.refill.entity.Presenti;
+import static it.refill.util.Utility.estraiEccezione;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,8 +137,8 @@ public class DocumentiPrg implements Serializable {
         if (this.presenti != null && !this.presenti.equals("") && this.presenti_list.isEmpty()) {
             try {
                 this.presenti_list = Arrays.asList(new ObjectMapper().readValue(presenti, Presenti[].class));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                insertTR("E", "System", estraiEccezione(ex));
             }
         }
         return presenti_list;
@@ -251,8 +253,8 @@ public class DocumentiPrg implements Serializable {
         if (presenti != null && !presenti.equals("")) {
             try {
                 presenti_list = Arrays.asList(new ObjectMapper().readValue(presenti, Presenti[].class));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                insertTR("E", "System", estraiEccezione(ex));
             }
         }
     }
