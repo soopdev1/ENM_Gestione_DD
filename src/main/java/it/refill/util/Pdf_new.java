@@ -30,6 +30,7 @@ import com.itextpdf.layout.element.Image;
 import com.itextpdf.signatures.PdfPKCS7;
 import com.itextpdf.signatures.SignatureUtil;
 import it.refill.db.Action;
+import static it.refill.db.Action.insertTR;
 import it.refill.db.Database;
 import it.refill.db.Entity;
 import it.refill.db.Registro_completo;
@@ -45,6 +46,7 @@ import it.refill.domain.StaffModelli;
 import it.refill.domain.TipoDoc;
 import it.refill.domain.TipoDoc_Allievi;
 import it.refill.domain.TitoliStudio;
+import it.refill.domain.User;
 import it.refill.entity.Item;
 import it.refill.entity.MappaturaId;
 import it.refill.entity.OreId;
@@ -532,7 +534,6 @@ public class Pdf_new {
                     List<Integer> neetID = faseA.stream().map(r1 -> r1.getIdutente()).distinct().collect(Collectors.toList());
                     AtomicInteger index_allieviA = new AtomicInteger(1);
 
-
                     neetID.forEach(n1 -> {
                         Allievi n2 = e.getEm().find(Allievi.class, Long.parseLong(String.valueOf(n1)));
                         MascheraM5 datiM5 = e.getM5_byAllievo(n2);
@@ -657,7 +658,7 @@ public class Pdf_new {
                                 .toString("dd/MM/yyyy")).distinct()
                                 .collect(Collectors.toCollection(LinkedList::new));
                         if (lezioniB.isEmpty()) {
-                            System.out.println("B) GRUPPO " + i + " VUOTO");
+//                            System.out.println("B) GRUPPO " + i + " VUOTO");
                         } else {
                             String DATAINIZIOFASEB = lezioniB.getFirst();
                             String DATAFINEFASEB = lezioniB.getLast();
@@ -860,7 +861,6 @@ public class Pdf_new {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking("ERROR SYSTEM ", estraiEccezione(ex));
         }
         return null;
@@ -1300,7 +1300,6 @@ public class Pdf_new {
                 return pdfOut;
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking("ERROR SYSTEM ", estraiEccezione(ex));
         }
         return null;
@@ -1515,7 +1514,6 @@ public class Pdf_new {
                 return pdfOut;
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking("ERROR SYSTEM ", estraiEccezione(ex));
         }
         return null;
@@ -1839,7 +1837,7 @@ public class Pdf_new {
             }
             return pdfOutA;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", "SERVICE", estraiEccezione(ex));
         }
         return null;
     }
@@ -1856,8 +1854,8 @@ public class Pdf_new {
             for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
                 new Canvas(pdfDoc.getPage(i), pdfDoc.getDefaultPageSize()).add(bCodeImage);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
         }
     }
 
@@ -1874,8 +1872,8 @@ public class Pdf_new {
                 fields_list.get(field_name).setValue(field_value);
                 form.partialFormFlattening(field_name);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
         }
     }
 
@@ -2093,10 +2091,10 @@ public class Pdf_new {
             String qr = result.getText().toUpperCase();
             return qr;
         } catch (Exception ex) {
-            ex.printStackTrace();
             if (ex.getMessage() == null) {
                 return estraiResult(doc, qrcrop, pag + 1);
             }
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             return null;
         }
     }
@@ -2138,11 +2136,11 @@ public class Pdf_new {
                         }
                     }
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    
                     if (ex.getMessage() == null) {
                         out = "ERRORE - QR CODE ILLEGGIBILE";
                     } else {
-                        ex.printStackTrace();
+                        insertTR("E", "SERVICE", estraiEccezione(ex));
                         out = "ERRORE NEL FILE - " + ex.getMessage();
                     }
                 }
@@ -2560,7 +2558,6 @@ public class Pdf_new {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking("ERROR SYSTEM ", estraiEccezione(ex));
         }
         return null;
@@ -2682,7 +2679,6 @@ public class Pdf_new {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking("ERROR SYSTEM ", estraiEccezione(ex));
         }
         return null;
@@ -2707,7 +2703,6 @@ public class Pdf_new {
 //                System.out.println("Pdf.main() " + downloadFile.getPath());
 //            }
 //        } catch (Exception ex) {
-//            ex.printStackTrace();
 //        }
 //    }
 }

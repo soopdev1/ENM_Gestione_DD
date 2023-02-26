@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
 import com.google.gson.JsonObject;
 import it.refill.db.Action;
+import static it.refill.db.Action.insertTR;
 import it.refill.db.Database;
 import it.refill.db.Entity;
 import it.refill.db.FileDownload;
@@ -62,6 +63,7 @@ import javax.servlet.http.Part;
 import it.refill.util.Utility;
 import static it.refill.util.Utility.checkPDF;
 import static it.refill.util.Utility.createDir;
+import static it.refill.util.Utility.estraiEccezione;
 import static it.refill.util.Utility.getRequestValue;
 import static it.refill.util.Utility.getstatoannullato;
 import static it.refill.util.Utility.patternITA;
@@ -119,7 +121,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro setProtocollo: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile inserire il protocollo.");
@@ -150,8 +151,7 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
 
             resp.addProperty("result", true);
-        } catch (PersistenceException | ParseException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro addDocente: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile aggiungere il docente.");
@@ -178,7 +178,6 @@ public class OperazioniMicro extends HttpServlet {
 //                resp.addProperty("message", "Errore: non &egrave; stato possibile caricare i docenti.");
 //            }
 //        } catch (Exception ex) {
-//            ex.printStackTrace();
 //            e.insertTracking(String.valueOf(us.getId()), "OperazioniMicro addDocenteFile: " + ex.getMessage());
 //            resp.addProperty("result", false);
 //            resp.addProperty("message", "Errore: non &egrave; stato possibile caricare i docenti.");
@@ -222,8 +221,7 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
 
             resp.addProperty("result", true);
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro addAula: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile aggiungere l'aula.");
@@ -260,8 +258,7 @@ public class OperazioniMicro extends HttpServlet {
             e.merge(p);
             e.commit();
             resp.addProperty("result", true);
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
                     "OperazioniMicro validateAula: " + ex.getMessage());
             resp.addProperty("result", false);
@@ -380,8 +377,7 @@ public class OperazioniMicro extends HttpServlet {
 
             resp.addProperty("result", check);
             resp.addProperty("message", rigettaPrg_msg);
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro validatePrg: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile validare il progetto formativo.");
@@ -413,8 +409,7 @@ public class OperazioniMicro extends HttpServlet {
             e.merge(p);
             e.commit();
             resp.addProperty("result", true);
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro annullaPrg: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile annullare il progetto formativo.");
@@ -449,8 +444,7 @@ public class OperazioniMicro extends HttpServlet {
             }
 
             resp.addProperty("result", true);
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro rejectPrg: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile segnalare il progetto formativo.");
@@ -484,8 +478,7 @@ public class OperazioniMicro extends HttpServlet {
             e.merge(doc);
             e.commit();
             resp.addProperty("result", true);
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro validateHourRegistroAula: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile validare le ore del registro");
@@ -509,8 +502,7 @@ public class OperazioniMicro extends HttpServlet {
             e.merge(doc);
             e.commit();
             resp.addProperty("result", true);
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro setHoursRegistro: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile validare le ore del registro");
@@ -545,8 +537,7 @@ public class OperazioniMicro extends HttpServlet {
 
             e.commit();
             resp.addProperty("result", true);
-        } catch (PersistenceException | ParseException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniSA uploadCurriculumDocente: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile aggiornare il documento d'identità.");
@@ -597,7 +588,6 @@ public class OperazioniMicro extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile caricare il documento.");
         } finally {
@@ -663,10 +653,9 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
 
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniSA uploadDocPrg: " + ex.getMessage());
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile caricare il documento.");
         } finally {
@@ -756,7 +745,6 @@ public class OperazioniMicro extends HttpServlet {
 //                resp.addProperty("message", "Errore: non &egrave; stato possibile compilare la checklist.");
 //            }
 //        } catch (PersistenceException ex) {
-//            ex.printStackTrace();
 //            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniSA compileCL2: " + ex.getMessage());
 //            resp.addProperty("result", false);
 //            resp.addProperty("message", "Errore: non &egrave; stato possibile compilare la checklist.");
@@ -830,7 +818,6 @@ public class OperazioniMicro extends HttpServlet {
             resp.addProperty("result", true);
             resp.addProperty("path", path);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniSA crearendicontazione: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile creare il file.");
@@ -910,10 +897,9 @@ public class OperazioniMicro extends HttpServlet {
                 }
                 resp.addProperty("message", "Errore: non &egrave; stato possibile registrarsi.<br>CF o P.IVA gi&agrave; presente");
             }
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro uploadPec: " + ex.getMessage());
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile caricare il documento.");
         } finally {
@@ -952,9 +938,8 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro uploadDocPregresso: " + ex.getMessage());
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile caricare il documento.");
         } finally {
@@ -976,9 +961,8 @@ public class OperazioniMicro extends HttpServlet {
             }
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro modifyDocPregresso: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile modificare il documento.");
         } finally {
@@ -1016,9 +1000,8 @@ public class OperazioniMicro extends HttpServlet {
             }
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro modifyDocIdPregresso: " + ex.getMessage());
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile modificare il documento.");
         } finally {
@@ -1045,7 +1028,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro sendAnswer: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile inviare il messaggio.");
@@ -1071,7 +1053,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro setTipoFaq: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile inviare il messaggio.");
@@ -1098,7 +1079,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro modifyFaq: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile moodificare la FAQ.");
@@ -1174,7 +1154,6 @@ public class OperazioniMicro extends HttpServlet {
             resp.addProperty("email", ((User) request.getSession().getAttribute("user")).getEmail());
             resp.addProperty("link", link);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro creaFAD: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile creare il convegno.");
@@ -1213,7 +1192,6 @@ public class OperazioniMicro extends HttpServlet {
 
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro creaFAD: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile modificare il convegno.");
@@ -1239,7 +1217,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro closeFAd: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile modificare la stanza.");
@@ -1282,7 +1259,6 @@ public class OperazioniMicro extends HttpServlet {
             }
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro reinvitaFAD: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile mandare gli inviti le mail.");
@@ -1313,7 +1289,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro addActivity: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile aggiungere l'attività.");
@@ -1338,7 +1313,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro deteleActivity: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile eliminare l'attività.");
@@ -1364,7 +1338,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro rejectDocente: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile rigettare il docente.");
@@ -1398,7 +1371,6 @@ public class OperazioniMicro extends HttpServlet {
             resp.addProperty("result", true);
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro modifyDocente: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile modificare il docente.");
@@ -1437,7 +1409,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro deteleActivity: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile eliminare l'attività.");
@@ -1482,7 +1453,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro rendicontaProgetto: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile rendicontare progetto.");
@@ -1536,9 +1506,7 @@ public class OperazioniMicro extends HttpServlet {
                 resp.addProperty("result", false);
                 resp.addProperty("messagge", "Non è stato possibile inviare la mail, contattare l'assistenza per farsi inviare le credenziali.");
             }
-
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro addCpiUser: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile creare utente CPI.");
@@ -1552,7 +1520,7 @@ public class OperazioniMicro extends HttpServlet {
     }
 
     protected void addlez(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Utility.printRequest(request);
+//        Utility.printRequest(request);
 
         String idpr1 = request.getParameter("idpr1");
         String corso = request.getParameter("corso");
@@ -1694,7 +1662,7 @@ public class OperazioniMicro extends HttpServlet {
             resp.addProperty("message", "Errore:4 - " + Utility.estraiEccezione(e));
         }
 
-        try (PrintWriter pw = response.getWriter()) {
+        try ( PrintWriter pw = response.getWriter()) {
             pw.write(resp.toString());
             pw.flush();
         }
@@ -1719,7 +1687,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro liquidaPrg: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato liquidare il progettto.");
@@ -1768,9 +1735,8 @@ public class OperazioniMicro extends HttpServlet {
             resp.addProperty("message", "");
             resp.addProperty("result", true);
         } catch (PersistenceException ex) {
-            ex.printStackTrace();
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro uploadDocUnitaDidattica (" + (isDoc ? "file)" : "link)") + ex.getMessage());
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile caricare il " + (isDoc ? "documento." : "link."));
         } finally {
@@ -1806,9 +1772,8 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro updateDocUnitaDidattica (" + tipo + "): " + ex.getMessage());
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile modificare il " + tipo + ".");
         } finally {
@@ -1835,7 +1800,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (PersistenceException ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro deleteDocUnitaDidattica: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile eliminare il documento.");
@@ -1861,9 +1825,8 @@ public class OperazioniMicro extends HttpServlet {
             Utility.redirect(request, response, request.getContextPath() + "/page/mc/editANPAL.jsp?id=" + idallievo);
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro updateDescrizioneUD: " + ex.getMessage());
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -1881,9 +1844,8 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro updateDescrizioneUD: " + ex.getMessage());
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile modificare la descrizione.");
         } finally {
@@ -1909,7 +1871,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (PersistenceException ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro deleteDocCloud: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile eliminare il documento.");
@@ -1974,8 +1935,7 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
 
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro mappatura: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile mappare gli allievi.");
@@ -1993,16 +1953,16 @@ public class OperazioniMicro extends HttpServlet {
         try {
             User us = (User) request.getSession().getAttribute("user");
             Entity e = new Entity();
-            ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class, Long.parseLong(getRequestValue(request, "idpr")));
+            ProgettiFormativi pf = e.getEm().find(ProgettiFormativi.class, Long.valueOf(getRequestValue(request, "idpr")));
             downloadFile = Pdf_new.CERTIFICAZIONEASSENZA(e, us.getUsername(), pf.getSoggetto(), new DateTime(), true);
             e.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         }
 
         if (downloadFile != null && downloadFile.exists()) {
             OutputStream outStream;
-            try (FileInputStream inStream = new FileInputStream(downloadFile)) {
+            try ( FileInputStream inStream = new FileInputStream(downloadFile)) {
                 String mimeType = probeContentType(downloadFile.toPath());
                 if (mimeType == null) {
                     mimeType = "application/octet-stream";
@@ -2033,7 +1993,7 @@ public class OperazioniMicro extends HttpServlet {
                 File downloadFile = new File(a1.getProgetto().getPdfunico());
                 if (downloadFile.exists() && downloadFile.canRead()) {
                     OutputStream outStream;
-                    try (FileInputStream inStream = new FileInputStream(downloadFile)) {
+                    try ( FileInputStream inStream = new FileInputStream(downloadFile)) {
                         String mimeType = Files.probeContentType(downloadFile.toPath());
                         if (mimeType == null) {
                             mimeType = "application/pdf";
@@ -2083,7 +2043,6 @@ public class OperazioniMicro extends HttpServlet {
                 response.sendRedirect("redirect.jsp?page=" + page + "&fileNotFound=true");
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro deleteDocCloud: " + ex.getMessage());
             User us = (User) request.getSession().getAttribute("user");
             String page = "page/";
@@ -2235,9 +2194,8 @@ public class OperazioniMicro extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro checklistFinale: " + ex.getMessage());
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile procedere con il salvataggio dei dati.");
         } finally {
@@ -2278,7 +2236,6 @@ public class OperazioniMicro extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro caricaesitovalutazione: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile caricare l'esito di valutazione firmato.");
@@ -2341,7 +2298,6 @@ public class OperazioniMicro extends HttpServlet {
                 resp.addProperty("message", "DOCUMENTO NON TROVATO");
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro mappatura: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: " + ex.getMessage());
@@ -2396,9 +2352,8 @@ public class OperazioniMicro extends HttpServlet {
                 resp.addProperty("message", "Errore: file corrotto o non conforme.");
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro caricanuovodocumento: " + ex.getMessage());
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile caricare il documento selezionato.");
         } finally {
@@ -2445,9 +2400,8 @@ public class OperazioniMicro extends HttpServlet {
                 resp.addProperty("message", "Errore: file corrotto o non conforme.");
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.rollBack();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro caricanuovodocumento: " + ex.getMessage());
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile caricare il documento selezionato.");
         } finally {
@@ -2472,7 +2426,6 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
-            ex.printStackTrace();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro assegnaPrg: " + ex.getMessage());
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile assegnare il progettto.");
@@ -2505,8 +2458,7 @@ public class OperazioniMicro extends HttpServlet {
             resp.addProperty("result", true);
         } catch (PersistenceException ex) {
             e.rollBack();
-            ex.printStackTrace();
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro setSIGMA: " + ex.getMessage());
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile impostare lo stato di partecipazione dell'allievo.");
         } finally {

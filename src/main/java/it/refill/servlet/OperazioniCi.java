@@ -12,7 +12,7 @@ import it.refill.domain.Cad;
 import it.refill.domain.Email;
 import it.refill.domain.User;
 import it.refill.util.SendMailJet;
-import it.refill.util.Skebby;
+//import it.refill.util.Skebby;
 import it.refill.util.Utility;
 import static it.refill.util.Utility.estraiEccezione;
 import java.io.IOException;
@@ -38,68 +38,68 @@ public class OperazioniCi extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void creaCad(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-        JsonObject resp = new JsonObject();
-        Entity e = new Entity();
-        try {
-            SimpleDateFormat sdf_h = new SimpleDateFormat("HH:mm");
-            String pwd = Utility.getRandomString(8);
-
-            e.begin();
-
-            Cad c = new Cad();
-            c.setNome(request.getParameter("nome").trim());
-            c.setCognome(request.getParameter("cognome").trim());
-            c.setEmail(request.getParameter("email").trim());
-            c.setNumero(request.getParameter("numero"));
-            c.setGiorno(new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("giorno")));
-            c.setOrariostart(sdf_h.parse(request.getParameter("start")));
-            c.setOrarioend(sdf_h.parse(request.getParameter("end")));
-            c.setPassword(pwd);
-            c.setUser((User) request.getSession().getAttribute("user"));
-
-            e.persist(c);
-            e.flush();
-            e.commit();
-            String dominio;
-            if (request.getContextPath().contains("Enm_DD")) {
-                dominio = "http://172.31.224.48:8080/Enm_DD/";
-            } else {
-                dominio = e.getPath("dominio");
-            }
-            //manda mail
-            Email email = e.getEmail("colloquio");
-            email.setTesto(email.getTesto()
-                    .replace("@redirect", dominio + "redirect_out.jsp")
-                    .replace("@link", e.getPath("linkfad"))
-                    .replace("@id", c.getId().toString())
-                    .replace("@user", c.getEmail())
-                    .replace("@pwd", pwd)
-                    .replace("@nome", c.getNome())
-                    .replace("@giorno", request.getParameter("giorno"))
-                    .replace("@start", request.getParameter("start"))
-                    .replace("@end", request.getParameter("end"))
-                    .replace("@email_tec", e.getPath("emailtecnico"))
-                    .replace("@email_am", e.getPath("emailamministrativo")));
-            SendMailJet.sendMail(e.getPath("mailsender"), new String[]{c.getEmail()},
-                    email.getTesto(),
-                    email.getOggetto());
-            //MANCA USER-----------------------
-            //manda sms
-            Skebby.sendSmsCAD(c);
-
-            resp.addProperty("result", true);
-        } catch (Exception ex) {
-            insertTR("E", "System", estraiEccezione(ex));
-            resp.addProperty("result", false);
-            resp.addProperty("message", "Errore: non &egrave; stato possibile rendicontare progetto.");
-        } finally {
-            e.close();
-        }
-        response.getWriter().write(resp.toString());
-        response.getWriter().flush();
-        response.getWriter().close();
+//        response.setContentType("text/plain");
+//        response.setCharacterEncoding("UTF-8");
+//        JsonObject resp = new JsonObject();
+//        Entity e = new Entity();
+//        try {
+//            SimpleDateFormat sdf_h = new SimpleDateFormat("HH:mm");
+//            String pwd = Utility.getRandomString(8);
+//
+//            e.begin();
+//
+//            Cad c = new Cad();
+//            c.setNome(request.getParameter("nome").trim());
+//            c.setCognome(request.getParameter("cognome").trim());
+//            c.setEmail(request.getParameter("email").trim());
+//            c.setNumero(request.getParameter("numero"));
+//            c.setGiorno(new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("giorno")));
+//            c.setOrariostart(sdf_h.parse(request.getParameter("start")));
+//            c.setOrarioend(sdf_h.parse(request.getParameter("end")));
+//            c.setPassword(pwd);
+//            c.setUser((User) request.getSession().getAttribute("user"));
+//
+//            e.persist(c);
+//            e.flush();
+//            e.commit();
+//            String dominio;
+//            if (request.getContextPath().contains("Enm_DD")) {
+//                dominio = "http://172.31.224.48:8080/Enm_DD/";
+//            } else {
+//                dominio = e.getPath("dominio");
+//            }
+//            //manda mail
+//            Email email = e.getEmail("colloquio");
+//            email.setTesto(email.getTesto()
+//                    .replace("@redirect", dominio + "redirect_out.jsp")
+//                    .replace("@link", e.getPath("linkfad"))
+//                    .replace("@id", c.getId().toString())
+//                    .replace("@user", c.getEmail())
+//                    .replace("@pwd", pwd)
+//                    .replace("@nome", c.getNome())
+//                    .replace("@giorno", request.getParameter("giorno"))
+//                    .replace("@start", request.getParameter("start"))
+//                    .replace("@end", request.getParameter("end"))
+//                    .replace("@email_tec", e.getPath("emailtecnico"))
+//                    .replace("@email_am", e.getPath("emailamministrativo")));
+//            SendMailJet.sendMail(e.getPath("mailsender"), new String[]{c.getEmail()},
+//                    email.getTesto(),
+//                    email.getOggetto());
+//            //MANCA USER-----------------------
+//            //manda sms
+//            Skebby.sendSmsCAD(c);
+//
+//            resp.addProperty("result", true);
+//        } catch (Exception ex) {
+//            insertTR("E", "System", estraiEccezione(ex));
+//            resp.addProperty("result", false);
+//            resp.addProperty("message", "Errore: non &egrave; stato possibile rendicontare progetto.");
+//        } finally {
+//            e.close();
+//        }
+//        response.getWriter().write(resp.toString());
+//        response.getWriter().flush();
+//        response.getWriter().close();
     }
 
     protected void modifyCad(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

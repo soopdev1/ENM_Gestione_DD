@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.refill.db.Action;
+import static it.refill.db.Action.insertTR;
 import it.refill.db.Database;
 import it.refill.db.Entity;
 import it.refill.domain.Allievi;
@@ -40,6 +41,7 @@ import it.refill.domain.UnitaDidattiche;
 import it.refill.domain.User;
 import it.refill.util.Fadroom;
 import it.refill.util.Utility;
+import static it.refill.util.Utility.estraiEccezione;
 import static it.refill.util.Utility.writeJsonResponseR;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -76,7 +78,7 @@ public class QueryMicro extends HttpServlet {
             List<SoggettiAttuatori> list = e.getSoggettiAttuatori(ragionesociale, protocollo, piva, cf, protocollare, nome, cognome);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -105,7 +107,7 @@ public class QueryMicro extends HttpServlet {
 //            List<SoggettiAttuatori> list = e.getSoggettiAttuatori(ragionesociale, protocollo, piva, cf, protocollare, nome, cognome);
             writeJsonResponse(response, listDEF);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -130,8 +132,8 @@ public class QueryMicro extends HttpServlet {
 
             writeJsonResponse(response, list);
 
-        } catch (IOException | NumberFormatException | ServletException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -146,7 +148,7 @@ public class QueryMicro extends HttpServlet {
             List<Docenti> list = e.getDocenti(nome, cognome, cf);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -204,12 +206,13 @@ public class QueryMicro extends HttpServlet {
 //                        prog.setFadroom("NO");
 //                    }
                 } catch (Exception ex) {
+                    insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
                     prog.setFadroom(null);
                 }
             });
             writeJsonResponseR(response, list);
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -222,7 +225,7 @@ public class QueryMicro extends HttpServlet {
             List<ProgettiFormativi> list = e.getProgettiFormativiDocenti(d);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -236,7 +239,7 @@ public class QueryMicro extends HttpServlet {
             writeJsonResponse(response, list);
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -262,7 +265,7 @@ public class QueryMicro extends HttpServlet {
             List<SediFormazione> list = e.getSediFormazione(request.getParameter("referente"), comuni);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -301,7 +304,7 @@ public class QueryMicro extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(documenti));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -314,7 +317,7 @@ public class QueryMicro extends HttpServlet {
             List<Storico_Prg> list = e.getStoryPrg(p);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -337,7 +340,7 @@ public class QueryMicro extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(docs));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -349,7 +352,7 @@ public class QueryMicro extends HttpServlet {
             List<Docenti> list = e.getDocentiPrg(e.getEm().find(ProgettiFormativi.class, Long.parseLong(request.getParameter("idprogetto"))));
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -361,7 +364,7 @@ public class QueryMicro extends HttpServlet {
             List<Estrazioni> list = e.getRendicontazioni();
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -374,7 +377,7 @@ public class QueryMicro extends HttpServlet {
             List<Storico_ModificheInfo> list = e.getPec(sa);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -383,11 +386,11 @@ public class QueryMicro extends HttpServlet {
     protected void getConversationSA(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         try {
-            List<Faq> list = e.getFaqSoggetto(e.getEm().find(SoggettiAttuatori.class, Long.parseLong(request.getParameter("idsoggetto"))));
+            List<Faq> list = e.getFaqSoggetto(e.getEm().find(SoggettiAttuatori.class, Long.valueOf(request.getParameter("idsoggetto"))));
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -401,7 +404,7 @@ public class QueryMicro extends HttpServlet {
             List<Faq> list = e.faqAnswer(sa, tipo);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -414,7 +417,7 @@ public class QueryMicro extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -427,7 +430,7 @@ public class QueryMicro extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(faq));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -441,7 +444,7 @@ public class QueryMicro extends HttpServlet {
             List<FadMicro> list = e.getMyConference((User) request.getSession().getAttribute("user"), nomestanza, stato);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -462,7 +465,7 @@ public class QueryMicro extends HttpServlet {
             response.getWriter().print(jMembers.toString());
             response.getWriter().close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -488,7 +491,7 @@ public class QueryMicro extends HttpServlet {
             List<Attivita> list = e.getAttivita(request.getParameter("nome"), comuni);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -504,7 +507,7 @@ public class QueryMicro extends HttpServlet {
             response.getWriter().print(mapper.writeValueAsString(d));
             response.getWriter().close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -532,7 +535,7 @@ public class QueryMicro extends HttpServlet {
             List<CpiUser> list = e.findAll(CpiUser.class);
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -557,7 +560,7 @@ public class QueryMicro extends HttpServlet {
 
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -566,7 +569,7 @@ public class QueryMicro extends HttpServlet {
     protected void getAllieviByPrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         try {
-            List<Allievi> a = e.getAllieviProgettiFormativi(e.getEm().find(ProgettiFormativi.class, Long.parseLong(request.getParameter("id"))));
+            List<Allievi> a = e.getAllieviProgettiFormativi(e.getEm().find(ProgettiFormativi.class, Long.valueOf(request.getParameter("id"))));
             List<Allievi> list = new ArrayList();
             for (Allievi al : a) {
                 list.add(new Allievi(al.getId(), al.getNome(), al.getCognome()));
@@ -575,7 +578,7 @@ public class QueryMicro extends HttpServlet {
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -584,7 +587,7 @@ public class QueryMicro extends HttpServlet {
     protected void getLezioniByProgetto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         try {
-            ModelliPrg m = e.getEm().find(ModelliPrg.class, Long.parseLong(request.getParameter("idmodello")));
+            ModelliPrg m = e.getEm().find(ModelliPrg.class, Long.valueOf(request.getParameter("idmodello")));
             List<Lezioni_Modelli> list = e.getLezioniByProgetto(m);
             for (Lezioni_Modelli lm : list) {
                 lm.setCodice_ud(lm.getLezione_calendario().getUnitadidattica().getCodice());
@@ -598,7 +601,7 @@ public class QueryMicro extends HttpServlet {
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -632,7 +635,7 @@ public class QueryMicro extends HttpServlet {
                 response.getWriter().write(mapper.writeValueAsString(list));
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -645,7 +648,7 @@ public class QueryMicro extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(sp));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -685,7 +688,7 @@ public class QueryMicro extends HttpServlet {
             writeJsonResponse(response, list);
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }

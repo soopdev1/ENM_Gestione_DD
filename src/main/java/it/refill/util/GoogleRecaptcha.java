@@ -53,7 +53,7 @@ public class GoogleRecaptcha {
                 response.append(inputLine);
             }
             in.close();
-            System.out.println("GoogleRecaptcha " + responseCode + " -- " + response.toString());
+//            System.out.println("GoogleRecaptcha " + responseCode + " -- " + response.toString());
             CaptchaResponse capRes = new Gson().fromJson(response.toString(), CaptchaResponse.class);
             return (capRes.isSuccess() && capRes.getScore() >= 0.5);
             

@@ -13,6 +13,7 @@ import com.google.gson.JsonParser;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import it.refill.db.Action;
+import static it.refill.db.Action.insertTR;
 import it.refill.db.FileDownload;
 import it.refill.domain.Allievi;
 import it.refill.domain.Docenti;
@@ -42,7 +43,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,7 +63,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -157,8 +156,8 @@ public class Utility {
                         System.out.println("MULTIPART FILE - " + fieldName + " : " + fieldValue);
                     }
                 }
-            } catch (FileUploadException ex) {
-                ex.printStackTrace();
+            } catch (Exception ex) {
+                insertTR("E", "SERVICE", estraiEccezione(ex));
             }
         }
     }
@@ -197,8 +196,8 @@ public class Utility {
                 sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
             }
             return sb.toString().trim();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             return "-";
         }
     }
@@ -349,8 +348,8 @@ public class Utility {
             response.setHeader("Content-Type", "application/json");
             response.getWriter().print(jMembers.toString());
             response.getWriter().close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
         }
     }
 
@@ -379,8 +378,8 @@ public class Utility {
                 DateTime dtout = fmt.parseDateTime(dat);
                 return dtout.toString(pattern2, ITALY);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
         }
         return "DATA ERRATA";
     }
@@ -424,8 +423,8 @@ public class Utility {
                     pd.close();
                 }
                 return pag > 0;
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                insertTR("E", "SERVICE", estraiEccezione(ex));
             }
         }
         return false;
@@ -523,8 +522,8 @@ public class Utility {
             JsonElement tradeElement = parser.parse(json_s);
             jMembers.add("aaData", tradeElement.getAsJsonArray());
             return jMembers.toString();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             return "";
         }
     }
@@ -749,8 +748,8 @@ public class Utility {
                 bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_EVEN);
                 return numITA.format(bigDecimal).replaceAll("[^0123456789.,()-]", "").trim();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
         }
         return "0";
 
@@ -829,7 +828,7 @@ public class Utility {
     public static List<Allievi> allievi_fa(long idp, List<Allievi> l) {
         Long hh36 = new Long(129600000);
         Map<Long, Long> oreRendicontabili_faseA = Action.OreRendicontabiliAlunni_faseA((int) (long) idp);
-        return l.stream().filter(a -> oreRendicontabili_faseA.get(a.getId()) != null && oreRendicontabili_faseA.get(a.getId()).compareTo(hh36) > 0).collect(Collectors.toList());
+        return l.stream().filter(a -> oreRendicontabili_faseA.get(a.getId()) != null && oreRendicontabili_faseA.get(a.getId()).compareTo(hh36) >= 0).collect(Collectors.toList());
     }
 
     public static List<Allievi> allievi_fb(long idp, List<Allievi> l) {
@@ -912,8 +911,8 @@ public class Utility {
             BigDecimal bigDecimal = new BigDecimal(Double.toString(f));
             bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_EVEN);
             return numITA.format(bigDecimal).replaceAll("[^0123456789.,()-]", "").trim();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
         }
         return "0";
 
@@ -924,8 +923,8 @@ public class Utility {
             BigDecimal bigDecimal = new BigDecimal(f);
             bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_EVEN);
             return bigDecimal.doubleValue();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
         }
         return 0.0;
 
@@ -989,8 +988,8 @@ public class Utility {
             CharsetDetector detector = new CharsetDetector();
             detector.setText(ing.getBytes());
             return new String(ing.getBytes(detector.detect().getName()), Charset.forName("utf-8"));
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
         }
         return ing;
     }

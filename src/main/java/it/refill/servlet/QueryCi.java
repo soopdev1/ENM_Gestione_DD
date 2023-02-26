@@ -9,9 +9,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import static it.refill.db.Action.insertTR;
 import it.refill.db.Entity;
 import it.refill.domain.Cad;
 import it.refill.domain.User;
+import static it.refill.util.Utility.estraiEccezione;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
@@ -47,7 +49,7 @@ public class QueryCi extends HttpServlet {
             response.getWriter().print(new Gson().toJson(d));
             response.getWriter().close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -99,7 +101,7 @@ public class QueryCi extends HttpServlet {
             response.getWriter().flush();
             response.getWriter().close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }

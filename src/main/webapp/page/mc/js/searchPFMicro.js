@@ -878,7 +878,7 @@ function uploadexcelcontrollo(id, fdata) {
 //UPLOAD DOC GENERICO - 04-10-21
 function uploadDocGenerico(id) {
     var swalDoc = getHtml("swalDoc", context).replace("@func",
-            "checkFileExtAndDim(&quot;pdf&quot;,&quot;p7m&quot;)").replace("@mime", 'application/pkcs7-mime,application/pdf');
+            "checkFileExtAndDim(&quot;pdf,p7m&quot;)").replace("@mime", 'application/pkcs7-mime,application/pdf');
     swal.fire({
         title: 'Carica Altra Documentazione',
         html: swalDoc,

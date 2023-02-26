@@ -25,7 +25,9 @@ import static com.mailjet.client.resource.Emailv31.Message.SUBJECT;
 import static com.mailjet.client.resource.Emailv31.Message.TO;
 import static com.mailjet.client.resource.Emailv31.resource;
 import com.mailjet.client.resource.Statcounters;
+import static it.refill.db.Action.insertTR;
 import it.refill.db.Entity;
+import static it.refill.util.Utility.estraiEccezione;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -108,7 +110,7 @@ public class SendMailJet {
                         b64 = new String(encodeBase64(toByteArray(i)));
                     }
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    insertTR("E", "SERVICE", estraiEccezione(ex));
                 }
                 mail.put(ATTACHMENTS, new JSONArray()
                         .put(new JSONObject()
@@ -131,8 +133,7 @@ public class SendMailJet {
 
             return ok;
         } catch (MailjetException ex) {
-            System.err.println("ERRORE: sendMail - " + ex.getMessage());
-            ex.printStackTrace();
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             return false;
         }
     }
@@ -168,8 +169,8 @@ public class SendMailJet {
             } else {
                 sending = -1;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            insertTR("E", "SERVICE", estraiEccezione(ex));
             sending = -1;
         }
         return sending;

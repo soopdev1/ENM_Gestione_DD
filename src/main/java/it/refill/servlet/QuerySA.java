@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.refill.db.Action;
+import static it.refill.db.Action.insertTR;
 import it.refill.db.Database;
 import it.refill.db.Entity;
 import it.refill.domain.Allievi;
@@ -32,6 +33,7 @@ import it.refill.domain.User;
 import it.refill.entity.ProgettiLezioniModelli;
 import it.refill.util.Fadroom;
 import it.refill.util.Utility;
+import static it.refill.util.Utility.estraiEccezione;
 import static it.refill.util.Utility.writeJsonResponseR;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -65,7 +67,7 @@ public class QuerySA extends HttpServlet {
             writeJsonResponse(response, list);
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -86,7 +88,7 @@ public class QuerySA extends HttpServlet {
             writeJsonResponse(response, list);
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -140,6 +142,7 @@ public class QuerySA extends HttpServlet {
                     }
                 } catch (Exception ex) {
                     prog.setFadroom(null);
+                    insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
                 }
 
             });
@@ -147,7 +150,7 @@ public class QuerySA extends HttpServlet {
             writeJsonResponseR(response, list);
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -161,7 +164,7 @@ public class QuerySA extends HttpServlet {
             writeJsonResponse(response, p.getAllievi());
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -173,7 +176,7 @@ public class QuerySA extends HttpServlet {
             List<Docenti> list = e.getDocentiPrg(e.getEm().find(ProgettiFormativi.class, Long.parseLong(request.getParameter("idprogetto"))));
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -209,7 +212,7 @@ public class QuerySA extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(documenti));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -232,7 +235,7 @@ public class QuerySA extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(docs));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -245,7 +248,7 @@ public class QuerySA extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(docenti));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -254,11 +257,11 @@ public class QuerySA extends HttpServlet {
     protected void getDocAllievoById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         try {
-            Documenti_Allievi doc = e.getEm().find(Documenti_Allievi.class, Long.parseLong(request.getParameter("iddocumento")));
+            Documenti_Allievi doc = e.getEm().find(Documenti_Allievi.class, Long.valueOf(request.getParameter("iddocumento")));
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(doc));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -271,7 +274,7 @@ public class QuerySA extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(se_p));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -280,11 +283,11 @@ public class QuerySA extends HttpServlet {
     protected void searchProgettiDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         try {
-            Docenti d = e.getEm().find(Docenti.class, Long.parseLong(request.getParameter("iddocente")));
+            Docenti d = e.getEm().find(Docenti.class, Long.valueOf(request.getParameter("iddocente")));
             List<ProgettiFormativi> list = d.getProgetti().stream().sorted((x, y) -> x.getEnd().compareTo(y.getEnd())).limit(50).collect(Collectors.toList());
             writeJsonResponse(response, list);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -294,12 +297,12 @@ public class QuerySA extends HttpServlet {
         Entity e = new Entity();
         try {
             List<DocumentiPrg> list = e.getRegistriDay(e.getEm()
-                    .find(ProgettiFormativi.class, Long.parseLong(request.getParameter("idprogetto"))),
+                    .find(ProgettiFormativi.class, Long.valueOf(request.getParameter("idprogetto"))),
                     new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("giorno")));
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -313,7 +316,7 @@ public class QuerySA extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(registro));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -326,7 +329,7 @@ public class QuerySA extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -340,7 +343,7 @@ public class QuerySA extends HttpServlet {
             mapper.setSerializationInclusion(Include.NON_NULL);
             response.getWriter().write(mapper.writeValueAsString(red));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -363,7 +366,7 @@ public class QuerySA extends HttpServlet {
             mapper.setSerializationInclusion(Include.NON_NULL);
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -378,7 +381,7 @@ public class QuerySA extends HttpServlet {
             mapper.setSerializationInclusion(Include.NON_NULL);
             response.getWriter().write(mapper.writeValueAsString(m6));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -426,7 +429,7 @@ public class QuerySA extends HttpServlet {
                 response.getWriter().write(mapper.writeValueAsString(list));
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -444,7 +447,7 @@ public class QuerySA extends HttpServlet {
             mapper.setSerializationInclusion(Include.NON_NULL);
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -467,7 +470,7 @@ public class QuerySA extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }
@@ -492,7 +495,7 @@ public class QuerySA extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             response.getWriter().write(mapper.writeValueAsString(list));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            insertTR("E", String.valueOf(((User) request.getSession().getAttribute("user")).getId()), estraiEccezione(ex));
         } finally {
             e.close();
         }

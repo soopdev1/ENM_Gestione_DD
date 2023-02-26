@@ -44,7 +44,7 @@ public class OperazioniGeneral extends HttpServlet {
         if (downloadFile != null
                 && downloadFile.exists()) {
 
-            try (FileInputStream inStream = new FileInputStream(downloadFile)) {
+            try ( FileInputStream inStream = new FileInputStream(downloadFile)) {
                 String mimeType = Files.probeContentType(downloadFile.toPath());
                 if (mimeType == null) {
                     mimeType = "application/pdf";
@@ -155,7 +155,7 @@ public class OperazioniGeneral extends HttpServlet {
     protected void excelfad(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String idpr = request.getParameter("idpr");
-        Database db1 = new Database(false,false);
+        Database db1 = new Database(false, false);
         String base64 = db1.getBase64Report(Integer.parseInt(idpr));
         db1.closeDB();
 
@@ -230,7 +230,7 @@ public class OperazioniGeneral extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(out));
     }
-    
+
     private void editMailNeet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -245,6 +245,8 @@ public class OperazioniGeneral extends HttpServlet {
             e.commit();
             e.close();
             resp.addProperty("result", true);
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
+                    "OperazioniSA Modifica MAIL discente: " + idallievo + " - " + new_mail);
         } catch (Exception ex) {
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore Mail: " + Utility.estraiEccezione(ex));
@@ -304,7 +306,7 @@ public class OperazioniGeneral extends HttpServlet {
                     break;
                 case "editMailNeet":
                     editMailNeet(request, response);
-                    break;    
+                    break;
                 default:
                     break;
             }

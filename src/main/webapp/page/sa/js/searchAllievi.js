@@ -122,12 +122,11 @@ var KTDatatablesDataSourceAjaxServer = function () {
                                     '<i class="fa fa-exclamation" style="color:#b30000"></i><i class="fa fa-id-card" style="color:#b30000"></i> Carica nuovo documento d\'identità</a>';
                         }
 //                        option += '<a class="dropdown-item fancyBoxAntoRef" href="' + context + '/redirect.jsp?page=page/sa/updtAllievo.jsp?id=' + row.id + '"><i class="fa fa-user-edit"></i> Scheda Allievo</a>'
-                        if (row.progetto != null) {
+                        if (row.progetto !== null) {
                             prg1.set(row.progetto.id, row.progetto);
-                            option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalTableProgFormativo(' + row.progetto.id + ')"><i class="fa fa-file-alt"></i> Visualizza Progetto Formativo</a>'
+                            option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalTableProgFormativo(' + row.progetto.id + ')"><i class="fa fa-file-alt"></i> Visualizza Progetto Formativo</a>';
                         }
-                        option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalMail(' + row.id + ',\'' + row.email + '\')"><i class="fa fa-envelope"></i> Modifica Email</a>'
-
+//                        option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalMail(' + row.id + ',\'' + row.email + '\')"><i class="fa fa-envelope"></i> Modifica Email</a>'
                         option += '</div></div>';
                         return option;
                     }
