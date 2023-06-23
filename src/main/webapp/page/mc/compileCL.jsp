@@ -5,7 +5,6 @@
 <%@page import="it.refill.domain.checklist_finale"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="it.refill.domain.SoggettiAttuatori"%>
-<%@page import="com.sun.xml.internal.ws.util.StringUtils"%>
 <%@page import="it.refill.domain.MascheraM5"%>
 <%@page import="it.refill.domain.ModelliPrg"%>
 <%@page import="it.refill.domain.DocumentiPrg"%>
